@@ -1,0 +1,8 @@
+<Page loaded="pageLoaded">
+    <StackLayout>
+        <Label text="Insert Server URL:" textWrap="true" id="insertLabel"/>
+        <TextField text="http://" id="urlTextField"/>
+        <Button text="Scan URL QR Code" id="btnScan" onTap="scanQR"/>
+        <Button text="Confirm" id="btnConfirm"/>
+    </StackLayout>
+</Page>

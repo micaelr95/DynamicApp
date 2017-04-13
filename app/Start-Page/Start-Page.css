@@ -1,0 +1,16 @@
+page{
+    text-align: center;
+}
+
+#insertLabel{
+    font-size: 30px;
+}
+
+#urlTextField{
+    height: 60px;
+    font-size: 25px;
+}
+
+stacklayout{
+    width:90%;
+}
