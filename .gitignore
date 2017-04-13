@@ -1,0 +1,14 @@
+npm-debug.log
+.DS_Store
+
+*.js.map
+*.metadata.json
+npm-debug.log
+.vscode
+
+hooks/
+lib/
+node_modules/
+platforms/
+tmp/
+typings/
