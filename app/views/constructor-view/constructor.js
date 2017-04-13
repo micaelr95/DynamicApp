@@ -1,4 +1,4 @@
-var app = require("Application");
+var app = require("application");
 var checkModule = require("nativescript-checkbox");
 var dropModule = require("nativescript-drop-down");
 var radioBtnModule = require("nativescript-radiobutton");
@@ -9,8 +9,11 @@ var scrollModule = require("ui/scroll-view");
 var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
 
-exports.constructor = function(args) {
+exports.constructorLoad = function(args) {
 
+    var page = args.object
+
+/*
    if( Info.toLowerCase() == "list" ){
 
         createList();
@@ -32,5 +35,5 @@ exports.constructor = function(args) {
         alert("NOPE!");
 
    }
-
+*/
 }
