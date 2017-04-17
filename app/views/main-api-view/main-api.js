@@ -16,58 +16,41 @@ dataPropertys = function() {
     var textObject = ["Label Working", "Create form", "Display ListView", "Open WebView", "Options"];
     var tapButton = ["", "You just created a new form", "You just opened a ListView", "You just opened a WebView", "You just opened an Options"];
     var typeObject = ["Label", "Button", "Button", "Button", "Button"];
+    var iconObject = ["", "0xef0fe", "0xef022", "0xef26b", "0xef013"];
 
-    // function to draw FORM according of propertys on JSON
-    drawForm(textObject, tapButton, typeObject);
+    drawForm(textObject, tapButton, typeObject, iconObject);
 }
 
-drawForm = function(txt, tp, typeObj) {
+drawForm = function(txt, tp, typeObj, icon) {
     var layout = new stackLayout.StackLayout();
-    
-    // var button = new Array();
+    var button = new Array();
     var label = new Array();
     var num = typeObj.length;
-
-    var formattedString = new formattedStringModule.FormattedString();
-
-    var textSpan1 = new spansModule.Span();
-    textSpan1.text= String.fromCharCode(0xef013) + "\n" + "Options";
-    textSpan1.fontSize = 25;
-
-    formattedString.spans.push(textSpan1);
-
-    var button = new buttonModule.Button(); 
-    button.formattedText = formattedString;
-    button.className = "btnIcon";
-
-    var buttonMerda = new buttonModule.Button();
-    buttonMerda.text = String.fromCharCode(0xef013) + "\n" + "xisde";
-    buttonMerda.className = "btnIcon";
     
-    layout.addChild(buttonMerda);
-    layout.addChild(button);
+    for (i = 0; i <= num; i++) {
+        const cont = i;       
 
-    /*for (i = 0; i <= num; i++) {
-        const cont = i;
         switch (typeObj[i]) {
             case "Label":
-                console.info("LABEL CRL CRL CRL CRL");
                 label[cont] = new labelModule.Label();
                 label[cont].text = txt[cont];
                 layout.addChild(label[cont]);
                 break;
 
             case "Button":
-                console.info("BUTTON CRL CRL CRL CRL");
+                var textSpan = new spansModule.Span();
+                var formattedString = new formattedStringModule.FormattedString();
+                textSpan.text = String.fromCharCode(icon[cont]) + "\n" + txt[cont];
+                formattedString.spans.push(textSpan);
+
                 button[cont] = new buttonModule.Button();
-                button[cont].className = "btnIcon";
-                // button[cont].text = txt[cont];
-                button[cont].text = "merda; coco";
+                button[cont].className = "btnIcon";               
+                button[cont].formattedText = formattedString;
 
                 layout.addChild(button[cont]);
                 break;
         }        
-    } */
+    }
 
     page.content = layout;
 }
