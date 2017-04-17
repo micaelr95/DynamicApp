@@ -1,7 +1,7 @@
 <Page loaded="pageLoaded">
     <StackLayout>
         <Label text="Insert Server URL:" textWrap="true" id="insertLabel"/>
-        <TextField text="http://" id="urlTextField"/>
+        <TextField text="https://newapp-e758c.firebaseio.com/" id="urlTextField"/>
         <Label text="This can be changed later in the settings page" textWrap="true" id="descriptionlabel"/>
         <Button text="Scan URL QR Code" id="btnScan" onTap="scanQR"/>
         <Button text="Confirm" id="btnConfirm" onTap="confirmURL"/>

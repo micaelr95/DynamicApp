@@ -50,7 +50,7 @@ exports.confirmURL = function(){
 
     var my_url = page.getViewById("urlTextField").text;
 
-    if(my_url == "" || my_url == "http://"){
+    if(my_url == "" || my_url == "https://" || my_url == "http://"){
         alert("Please insert or scan a valid URL");
     }else{
         localstorage.setItem("server_url",my_url);
