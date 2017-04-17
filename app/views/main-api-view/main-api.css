@@ -1,0 +1,16 @@
+.btnIcon {
+    font-family: FontAwesome, fontawesome-webfont;
+    color: white;
+    background-color: brown;
+    height: 100px;
+    width: 120px;
+    font-size: 20px;
+}
+
+StackLayout {
+    background-color: #e0e0eb;
+}
+
+Label {
+    color: black;
+}
