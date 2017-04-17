@@ -1,10 +1,17 @@
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
 var localstorage = require( "nativescript-localstorage" );
+var frameModule = require("ui/frame");
 var page;
 
-exports.pageLoaded = function(args) {
 
+exports.pageLoaded = function(args) {
+    //localstorage.clear();
     page = args.object;
+
+    if(localstorage.getItem("isConfigured") == true){
+        var topmost = frameModule.topmost();
+        topmost.navigate("main-page"); //Alterar para página correta mais tarde
+    }
 
 }
 
@@ -35,5 +42,21 @@ exports.scanQR = function(){
         console.log("No scan: " + error);
     }
   );
+    
+}
+
+
+exports.confirmURL = function(){
+
+    var my_url = page.getViewById("urlTextField").text;
+
+    if(my_url == "" || my_url == "https://" || my_url == "http://"){
+        alert("Please insert or scan a valid URL");
+    }else{
+        localstorage.setItem("server_url",my_url);
+        localstorage.setItem("isConfigured",true);
+        var topmost = frameModule.topmost();
+        topmost.navigate("main-page"); //Alterar para página correta quando for feita
+    }
     
 }
