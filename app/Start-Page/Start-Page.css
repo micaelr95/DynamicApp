@@ -6,6 +6,10 @@ page{
     font-size: 30px;
 }
 
+#descriptionlabel{
+    font-size: 16px;
+}
+
 #urlTextField{
     height: 60px;
     font-size: 25px;
