@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "901150862869",
+    "firebase_url": "https://newapp-e758c.firebaseio.com",
+    "project_id": "newapp-e758c",
+    "storage_bucket": "newapp-e758c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901150862869:android:902419f7ade5bf6e",
+        "android_client_info": {
+          "package_name": "org.nativescript.NewApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901150862869-lqfhhvm3u5tfcolr7q19ogq8ld51ttr4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBaCrlBPWkh68OuldJ_wEGVeEojUDSYak"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
