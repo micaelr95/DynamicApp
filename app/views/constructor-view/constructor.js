@@ -1,6 +1,8 @@
 var app = require("application");
+var stackModule = require("ui/layouts/stack-layout");
+var gridModule = require("ui/layouts/grid-layout");
 var observable = require("data/observable");
-var stackLayout = require("ui/layouts/stack-layout");
+var observableArray = require("data/observable-array");
 var checkModule = require("nativescript-checkbox");
 var dropModule = require("nativescript-drop-down");
 var radioBtnModule = require("nativescript-radiobutton");
@@ -11,6 +13,65 @@ var scrollModule = require("ui/scroll-view");
 var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
 
+function createRows(numbRows , arrayRows , gridLayout) {
+
+    for ( i = 0 ; i < numbRows ; i++ )
+    {
+
+        arrayRows[i] = new gridModule.ItemSpec(1, gridModule.GridUnitType.star);
+        gridLayout.addRow(arrayRows[i]);
+
+    }
+
+}
+
+function createColumns(numbColumns , arrayColumns , gridLayout) {
+
+    for ( i = 0 ; i < numbColumns ; i++ )
+    {
+        if(i == 1){
+
+            arrayColumns[i] = new gridModule.ItemSpec(300, gridModule.GridUnitType.pixel);
+
+        } else {
+
+            arrayColumns[i] = new gridModule.ItemSpec(1, gridModule.GridUnitType.star);
+
+        }
+
+        gridLayout.addColumn(arrayColumns[i]);
+
+    }
+
+}
+
+function createList(page) {
+    var viewModule = new observable.Observable();
+    
+    var thatboi = ["Oi","Ola","Feito"];
+    var layout = new stackModule.StackLayout();
+    var headerGrid = new gridModule.GridLayout();
+    var arrayColumns = Array();
+    var arrayRows = Array();
+    var numbColumns = 3;
+    var numbRows = 1;
+    
+    createRows(numbRows , arrayRows , headerGrid);
+    createColumns(numbColumns , arrayColumns , headerGrid);
+
+    //for( i = 0 ; i < numbColumns ; i++ ){
+//
+  //      headerGrid.GridLayout.setColumn(thatboi[i], i );
+    //    headerGrid.GridLayout.setRow(thatboi[i], 0 );
+      //  headerGrid.addChild(thatboi[i]);
+//
+  //  }
+
+    layout.addChild(headerGrid);
+
+    page.content = layout;
+
+}
 
 function createForm(page){
     pagerino = page;
