@@ -12,32 +12,26 @@ var listViewModule = require("ui/list-view");
 var scrollModule = require("ui/scroll-view");
 var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
+var localStorage = require("nativescript-localstorage");
 
-function createRows(numbRows , arrayRows , gridLayout) {
+function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
 
     for ( i = 0 ; i < numbRows ; i++ )
     {
 
-        arrayRows[i] = new gridModule.ItemSpec(1, gridModule.GridUnitType.star);
+        arrayRows[i] = new gridModule.ItemSpec(RowHeight, gridModule.GridUnitType[RowMode]);
         gridLayout.addRow(arrayRows[i]);
+
 
     }
 
 }
 
-function createColumns(numbColumns , arrayColumns , gridLayout) {
+function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, ColumnMode) {
 
     for ( i = 0 ; i < numbColumns ; i++ )
     {
-        if(i == 1){
-
-            arrayColumns[i] = new gridModule.ItemSpec(300, gridModule.GridUnitType.pixel);
-
-        } else {
-
-            arrayColumns[i] = new gridModule.ItemSpec(1, gridModule.GridUnitType.star);
-
-        }
+            arrayColumns[i] = new gridModule.ItemSpec(ColumnHeight, gridModule.GridUnitType[ColumnMode]);
 
         gridLayout.addColumn(arrayColumns[i]);
 
@@ -77,8 +71,8 @@ function createForm(page){
     pageForm = page;
     var viewModule = new observable.Observable();
 
-
     var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"buttaooo","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkvalue","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radiobuttton","value":"coisital"}]}';
+
     var jaaason = JSON.parse(myJSON);
     var fieldsSize = jaaason.form.length;
     
@@ -172,11 +166,65 @@ function createForm(page){
     });
 }
 
+
+function createWebView(page){
+    var mygrid = new gridModule.GridLayout();
+    var txt1 = new textFieldModule.TextField();
+    var btnsearch = new buttonModule.Button();
+    var myweb = new webModule.WebView();
+
+    var colunas = new Array();
+    var linhas = new Array();
+
+    //txt1.height = 30;
+    txt1.id = "txtsearch";
+
+    //btnsearch.height = 30;
+    btnsearch.text = "Search";
+    btnsearch.id = "btnsearch";
+
+    if(localStorage.getItem("default_url") == null){
+        myweb.url = "";
+        txt1.text = "http://";
+        alert("URL is not defined");
+    }else{
+        myweb.url = localStorage.getItem("default_url");
+        txt1.text = localStorage.getItem("default_url");
+    }
+    
+    btnsearch.on(buttonModule.Button.tapEvent, function (){
+        myweb.url = txt1.text;
+    });
+
+    createRows(1,linhas,mygrid,50,"pixel");
+    createRows(1,linhas,mygrid,500,"pixel");
+    createColumns(1,colunas,mygrid,230,"pixel");
+    createColumns(1,colunas,mygrid,90,"pixel");
+
+    gridModule.GridLayout.setColumn(txt1,0);
+    gridModule.GridLayout.setRow(txt1,0);
+    mygrid.addChild(txt1);
+
+    gridModule.GridLayout.setColumn(btnsearch,1);
+    gridModule.GridLayout.setRow(btnsearch,0);
+    mygrid.addChild(btnsearch);
+
+    gridModule.GridLayout.setColumn(myweb,0);
+    gridModule.GridLayout.setRow(myweb,1);
+    gridModule.GridLayout.setColumnSpan(myweb, 2)
+    mygrid.addChild(myweb);
+
+    page.content = mygrid;
+
+}
+
 exports.constructorLoad = function(args) {
 
     var page = args.object
     //info = button value; JSON constructor comes from the button JSON parameter
-    var Info = "FORM";
+    var Info = "webview";
+    //localStorage.setItem("default_url","http://www.google.com");
+    //localStorage.clear();
    if( Info.toLowerCase() == "list" ){
 
         createList();
@@ -187,7 +235,7 @@ exports.constructorLoad = function(args) {
 
    } else if ( Info.toLowerCase() == "webview" ) {
 
-        createWebView();
+        createWebView(page);
 
    } else if ( Info.toLowerCase() == "options" ) {
 
