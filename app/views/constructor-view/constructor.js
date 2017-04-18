@@ -72,8 +72,7 @@ function createForm(page){
     pageForm = page;
     var viewModule = new observable.Observable();
 
-    var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"buttaooo","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkvalue","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radiobuttton","value":"coisital"}]}';
-
+    var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"QrCode","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkBox","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radioButtton","value":"coisital"}]}';
     var jaaason = JSON.parse(myJSON);
     var fieldsSize = jaaason.form.length;
     
@@ -85,19 +84,46 @@ function createForm(page){
         switch(jaaason.form[i].Type){
             case "checkbox":
                 fieldsArray[i] = new checkModule.CheckBox();
+                fieldsArray[i].value = jaaason.form[i].value;
             break;
             case "dropdown":
+                var arrayDados = new Array();
                 fieldsArray[i] = new dropModule.DropDown();
                 fieldsArray[i].items = jaaason.form[i].items;
             break;
             case "radiobutton":
                 fieldsArray[i] = new radioBtnModule.RadioButton();
                 fieldsArray[i].radioGroup = jaaason.form[i].group;
+                fieldsArray[i].value = jaaason.form[i].value;
             break;
             case "button":
                 fieldsArray[i] = new buttonModule.Button();
                 fieldsArray[i].on(buttonModule.Button.tapEvent, function() {
-
+                    navigate
+                    var barcodescanner = new BarcodeScanner();
+                    barcodescanner.scan({
+                        formats: "QR_CODE",   // Pass in of you want to restrict scanning to certain types
+                        //cancelLabel: "EXIT. Also, try the volume buttons!", // iOS only, default 'Close'
+                        //cancelLabelBackgroundColor: "#333333", // iOS only, default '#000000' (black)
+                        message: "Use the volume buttons for extra light", // Android only, default is 'Place a barcode inside the viewfinder rectangle to scan it.'
+                        showFlipCameraButton: true,   // default false
+                        preferFrontCamera: false,     // default false
+                        showTorchButton: true,        // default false
+                        beepOnScan: true,             // Play or Suppress beep on scan (default true)
+                        torchOn: false,               // launch with the flashlight on (default false)
+                        resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
+                        orientation: "portrait",     // Android only, optionally lock the orientation to either "portrait" or "landscape"
+                        //openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
+                    }).then(
+                        function(result) {
+                            console.log("Scan format: " + result.format);
+                            console.log("Scan text:   " + result.text);
+                            localStorage.setItem("merda",result.text);
+                        },
+                        function(error) {
+                            console.log("No scan: " + error);
+                        }
+                    );
                 });
             break;
             case "label":
@@ -106,19 +132,12 @@ function createForm(page){
             case "textfield":
                 fieldsArray[i] = new textFieldModule.TextField();
                 fieldsArray[i].hint = jaaason.form[i].hint;
+                fieldsArray[i].value = jaaason.form[i].value;
             break;
         }
         fieldsArray[i].id = jaaason.form[i].id;
         fieldsArray[i].text = jaaason.form[i].text;
-        fieldsArray[i].value = jaaason.form[i].value;
-            var fieldBindOptions = {
-
-                sourceProperty: jaaason.form[i].varName,
-                targetProperty: jaaason.form[i].defaultValue,
-                twoWay: true
-        }
         
-        fieldsArray[i].bind(fieldBindOptions,viewModule);
         newStackLayout.addChild(fieldsArray[i]);
             
     }
@@ -134,58 +153,45 @@ function createForm(page){
             switch(jaaason.form[i].Type)
             {
                 case "textfield":
-                    viewModule[jaaason.form[i].varName] = fieldsArray[i].text;
-                    console.log(viewModule[jaaason.form[i].varName]);
-
+                    if(i == 0){
+                        submitInfo = fieldsArray[i].text;
+                    }
+                    else{
+                        submitInfo = submitInfo + "," + fieldsArray[i].text;
+                    }
                 break;
                 case "dropdown":
-                    viewModule[jaaason.form[i].varName] = fieldsArray[i].items[fieldsArray[i].selectedIndex];
-                    console.log(viewModule[jaaason.form[i].varName]);
-
+                    if(i == 0){
+                        submitInfo = fieldsArray[i].items[fieldsArray[i].selectedIndex];
+                    }
+                    else{
+                        submitInfo = submitInfo + "," + fieldsArray[i].items[fieldsArray[i].selectedIndex];
+                    }
                 break;
                 case "checkbox":
-                    viewModule[jaaason.form[i].varName] = fieldsArray[i].checked;
-                    console.log(viewModule[jaaason.form[i].varName]);
-
+                    if(i == 0){
+                        submitInfo = fieldsArray[i].checked;
+                    }
+                    else{
+                        submitInfo = submitInfo + "," + fieldsArray[i].checked;
+                    }
                 break;
                 case "radiobutton":
-                    viewModule[jaaason.form[i].varName] = fieldsArray[i].checked;
-                    console.log(viewModule[jaaason.form[i].varName]);
+                    if(i == 0){
+                        submitInfo = fieldsArray[i].checked;
+                    }
+                    else{
+                        submitInfo = submitInfo + "," + fieldsArray[i].checked;
+                    }
                 break;
                 case "button":
-                    var barcodescanner = new BarcodeScanner();
-                    barcodescanner.scan({
-                        formats: "QR_CODE",   // Pass in of you want to restrict scanning to certain types
-                        //cancelLabel: "EXIT. Also, try the volume buttons!", // iOS only, default 'Close'
-                        //cancelLabelBackgroundColor: "#333333", // iOS only, default '#000000' (black)
-                        message: "Use the volume buttons for extra light", // Android only, default is 'Place a barcode inside the viewfinder rectangle to scan it.'
-                        showFlipCameraButton: false,   // default false
-                        preferFrontCamera: false,     // default false
-                        showTorchButton: true,        // default false
-                        beepOnScan: true,             // Play or Suppress beep on scan (default true)
-                        torchOn: false,               // launch with the flashlight on (default false)
-                        resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
-                        orientation: "landscape",     // Android only, optionally lock the orientation to either "portrait" or "landscape"
-                        //openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
-                    }).then(
-                        function(result) {
-                            console.log("Scan format: " + result.format);
-                            console.log("Scan text:   " + result.text);
-                            var leitura = result.text;
-                        },
-                        function(error) {
-                            console.log("No scan: " + error);
-                        }
-                    );
+                    if(i == 0){
+                        submitInfo = fieldsArray[i].value
+                    }
+                    else{
+                        submitInfo = submitInfo + "," + fieldsArray[i].value;
+                    }
                 break;
-            }
-        }
-        for(j = 0; j < fieldsSize; j++){
-            if (j == 0){
-                submitInfo = viewModule[jaaason.form[j].varName];
-            }
-            else{
-                submitInfo = submitInfo + "," + viewModule[jaaason.form[j].varName];
             }
         }
 
@@ -249,7 +255,7 @@ exports.constructorLoad = function(args) {
 
     var page = args.object
     //info = button value; JSON constructor comes from the button JSON parameter
-    var Info = "webview";
+    var Info = "form";
     //localStorage.setItem("default_url","http://www.google.com");
     //localStorage.clear();
    if( Info.toLowerCase() == "list" ){

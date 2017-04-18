@@ -1,4 +1,6 @@
 dropdown{
     font-size: 20px;
     color: black;
+    width: 80%;
+    horizontal-align: left;
 }
