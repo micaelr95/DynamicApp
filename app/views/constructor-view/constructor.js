@@ -74,22 +74,15 @@ function createList(page) {
 }
 
 function createForm(page){
-    pagerino = page;
-    var viewModule = new observable.Obeservable();
+    pageForm = page;
+    var viewModule = new observable.Observable();
 
 
-    var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","hint":"click me","value":"email"},{"Type":"button","id":"button1","text":"click me","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"value":"coisado"},{"Type":"radiobutton","id":"radiobutton","text":"radio","value"="coisital"}]}';
+    var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"buttaooo","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkvalue","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radiobuttton","value":"coisital"}]}';
     var jaaason = JSON.parse(myJSON);
     var fieldsSize = jaaason.form.length;
-
-    for(i=0;i<fieldsSize;i++){
-        if(jaaason.form[i].value == ""){}
-        else{
-            viewModule[jaaason.form[i].value] = "";
-        }
-    }
     
-    var newStackLayout = new stackLayout.StackLayout();
+    var newStackLayout = new stackModule.StackLayout();
 
     var fieldsArray = new Array();
 
@@ -120,30 +113,63 @@ function createForm(page){
         fieldsArray[i].id = jaaason.form[i].id;
         fieldsArray[i].text = jaaason.form[i].text;
         fieldsArray[i].value = jaaason.form[i].value;
-        var fieldBindOptions = {
+            var fieldBindOptions = {
 
-                sourceProperty: jaaason.form[i].value,
-                targetProperty: "",
+                sourceProperty: jaaason.form[i].varName,
+                targetProperty: jaaason.form[i].defaultValue,
                 twoWay: true
-
         }
+        
         fieldsArray[i].bind(fieldBindOptions,viewModule);
         newStackLayout.addChild(fieldsArray[i]);
             
     }
     var submitBtn = new buttonModule.Button();
+    submitBtn.text = "submit";
     newStackLayout.addChild(submitBtn);
-    pagerino.content = newStackLayout;
+    pageForm.content = newStackLayout;
 
-    /*subtim btn {
-        for
-         viewModule[jaaason.form[i].value];
+    submitBtn.on(buttonModule.Button.tapEvent, function (){
+        var submitInfo = "";
+        for(i = 0; i < fieldsSize; i++)
+        {
+            switch(jaaason.form[i].Type)
+            {
+                case "textfield":
+                    viewModule[jaaason.form[i].varName] = fieldsArray[i].text;
+                    console.log(viewModule[jaaason.form[i].varName]);
 
-         array viewModuleinjo += ikeiiko
+                break;
+                case "dropdown":
+                    viewModule[jaaason.form[i].varName] = fieldsArray[i].items[fieldsArray[i].selectedIndex];
+                    console.log(viewModule[jaaason.form[i].varName]);
 
-         return arra
-    }*/
-    console.dump()
+                break;
+                case "checkbox":
+                    viewModule[jaaason.form[i].varName] = fieldsArray[i].checked;
+                    console.log(viewModule[jaaason.form[i].varName]);
+
+                break;
+                case "radiobutton":
+                    viewModule[jaaason.form[i].varName] = fieldsArray[i].checked;
+                    console.log(viewModule[jaaason.form[i].varName]);
+                break;
+                case "button":
+                    //pedro QR code;
+                break;
+            }
+        }
+        for(j = 0; j < fieldsSize; j++){
+            if (j == 0){
+                submitInfo = viewModule[jaaason.form[j].varName];
+            }
+            else{
+                submitInfo = submitInfo + "," + viewModule[jaaason.form[j].varName];
+            }
+        }
+
+    console.log(submitInfo);
+    });
 }
 
 exports.constructorLoad = function(args) {
