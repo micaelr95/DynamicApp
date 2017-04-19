@@ -1,22 +1,19 @@
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
-var localstorage = require( "nativescript-localstorage" );
+var localstorage = require("nativescript-localstorage");
 var frameModule = require("ui/frame");
 var page;
 
-
 exports.pageLoaded = function(args) {
-    //localstorage.clear();
+    // localstorage.clear();
     page = args.object;
 
     if(localstorage.getItem("isConfigured") == true){
         var topmost = frameModule.topmost();
-        topmost.navigate("main-page"); //Alterar para página correta mais tarde
+        topmost.navigate("views/main-api-view/main-api"); //Alterar para página correta mais tarde
     }
-
 }
 
 exports.scanQR = function(){
-
     var barcodescanner = new BarcodeScanner();
 
     barcodescanner.scan({
@@ -45,18 +42,16 @@ exports.scanQR = function(){
     
 }
 
-
 exports.confirmURL = function(){
-
     var my_url = page.getViewById("urlTextField").text;
 
     if(my_url == "" || my_url == "https://" || my_url == "http://"){
         alert("Please insert or scan a valid URL");
-    }else{
+    }
+    else {
         localstorage.setItem("server_url",my_url);
         localstorage.setItem("isConfigured",true);
         var topmost = frameModule.topmost();
-        topmost.navigate("main-page"); //Alterar para página correta quando for feita
+        topmost.navigate("views/main-api-view/main-api"); //Alterar para página correta quando for feita */~
     }
-    
 }
