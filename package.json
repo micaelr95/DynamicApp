@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "nativescript-barcodescanner": "^2.5.0",
-    "nativescript-localstorage": "^1.1.0",
     "nativescript-plugin-firebase": "^3.11.3",
+    "nativescript-checkbox": "^1.2.8",
+    "nativescript-drop-down": "^1.5.3",
+    "nativescript-localstorage": "^1.1.0",
+    "nativescript-radiobutton": "^0.1.0",
     "nativescript-theme-core": "~1.0.2",
     "tns-core-modules": "2.5.2"
   },
