@@ -41,28 +41,21 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 }
 
 function createList(page) {
-    var viewModule = new observable.Observable();
-    
-    var thatboi = ["Oi","Ola","Feito"];
     var layout = new stackModule.StackLayout();
-    var headerGrid = new gridModule.GridLayout();
-    var arrayColumns = Array();
-    var arrayRows = Array();
-    var numbColumns = 3;
-    var numbRows = 1;
-    
-    createRows(numbRows , arrayRows , headerGrid);
-    createColumns(numbColumns , arrayColumns , headerGrid);
 
-    //for( i = 0 ; i < numbColumns ; i++ ){
-//
-  //      headerGrid.GridLayout.setColumn(thatboi[i], i );
-    //    headerGrid.GridLayout.setRow(thatboi[i], 0 );
-      //  headerGrid.addChild(thatboi[i]);
-//
-  //  }
+    var jsonString = '{"title":"SOMETHING","listItems":["oi","fkukid"]}'; // <------- Can be replaced with the localstorage sting
+    var myJSON = JSON.parse(jsonString);
 
-    layout.addChild(headerGrid);
+    var labelTitle = new labelModule.Label();
+    labelTitle.className = "labelTitle";
+    labelTitle.text = myJSON.title;
+
+    var listView = new listViewModule.ListView();
+    listView.items = [];
+    listView.items = myJSON.listItems;    
+
+    layout.addChild(labelTitle);
+    layout.addChild(listView);
 
     page.content = layout;
 
