@@ -98,7 +98,7 @@ function createForm(page){
             break;
             case "button":
                 fieldsArray[i] = new buttonModule.Button();
-                fieldsArray[i].on(buttonModule.Button.tapEvent, function() {
+               /* fieldsArray[i].on(buttonModule.Button.tapEvent, function() {
                     navigate
                     var barcodescanner = new BarcodeScanner();
                     barcodescanner.scan({
@@ -124,7 +124,7 @@ function createForm(page){
                             console.log("No scan: " + error);
                         }
                     );
-                });
+                });*/
             break;
             case "label":
                 fieldsArray[i] = new labelModule.Label();
@@ -184,14 +184,14 @@ function createForm(page){
                         submitInfo = submitInfo + "," + fieldsArray[i].checked;
                     }
                 break;
-                case "button":
+              /*  case "button":
                     if(i == 0){
                         submitInfo = fieldsArray[i].value
                     }
                     else{
                         submitInfo = submitInfo + "," + fieldsArray[i].value;
                     }
-                break;
+                break;*/
             }
         }
 
