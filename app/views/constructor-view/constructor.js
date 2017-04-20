@@ -61,11 +61,20 @@ function createList(page) {
 
 }
 
-function createForm(page){
-    pageForm = page;
-    var viewModule = new observable.Observable();
+JsonForm = function() {
+    var urlJson = localstorage.getItem("server_url") + "/cenas.json";
+    fetch(urlJson).then(response => {
+        return response.json();
+    })
+    .then(function (r) {
+        var data = r;
+        drawForm(data);
+    });   
+}
 
-    var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"QrCode","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkBox","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radioButtton","value":"coisital"}]}';
+drawForm = function(data){
+
+    //var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"QrCode","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkBox","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radioButtton","value":"coisital"}]}';
     var jaaason = JSON.parse(myJSON);
     var fieldsSize = jaaason.form.length;
     
@@ -245,10 +254,10 @@ function createWebView(page){
 }
 
 exports.constructorLoad = function(args) {
+    var page = args.object;
+    var gotData = page.navigationContext;
+    var Info = gotData.typeView;
 
-    var page = args.object
-    //info = button value; JSON constructor comes from the button JSON parameter
-    var Info = "form";
     //localStorage.setItem("default_url","http://www.google.com");
     //localStorage.clear();
    if( Info.toLowerCase() == "list" ){

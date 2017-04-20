@@ -1,4 +1,6 @@
 // modules
+var frameModule = require("ui/frame");
+var topmost = frameModule.topmost();
 var buttonModule = require("ui/button");
 var labelModule = require("ui/label");
 var checkboxModule = require("nativescript-checkbox");
@@ -12,7 +14,7 @@ var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
 
 // vars storage
-var urlJson = localstorage.getItem("server_url");
+var urlJson = localstorage.getItem("server_url") + "/form.json";
 
 // merda para isto ok
 
@@ -62,9 +64,15 @@ drawJson = function(data) {
                 button[cont].id = data[i].id;
                 button[cont].formattedText = formattedString;
                 button[cont].className = "btnIcon";
+                button[cont].value = data[i].typeview;
                 button[cont].on(buttonModule.Button.tapEvent, function() {
-                    var toast = toastModule.makeText(data[cont].linkJson);
-                    toast.show();
+                    var navigationOptions = {
+                        moduleName: "views/constructor-view/constructor",
+                        context:{
+                            typeView: button[cont].value
+                        }
+                    }
+                    topmost.navigate(navigationOptions);
                 });
 
                 if (x <= 1) {
