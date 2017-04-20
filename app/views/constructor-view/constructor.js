@@ -43,7 +43,7 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 
 function createList(page) {
 
-    var viewLayout = new gridModule.GridLayout();
+   var viewLayout = new gridModule.GridLayout();
 
     var arrayRows = new Array();
     var arrayColumns = new Array();
@@ -52,8 +52,9 @@ function createList(page) {
     var titleArray = ["Nome","Idade","Morada"]; // <---| Informação dada pelo JSON
     var xListsInfo = [["Ola","Como"],["Vai","Isso"],["Contigo","?"]];
                                                 //     |
-    createColumns(numbColumns,arrayColumns,viewLayout,80,"star");
-    createRows(2,arrayRows,viewLayout,1,"auto");//     |
+    createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
+    createRows(1,arrayRows,viewLayout,50,"pixel");//     |
+    createRows(1,arrayRows,viewLayout,1,"auto");//     |
                                                 //     |
                                 //       ______________|
     var xLists = new Array(3);  //  <---| Numero de Campos
@@ -80,11 +81,11 @@ function createList(page) {
 
         gridModule.GridLayout.setColumn(xLists[i],i);
         gridModule.GridLayout.setRow(xLists[i],1);
-        // if( i == 0 ){
-        // 
-        //     gridModule.GridLayout.setColumnSpan(xLists[i], 2 /* Numero de Campos */)
-        // 
-        // }
+        //if( i == 0 ){
+         
+           // gridModule.GridLayout.setColumnSpan(xLists[i], 9999 /* Numero de Campos */)
+        
+         //}
         viewLayout.addChild(xLists[i]);
 
     }
