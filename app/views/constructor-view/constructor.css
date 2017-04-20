@@ -11,9 +11,9 @@ dropdown{
 }
 
 .Info{
-    color:red;
     text-align: center;
     font-size: 16px;
     border-width: 1px;
     border-color: lightgray;
+    height: 85%;
 }
