@@ -41,66 +41,53 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 }
 
 function createList(page) {
+
+    var viewLayout = new gridModule.GridLayout();
+
     var arrayRows = new Array();
     var arrayColumns = new Array();
 
-    var textoDoJson = "dasdasd";
-        
-    var title = new labelModule.Label();
-    title.className = "mytitle";
-    title.text= textoDoJson;
+    var numbColumns = 3; // <--- Numero de Campos  <---|
+    var titleArray = ["Nome","Idade","Morada"]; // <---| Informação dada pelo JSON
+    var xListsInfo = [["Ola","Como"],["Vai","Isso"],["Contigo","?"]];
+                                                //     |
+    createColumns(numbColumns,arrayColumns,viewLayout,80,"star");
+    createRows(2,arrayRows,viewLayout,1,"auto");//     |
+                                                //     |
+                                //       ______________|
+    var xLists = new Array(3);  //  <---| Numero de Campos
+    var xLabels = new Array(3); //  <---| Numero de Campos
+    
+    for( i = 0 ; i < 3 /* Numero de Campos */ ; i++ ){
 
-    var gridLayout = new Array();
-    var coisas = new Array();
+        xLabels[i] = new labelModule.Label();
+        xLabels[i].text = titleArray[i];
+        xLabels[i].className = "Title";
 
-    for(i=0;i<10;i++){
-
-        gridLayout[i] = new gridModule.GridLayout();
-
-    }
-
-    var i = 0;
-    var j = 0;
-    for(i=0;i<10;i++){
-
-        console.log("i = "+i);
-
-        createColumns(3,arrayColumns,gridLayout[i],1,"star");
-        createRows(1,arrayRows,gridLayout[i],1,"star");
-
-        for( j = 0 ; j < 3 ; j++ ){
-            console.log("JOTA = "+j);
-            
-            if(i==0){
-
-                coisas[j] = new labelModule.Label();
-                coisas[j].className = "gridLabel";
-                coisas[j].text = "Ola";
-                gridModule.GridLayout.setColumn(coisas[j],j);
-                gridModule.GridLayout.setRow(coisas[j],0);
-                gridLayout[i].addChild(coisas[j]);
-
-            } else {
-
-                coisas[i+2+j] = new labelModule.Label();
-                coisas[i+2+j].text = "ola";
-                gridModule.GridLayout.setColumn(coisas[i+2+j],j);
-                gridModule.GridLayout.setRow(coisas[i+2+j],0);
-                gridLayout[i].addChild(coisas[i+2+j]);
-
-            }
-
-        }
+        gridModule.GridLayout.setColumn(xLabels[i],i);
+        gridModule.GridLayout.setRow(xLabels[i],0);
+        viewLayout.addChild(xLabels[i]);
 
     }
 
-	// Criar scrollView por la as grids dentro scrollView.items = gridArray
-    var scroll1 = new scrollModule.ScrollView();
-    scroll1.items = gridLayout;
-    var viewLayout = new stackModule.StackLayout();
-    viewLayout.addChild(title);
-    viewLayout.addChild(scroll1);
+    for( i = 0 ; i < 3 /* Numero de Campos */ ; i++ ){
 
+        xLists[i] = new listViewModule.ListView();
+        xLists[i].items = [];
+        xLists[i].items = xListsInfo[i];
+        xLists[i].className = "Info";
+
+        gridModule.GridLayout.setColumn(xLists[i],i);
+        gridModule.GridLayout.setRow(xLists[i],1);
+        // if( i == 0 ){
+        // 
+        //     gridModule.GridLayout.setColumnSpan(xLists[i], 2 /* Numero de Campos */)
+        // 
+        // }
+        viewLayout.addChild(xLists[i]);
+
+    }
+    
     page.content = viewLayout;
 
 }

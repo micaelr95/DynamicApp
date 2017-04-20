@@ -5,13 +5,15 @@ dropdown{
     horizontal-align: left;
 }
 
-.mytitle{
-    font-size: 25px;
+.Title{
+    font-size: 20px;
     horizontal-align: center;
 }
 
-.gridLabel{
+.Info{
     color:red;
-    font-size: 20px;
-    border-width: 2px;
+    text-align: center;
+    font-size: 16px;
+    border-width: 1px;
+    border-color: lightgray;
 }
