@@ -92,13 +92,15 @@ function createList(page) {
 
 }
 
-JsonForm = function() {
-    var urlJson = localstorage.getItem("server_url") + "/cenas.json";
-    fetch(urlJson).then(response => {
+var urlForm = localStorage.getItem("server_url") + "/cenas.json";
+requestForm = function() {
+    fetch(urlForm).then(response => {
+         console.dump(response.json());
         return response.json();
     })
     .then(function (r) {
         var data = r;
+        console.dump(data);
         drawForm(data);
     });   
 }
@@ -106,8 +108,8 @@ JsonForm = function() {
 drawForm = function(data){
 
     //var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"QrCode","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkBox","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radioButtton","value":"coisital"}]}';
-    var jaaason = JSON.parse(myJSON);
-    var fieldsSize = jaaason.form.length;
+    
+    var fieldsSize = data.length;
     
     var newStackLayout = new stackModule.StackLayout();
 
@@ -297,7 +299,7 @@ exports.constructorLoad = function(args) {
 
    } else if ( Info.toLowerCase() == "form" ) {
 
-        createForm(page);
+        requestForm();
 
    } else if ( Info.toLowerCase() == "webview" ) {
 
