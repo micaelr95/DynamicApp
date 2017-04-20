@@ -4,3 +4,14 @@ dropdown{
     width: 80%;
     horizontal-align: left;
 }
+
+.mytitle{
+    font-size: 25px;
+    horizontal-align: center;
+}
+
+.gridLabel{
+    color:red;
+    font-size: 20px;
+    border-width: 2px;
+}

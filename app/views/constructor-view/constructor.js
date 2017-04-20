@@ -41,23 +41,67 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 }
 
 function createList(page) {
-    var layout = new stackModule.StackLayout();
+    var arrayRows = new Array();
+    var arrayColumns = new Array();
 
-    var jsonString = '{"title":"SOMETHING","listItems":["oi","fkukid"]}'; // <------- Can be replaced with the localstorage sting
-    var myJSON = JSON.parse(jsonString);
+    var textoDoJson = "dasdasd";
+        
+    var title = new labelModule.Label();
+    title.className = "mytitle";
+    title.text= textoDoJson;
 
-    var labelTitle = new labelModule.Label();
-    labelTitle.className = "labelTitle";
-    labelTitle.text = myJSON.title;
+    var gridLayout = new Array();
+    var coisas = new Array();
 
-    var listView = new listViewModule.ListView();
-    listView.items = [];
-    listView.items = myJSON.listItems;    
+    for(i=0;i<10;i++){
 
-    layout.addChild(labelTitle);
-    layout.addChild(listView);
+        gridLayout[i] = new gridModule.GridLayout();
 
-    page.content = layout;
+    }
+
+    var i = 0;
+    var j = 0;
+    for(i=0;i<10;i++){
+
+        console.log("i = "+i);
+
+        createColumns(3,arrayColumns,gridLayout[i],1,"star");
+        createRows(1,arrayRows,gridLayout[i],1,"star");
+
+        for( j = 0 ; j < 3 ; j++ ){
+            console.log("JOTA = "+j);
+            
+            if(i==0){
+
+                coisas[j] = new labelModule.Label();
+                coisas[j].className = "gridLabel";
+                coisas[j].text = "Ola";
+                gridModule.GridLayout.setColumn(coisas[j],j);
+                gridModule.GridLayout.setRow(coisas[j],0);
+                gridLayout[i].addChild(coisas[j]);
+
+            } else {
+
+                coisas[i+2+j] = new labelModule.Label();
+                coisas[i+2+j].text = "ola";
+                gridModule.GridLayout.setColumn(coisas[i+2+j],j);
+                gridModule.GridLayout.setRow(coisas[i+2+j],0);
+                gridLayout[i].addChild(coisas[i+2+j]);
+
+            }
+
+        }
+
+    }
+
+	// Criar scrollView por la as grids dentro scrollView.items = gridArray
+    var scroll1 = new scrollModule.ScrollView();
+    scroll1.items = gridLayout;
+    var viewLayout = new stackModule.StackLayout();
+    viewLayout.addChild(title);
+    viewLayout.addChild(scroll1);
+
+    page.content = viewLayout;
 
 }
 
@@ -262,7 +306,7 @@ exports.constructorLoad = function(args) {
     //localStorage.clear();
    if( Info.toLowerCase() == "list" ){
 
-        createList();
+        createList(page);
 
    } else if ( Info.toLowerCase() == "form" ) {
 
