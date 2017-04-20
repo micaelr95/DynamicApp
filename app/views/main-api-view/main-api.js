@@ -14,6 +14,8 @@ var toastModule = require("nativescript-toast");
 // vars storage
 var urlJson = localstorage.getItem("server_url");
 
+// merda para isto ok
+
 exports.mainMenu = function(args) {
     page = args.object;
     requestJson();
