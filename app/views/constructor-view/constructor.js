@@ -14,6 +14,7 @@ var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
 var localStorage = require("nativescript-localstorage");
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
+var page;
 
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
 
@@ -95,12 +96,10 @@ function createList(page) {
 var urlForm = localStorage.getItem("server_url") + "/cenas.json";
 requestForm = function() {
     fetch(urlForm).then(response => {
-         console.dump(response.json());
         return response.json();
     })
     .then(function (r) {
         var data = r;
-        console.dump(data);
         drawForm(data);
     });   
 }
@@ -116,20 +115,20 @@ drawForm = function(data){
     var fieldsArray = new Array();
 
     for(i=0; i < fieldsSize; i++){
-        switch(jaaason.form[i].Type){
+        switch(data[i].Type){
             case "checkbox":
                 fieldsArray[i] = new checkModule.CheckBox();
-                fieldsArray[i].value = jaaason.form[i].value;
+                fieldsArray[i].value = data[i].value;
             break;
             case "dropdown":
                 var arrayDados = new Array();
                 fieldsArray[i] = new dropModule.DropDown();
-                fieldsArray[i].items = jaaason.form[i].items;
+                fieldsArray[i].items = data[i].items;
             break;
             case "radiobutton":
                 fieldsArray[i] = new radioBtnModule.RadioButton();
-                fieldsArray[i].radioGroup = jaaason.form[i].group;
-                fieldsArray[i].value = jaaason.form[i].value;
+                fieldsArray[i].radioGroup = data[i].group;
+                fieldsArray[i].value = data[i].value;
             break;
             case "button":
                 fieldsArray[i] = new buttonModule.Button();
@@ -166,12 +165,12 @@ drawForm = function(data){
             break;
             case "textfield":
                 fieldsArray[i] = new textFieldModule.TextField();
-                fieldsArray[i].hint = jaaason.form[i].hint;
-                fieldsArray[i].value = jaaason.form[i].value;
+                fieldsArray[i].hint = data[i].hint;
+                fieldsArray[i].value = data[i].value;
             break;
         }
-        fieldsArray[i].id = jaaason.form[i].id;
-        fieldsArray[i].text = jaaason.form[i].text;
+        fieldsArray[i].id = data[i].id;
+        fieldsArray[i].text = data[i].text;
         
         newStackLayout.addChild(fieldsArray[i]);
             
@@ -179,13 +178,13 @@ drawForm = function(data){
     var submitBtn = new buttonModule.Button();
     submitBtn.text = "submit";
     newStackLayout.addChild(submitBtn);
-    pageForm.content = newStackLayout;
+    page.content = newStackLayout;
 
     submitBtn.on(buttonModule.Button.tapEvent, function (){
         var submitInfo = "";
         for(i = 0; i < fieldsSize; i++)
         {
-            switch(jaaason.form[i].Type)
+            switch(data[i].Type)
             {
                 case "textfield":
                     if(i == 0){
@@ -287,7 +286,7 @@ function createWebView(page){
 }
 
 exports.constructorLoad = function(args) {
-    var page = args.object;
+    page = args.object;
     var gotData = page.navigationContext;
     var Info = gotData.typeView;
 
