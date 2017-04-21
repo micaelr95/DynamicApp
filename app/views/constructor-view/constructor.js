@@ -53,9 +53,9 @@ function drawList(data) {
     var arrayRows = new Array();
     var arrayColumns = new Array();
 
-    var numbColumns = data.camps.length; // <--- Numero de Campos  <---|
-    var titleArray = data.camps; // <---| Informação dada pelo JSON
-    var xListsInfo = data.campsInfo;
+    var numbColumns = data.camps.length; //        <---| Numero de Campos  <---|
+    var titleArray = data.camps; //                <---| Informação dada pelo JSON
+    var xListsInfo = data.campsInfo; //                |
                                                 //     |
     createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
     createRows(1,arrayRows,viewLayout,50,"pixel");//   |
