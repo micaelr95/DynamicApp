@@ -1,8 +1,16 @@
-dropdown{
+label{
     font-size: 20px;
+
+}
+textfield{
+    margin-bottom: 3%;
+}
+dropdown{
+    font-size: 15px;
     color: black;
     width: 80%;
     horizontal-align: left;
+    margin-bottom: 3%;
 }
 
 .Title{
