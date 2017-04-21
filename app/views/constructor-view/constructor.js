@@ -103,7 +103,7 @@ requestForm = function(constructorForm) {
 
     if( constructorForm == "form" ){
 
-        urlForm += "/cenas.json";
+        urlForm += "/constructForm.json";
 
     } else if( constructorForm == "list" ){
 
@@ -221,21 +221,22 @@ drawForm = function(data){
 
     submitBtn.on(buttonModule.Button.tapEvent, function (){
         var submitInfo = new Array();
+        var cont = 0;
         for(i = 0; i < fieldsSize; i++)
         {
             switch(data[i].type)
             {
                 case "textfield":
-                        submitInfo[i] = fieldsArray[i].text;
+                        submitInfo[i-cont] = fieldsArray[i].text;
                 break;
                 case "dropdown":
-                        submitInfo[i] = fieldsArray[i].items[fieldsArray[i].selectedIndex];
+                        submitInfo[i-cont] = fieldsArray[i].items[fieldsArray[i].selectedIndex];
                 break;
                 case "checkbox":
-                        submitInfo[i] = fieldsArray[i].checked;
+                        submitInfo[i-cont] = fieldsArray[i].checked;
                 break;
                 case "radiobutton":
-                        submitInfo[i] = fieldsArray[i].value;
+                        submitInfo[i-cont] = fieldsArray[i].value;
                 break;
               /*  case "button":
                     if(i == 0){
@@ -245,9 +246,12 @@ drawForm = function(data){
                         submitInfo = submitInfo + "," + fieldsArray[i].value;
                     }
                 break;*/
+                case "label":
+                    cont +=1;
+                break;
             }
         }
-
+        console.log(submitInfo);
     //codigo micael aqui <----------------------------------------------------------------------------------
     });
 }
