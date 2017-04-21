@@ -4,3 +4,16 @@ dropdown{
     width: 80%;
     horizontal-align: left;
 }
+
+.Title{
+    font-size: 20px;
+    horizontal-align: center;
+}
+
+.Info{
+    text-align: center;
+    font-size: 16px;
+    border-width: 1px;
+    border-color: lightgray;
+    height: 85%;
+}

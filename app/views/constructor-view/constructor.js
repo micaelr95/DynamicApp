@@ -14,6 +14,7 @@ var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
 var localStorage = require("nativescript-localstorage");
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
+var page;
 
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
 
@@ -40,54 +41,136 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 
 }
 
-function createList(page) {
-    var layout = new stackModule.StackLayout();
+function drawList(data) {
 
-    var jsonString = '{"title":"SOMETHING","listItems":["oi","fkukid"]}'; // <------- Can be replaced with the localstorage sting
-    var myJSON = JSON.parse(jsonString);
+    console.dump(data);
+    console.dump(data.camps);
+    console.dump(data.campsInfo);
+    console.log("CARALHO: " + data.camps.length);
 
-    var labelTitle = new labelModule.Label();
-    labelTitle.className = "labelTitle";
-    labelTitle.text = myJSON.title;
+   var viewLayout = new gridModule.GridLayout();
 
-    var listView = new listViewModule.ListView();
-    listView.items = [];
-    listView.items = myJSON.listItems;    
+    var arrayRows = new Array();
+    var arrayColumns = new Array();
 
-    layout.addChild(labelTitle);
-    layout.addChild(listView);
+    var numbColumns = data.camps.length; //        <---| Numero de Campos
+    var titleArray = data.camps; //                <---| Informação dada pelo JSON                                                //     |
+    createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
+    createRows(1,arrayRows,viewLayout,50,"pixel"); //  |
+    createRows(1,arrayRows,viewLayout,1,"auto");   //  |
+                                                   //  |
+                                //       ______________|
+    var xLists = new Array(3);  //  <---| Numero de Campos
+    var xLabels = new Array(3); //  <---| Numero de Campos
+    
+    for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
 
-    page.content = layout;
+        xLabels[i] = new labelModule.Label();
+        xLabels[i].text = titleArray[i];
+        xLabels[i].className = "Title";
+
+        gridModule.GridLayout.setColumn(xLabels[i],i);
+        gridModule.GridLayout.setRow(xLabels[i],0);
+        viewLayout.addChild(xLabels[i]);
+
+    }
+
+    for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
+
+        xLists[i] = new listViewModule.ListView();
+        xLists[i].items = [];
+        xLists[i].items = data.campsInfo[i];
+        xLists[i].className = "Info";
+
+        gridModule.GridLayout.setColumn(xLists[i],i);
+        gridModule.GridLayout.setRow(xLists[i],1);
+        //if( i == 0 ){
+         
+           // gridModule.GridLayout.setColumnSpan(xLists[i], 9999 /* Numero de Campos */)
+        
+         //}
+        viewLayout.addChild(xLists[i]);
+
+    }
+    
+    page.content = viewLayout;
 
 }
 
-function createForm(page){
-    pageForm = page;
-    var viewModule = new observable.Observable();
+requestForm = function(constructorForm) {
 
-    var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"QrCode","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkBox","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radioButtton","value":"coisital"}]}';
-    var jaaason = JSON.parse(myJSON);
-    var fieldsSize = jaaason.form.length;
+    var urlForm = localStorage.getItem("server_url");
+
+    if( constructorForm == "form" ){
+
+        urlForm += "/cenas.json";
+
+    } else if( constructorForm == "list" ){
+
+        urlForm += "/list.json"
+
+    } else if( constructorForm == "webview" ){
+
+        urlForm += "/webview.json"
+
+    } else {
+
+        urlForm += "/options.json"
+
+    }
+
+    fetch(urlForm).then(response => {
+        return response.json();
+    })
+    .then(function (r) {
+        var data = r;
+
+        if( constructorForm == "form" ){
+
+        drawForm(data);
+
+        } else if( constructorForm == "list" ){
+
+            drawList(data);
+
+        } else if( constructorForm == "webview" ){
+
+            drawWebView(data);
+
+        } else {
+
+            drawOptions(data);
+
+        }
+
+    });   
+}
+
+drawForm = function(data){
+
+    //var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"QrCode","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkBox","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radioButtton","value":"coisital"}]}';
+    
+    var fieldsSize = data.length;
     
     var newStackLayout = new stackModule.StackLayout();
 
     var fieldsArray = new Array();
 
     for(i=0; i < fieldsSize; i++){
-        switch(jaaason.form[i].Type){
+        switch(data[i].Type){
             case "checkbox":
                 fieldsArray[i] = new checkModule.CheckBox();
-                fieldsArray[i].value = jaaason.form[i].value;
+                fieldsArray[i].value = data[i].value;
             break;
             case "dropdown":
                 var arrayDados = new Array();
                 fieldsArray[i] = new dropModule.DropDown();
-                fieldsArray[i].items = jaaason.form[i].items;
+                fieldsArray[i].items = data[i].items;
             break;
             case "radiobutton":
                 fieldsArray[i] = new radioBtnModule.RadioButton();
-                fieldsArray[i].radioGroup = jaaason.form[i].group;
-                fieldsArray[i].value = jaaason.form[i].value;
+                fieldsArray[i].radioGroup = data[i].group;
+                fieldsArray[i].value = data[i].value;
             break;
             case "button":
                 fieldsArray[i] = new buttonModule.Button();
@@ -124,12 +207,12 @@ function createForm(page){
             break;
             case "textfield":
                 fieldsArray[i] = new textFieldModule.TextField();
-                fieldsArray[i].hint = jaaason.form[i].hint;
-                fieldsArray[i].value = jaaason.form[i].value;
+                fieldsArray[i].hint = data[i].hint;
+                fieldsArray[i].value = data[i].value;
             break;
         }
-        fieldsArray[i].id = jaaason.form[i].id;
-        fieldsArray[i].text = jaaason.form[i].text;
+        fieldsArray[i].id = data[i].id;
+        fieldsArray[i].text = data[i].text;
         
         newStackLayout.addChild(fieldsArray[i]);
             
@@ -137,13 +220,13 @@ function createForm(page){
     var submitBtn = new buttonModule.Button();
     submitBtn.text = "submit";
     newStackLayout.addChild(submitBtn);
-    pageForm.content = newStackLayout;
+    page.content = newStackLayout;
 
     submitBtn.on(buttonModule.Button.tapEvent, function (){
         var submitInfo = "";
         for(i = 0; i < fieldsSize; i++)
         {
-            switch(jaaason.form[i].Type)
+            switch(data[i].Type)
             {
                 case "textfield":
                     if(i == 0){
@@ -193,7 +276,7 @@ function createForm(page){
 }
 
 
-function createWebView(page){
+function drawWebView(data){
     var mygrid = new gridModule.GridLayout();
     var txt1 = new textFieldModule.TextField();
     var btnsearch = new buttonModule.Button();
@@ -209,13 +292,13 @@ function createWebView(page){
     btnsearch.text = "Search";
     btnsearch.id = "btnsearch";
 
-    if(localStorage.getItem("default_url") == null){
+    if(data.defaultUrl == ""){
         myweb.url = "";
         txt1.text = "http://";
-        alert("URL is not defined");
+        alert("Default URL is not defined");
     }else{
-        myweb.url = localStorage.getItem("default_url");
-        txt1.text = localStorage.getItem("default_url");
+        myweb.url = data.defaultUrl;
+        txt1.text = data.defaultUrl;
     }
     
     btnsearch.on(buttonModule.Button.tapEvent, function (){
@@ -245,31 +328,32 @@ function createWebView(page){
 }
 
 exports.constructorLoad = function(args) {
+    page = args.object;
+    var gotData = page.navigationContext;
+    var Info = gotData.typeView;
 
-    var page = args.object
-    //info = button value; JSON constructor comes from the button JSON parameter
-    var Info = "form";
     //localStorage.setItem("default_url","http://www.google.com");
     //localStorage.clear();
    if( Info.toLowerCase() == "list" ){
 
-        createList();
+        requestForm("list");
 
    } else if ( Info.toLowerCase() == "form" ) {
 
-        createForm(page);
+        requestForm("form");
 
    } else if ( Info.toLowerCase() == "webview" ) {
 
-        createWebView(page);
+        requestForm("webview");
 
    } else if ( Info.toLowerCase() == "options" ) {
 
-        createOptions();
+        requestForm("options");
 
    } else {
 
         alert("NOPE!");
+        //error
 
    }
 
