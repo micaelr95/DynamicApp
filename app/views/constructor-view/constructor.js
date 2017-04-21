@@ -221,6 +221,7 @@ drawForm = function(data){
 
     submitBtn.on(buttonModule.Button.tapEvent, function (){
         var submitInfo = new Array();
+        var varNames = new Array
         var cont = 0;
         for(i = 0; i < fieldsSize; i++)
         {
@@ -228,15 +229,19 @@ drawForm = function(data){
             {
                 case "textfield":
                         submitInfo[i-cont] = fieldsArray[i].text;
+                        varNames[i-cont] = data[i].varName;
                 break;
                 case "dropdown":
                         submitInfo[i-cont] = fieldsArray[i].items[fieldsArray[i].selectedIndex];
+                        varNames[i-cont] = data[i].varName;
                 break;
                 case "checkbox":
                         submitInfo[i-cont] = fieldsArray[i].checked;
+                        varNames[i-cont] = data[i].varName;
                 break;
                 case "radiobutton":
                         submitInfo[i-cont] = fieldsArray[i].value;
+                        varNames[i-cont] = data[i].varName;
                 break;
               /*  case "button":
                     if(i == 0){
@@ -251,6 +256,7 @@ drawForm = function(data){
                 break;
             }
         }
+        console.log(varNames);
         console.log(submitInfo);
     //codigo micael aqui <----------------------------------------------------------------------------------
     });
