@@ -147,17 +147,14 @@ requestForm = function(constructorForm) {
 }
 
 drawForm = function(data){
-
-    //var myJSON = '{"form":[{"Type":"textfield","id":"textfield1","text":"","hint":"write your email","varName":"email"},{"Type":"button","id":"button1","text":"click me","varName":"QrCode","value":"coiso"},{"Type":"checkbox","id":"checkbox","text":"click me","varName":"checkBox","value":"coisito"},{"Type":"dropdown","id":"dropdown","items":["Escolha uma opção","as","oi"],"varName":"dropDown"},{"Type":"radiobutton","id":"radiobutton","text":"radio","varName":"radioButtton","value":"coisital"}]}';
-    
     var fieldsSize = data.length;
-    
+
     var newStackLayout = new stackModule.StackLayout();
 
     var fieldsArray = new Array();
-
+    
     for(i=0; i < fieldsSize; i++){
-        switch(data[i].Type){
+        switch(data[i].type){
             case "checkbox":
                 fieldsArray[i] = new checkModule.CheckBox();
                 fieldsArray[i].value = data[i].value;
@@ -168,6 +165,7 @@ drawForm = function(data){
                 fieldsArray[i].items = data[i].items;
             break;
             case "radiobutton":
+                // radiogroupd (luis help)
                 fieldsArray[i] = new radioBtnModule.RadioButton();
                 fieldsArray[i].radioGroup = data[i].group;
                 fieldsArray[i].value = data[i].value;
@@ -208,7 +206,6 @@ drawForm = function(data){
             case "textfield":
                 fieldsArray[i] = new textFieldModule.TextField();
                 fieldsArray[i].hint = data[i].hint;
-                fieldsArray[i].value = data[i].value;
             break;
         }
         fieldsArray[i].id = data[i].id;
@@ -223,42 +220,22 @@ drawForm = function(data){
     page.content = newStackLayout;
 
     submitBtn.on(buttonModule.Button.tapEvent, function (){
-        var submitInfo = "";
+        var submitInfo = new Array();
         for(i = 0; i < fieldsSize; i++)
         {
-            switch(data[i].Type)
+            switch(data[i].type)
             {
                 case "textfield":
-                    if(i == 0){
-                        submitInfo = fieldsArray[i].text;
-                    }
-                    else{
-                        submitInfo = submitInfo + "," + fieldsArray[i].text;
-                    }
+                        submitInfo[i] = fieldsArray[i].text;
                 break;
                 case "dropdown":
-                    if(i == 0){
-                        submitInfo = fieldsArray[i].items[fieldsArray[i].selectedIndex];
-                    }
-                    else{
-                        submitInfo = submitInfo + "," + fieldsArray[i].items[fieldsArray[i].selectedIndex];
-                    }
+                        submitInfo[i] = fieldsArray[i].items[fieldsArray[i].selectedIndex];
                 break;
                 case "checkbox":
-                    if(i == 0){
-                        submitInfo = fieldsArray[i].checked;
-                    }
-                    else{
-                        submitInfo = submitInfo + "," + fieldsArray[i].checked;
-                    }
+                        submitInfo[i] = fieldsArray[i].checked;
                 break;
                 case "radiobutton":
-                    if(i == 0){
-                        submitInfo = fieldsArray[i].checked;
-                    }
-                    else{
-                        submitInfo = submitInfo + "," + fieldsArray[i].checked;
-                    }
+                        submitInfo[i] = fieldsArray[i].value;
                 break;
               /*  case "button":
                     if(i == 0){
@@ -271,7 +248,7 @@ drawForm = function(data){
             }
         }
 
-    console.log(submitInfo);
+    //codigo micael aqui <----------------------------------------------------------------------------------
     });
 }
 
