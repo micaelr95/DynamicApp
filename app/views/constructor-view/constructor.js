@@ -41,7 +41,9 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 
 }
 
-function createList(page) {
+function drawList(data) {
+
+    console.dump(data);
 
    var viewLayout = new gridModule.GridLayout();
 
@@ -53,7 +55,7 @@ function createList(page) {
     var xListsInfo = [["Ola","Como"],["Vai","Isso"],["Contigo","?"]];
                                                 //     |
     createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
-    createRows(1,arrayRows,viewLayout,50,"pixel");//     |
+    createRows(1,arrayRows,viewLayout,50,"pixel");//   |
     createRows(1,arrayRows,viewLayout,1,"auto");//     |
                                                 //     |
                                 //       ______________|
@@ -94,14 +96,52 @@ function createList(page) {
 
 }
 
-var urlForm = localStorage.getItem("server_url") + "/cenas.json";
-requestForm = function() {
+requestForm = function(constructorForm) {
+
+    var urlForm = localStorage.getItem("server_url");
+
+    if( constructorForm == "form" ){
+
+        urlForm += "/cenas.json";
+
+    } else if( constructorForm == "list" ){
+
+        urlForm += "/list.json"
+
+    } else if( constructorForm == "webview" ){
+
+        urlForm += "/webview.json"
+
+    } else {
+
+        urlForm += "/options.json"
+
+    }
+
     fetch(urlForm).then(response => {
         return response.json();
     })
     .then(function (r) {
         var data = r;
+
+        if( constructorForm == "form" ){
+
         drawForm(data);
+
+        } else if( constructorForm == "list" ){
+
+            drawList(data);
+
+        } else if( constructorForm == "webview" ){
+
+            drawWebView(data);
+
+        } else {
+
+            drawOptions(data);
+
+        }
+
     });   
 }
 
@@ -235,7 +275,7 @@ drawForm = function(data){
 }
 
 
-function createWebView(page){
+function drawWebView(data){
     var mygrid = new gridModule.GridLayout();
     var txt1 = new textFieldModule.TextField();
     var btnsearch = new buttonModule.Button();
@@ -295,19 +335,19 @@ exports.constructorLoad = function(args) {
     //localStorage.clear();
    if( Info.toLowerCase() == "list" ){
 
-        createList(page);
+        requestForm("list");
 
    } else if ( Info.toLowerCase() == "form" ) {
 
-        requestForm();
+        requestForm("form");
 
    } else if ( Info.toLowerCase() == "webview" ) {
 
-        createWebView(page);
+        requestForm("webview");
 
    } else if ( Info.toLowerCase() == "options" ) {
 
-        createOptions();
+        requestForm("options");
 
    } else {
 
