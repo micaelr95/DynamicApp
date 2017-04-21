@@ -44,15 +44,18 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 function drawList(data) {
 
     console.dump(data);
+    console.dump(data.camps);
+    console.dump(data.campsInfo);
+    console.log("CARALHO: " + data.camps.length);
 
    var viewLayout = new gridModule.GridLayout();
 
     var arrayRows = new Array();
     var arrayColumns = new Array();
 
-    var numbColumns = 3; // <--- Numero de Campos  <---|
-    var titleArray = ["Nome","Idade","Morada"]; // <---| Informação dada pelo JSON
-    var xListsInfo = [["Ola","Como"],["Vai","Isso"],["Contigo","?"]];
+    var numbColumns = data.camps.length; // <--- Numero de Campos  <---|
+    var titleArray = data.camps; // <---| Informação dada pelo JSON
+    var xListsInfo = data.campsInfo;
                                                 //     |
     createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
     createRows(1,arrayRows,viewLayout,50,"pixel");//   |
@@ -62,7 +65,7 @@ function drawList(data) {
     var xLists = new Array(3);  //  <---| Numero de Campos
     var xLabels = new Array(3); //  <---| Numero de Campos
     
-    for( i = 0 ; i < 3 /* Numero de Campos */ ; i++ ){
+    for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
 
         xLabels[i] = new labelModule.Label();
         xLabels[i].text = titleArray[i];
@@ -74,11 +77,11 @@ function drawList(data) {
 
     }
 
-    for( i = 0 ; i < 3 /* Numero de Campos */ ; i++ ){
+    for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
 
         xLists[i] = new listViewModule.ListView();
         xLists[i].items = [];
-        xLists[i].items = xListsInfo[i];
+        xLists[i].items = data.campsInfo[i];
         xLists[i].className = "Info";
 
         gridModule.GridLayout.setColumn(xLists[i],i);
@@ -291,13 +294,13 @@ function drawWebView(data){
     btnsearch.text = "Search";
     btnsearch.id = "btnsearch";
 
-    if(localStorage.getItem("default_url") == null){
+    if(data.defaultUrl == ""){
         myweb.url = "";
         txt1.text = "http://";
-        alert("URL is not defined");
+        alert("Default URL is not defined");
     }else{
-        myweb.url = localStorage.getItem("default_url");
-        txt1.text = localStorage.getItem("default_url");
+        myweb.url = data.defaultUrl;
+        txt1.text = data.defaultUrl;
     }
     
     btnsearch.on(buttonModule.Button.tapEvent, function (){
