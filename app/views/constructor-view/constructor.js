@@ -14,6 +14,7 @@ var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
 var localStorage = require("nativescript-localstorage");
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
+var firebase = require("nativescript-plugin-firebase");
 var page;
 
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
@@ -258,7 +259,10 @@ drawForm = function(data){
         }
         console.log(varNames);
         console.log(submitInfo);
-    //codigo micael aqui <----------------------------------------------------------------------------------
+        //codigo micael aqui <----------------------------------------------------------------------------------
+        firebase.push( '/aasd', {
+            varNames: submitInfo
+        });
     });
 }
 
