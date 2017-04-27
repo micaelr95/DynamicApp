@@ -14,7 +14,8 @@ var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
 var localStorage = require("nativescript-localstorage");
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
-var firebase = require("nativescript-plugin-firebase");
+var Connection = require("../../shared/DB_connection");
+var con = new Connection();
 var page;
 
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
@@ -222,7 +223,7 @@ drawForm = function(data){
 
     submitBtn.on(buttonModule.Button.tapEvent, function (){
         var submitInfo = new Array();
-        var varNames = new Array
+        var varNames = new Array();
         var cont = 0;
         for(i = 0; i < fieldsSize; i++)
         {
@@ -259,10 +260,9 @@ drawForm = function(data){
         }
         console.log(varNames);
         console.log(submitInfo);
-        //codigo micael aqui <----------------------------------------------------------------------------------
-        firebase.push( '/aasd', {
-            varNames: submitInfo
-        });
+        
+        // Send data to DB
+        con.add('/aasd', submitInfo);
     });
 }
 

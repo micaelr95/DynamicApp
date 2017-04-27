@@ -12,38 +12,20 @@ var localstorage = require("nativescript-localstorage");
 var formattedStringModule = require("text/formatted-string");
 var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
-var firebase = require("nativescript-plugin-firebase");
-var config = require("../../shared/config");
+var Connection = require("../../shared/DB_connection");
+var con = new Connection();
 
 // vars storage
 var urlJson = localstorage.getItem("server_url") + "/form.json";
 
-// merda para isto ok
-
-exports.mainMenu = function(args) {
-    firebase.init({
-        url: config.apiUrl
-        }).then(
-            function (instance) {
-            console.log("firebase.init done");
-            },
-            function (error) {
-            console.log("firebase.init error: " + error);
-            }
-    );
-
-    firebase.login({
-        type: firebase.LoginType.ANONYMOUS
-    }).then(
-        function (result) {
-            console.log(JSON.stringify(result));
-        },
-        function (errorMessage) {
-            console.log(errorMessage);
-        }
-    );
-    
+exports.mainMenu = function(args) {    
     page = args.object;
+
+    // Initiate database connection
+    con.init();
+    // Starts ANONYMOUS connection to database
+    con.login();
+
     requestJson();
 }
 
