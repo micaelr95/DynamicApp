@@ -1,4 +1,6 @@
 // modules
+var frameModule = require("ui/frame");
+var topmost = frameModule.topmost();
 var buttonModule = require("ui/button");
 var labelModule = require("ui/label");
 var checkboxModule = require("nativescript-checkbox");
@@ -10,12 +12,20 @@ var localstorage = require("nativescript-localstorage");
 var formattedStringModule = require("text/formatted-string");
 var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
+var Connection = require("../../shared/DB_connection");
+var con = new Connection();
 
 // vars storage
-var urlJson = localstorage.getItem("server_url");
+var urlJson = localstorage.getItem("server_url") + "/form.json";
 
-exports.mainMenu = function(args) {
+exports.mainMenu = function(args) {    
     page = args.object;
+
+    // Initiate database connection
+    con.init();
+    // Starts ANONYMOUS connection to database
+    con.login();
+
     requestJson();
 }
 
@@ -60,9 +70,15 @@ drawJson = function(data) {
                 button[cont].id = data[i].id;
                 button[cont].formattedText = formattedString;
                 button[cont].className = "btnIcon";
+                button[cont].value = data[i].typeview;
                 button[cont].on(buttonModule.Button.tapEvent, function() {
-                    var toast = toastModule.makeText(data[cont].linkJson);
-                    toast.show();
+                    var navigationOptions = {
+                        moduleName: "views/constructor-view/constructor",
+                        context:{
+                            typeView: button[cont].value
+                        }
+                    }
+                    topmost.navigate(navigationOptions);
                 });
 
                 if (x <= 1) {
