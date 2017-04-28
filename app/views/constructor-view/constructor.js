@@ -18,7 +18,8 @@ var localStorage = require("nativescript-localstorage");
 var spansModule = require("text/span");
 var formattedStringModule = require("text/formatted-string");
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
-var firebase = require("nativescript-plugin-firebase");
+var Connection = require("../../shared/DB_connection");
+var con = new Connection();
 var page;
 
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
@@ -294,9 +295,7 @@ drawForm = function(data,viewGrid){
             }
         }
 
-        firebase.push( '/aasd', {
-            varNames: submitInfo
-        });
+       con.add('/aasd', submitInfo);
     });
 }
 
