@@ -13,9 +13,10 @@ var scrollModule = require("ui/scroll-view");
 var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
 var localStorage = require("nativescript-localstorage");
+var spansModule = require("text/span");
+var formattedStringModule = require("text/formatted-string");
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
-var Connection = require("../../shared/DB_connection");
-var con = new Connection();
+var firebase = require("nativescript-plugin-firebase");
 var page;
 
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
@@ -43,14 +44,9 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 
 }
 
-function drawList(data) {
+function drawList(data,viewGrid) {
 
-    console.dump(data);
-    console.dump(data.camps);
-    console.dump(data.campsInfo);
-    console.log("CARALHO: " + data.camps.length);
-
-   var viewLayout = new gridModule.GridLayout();
+var viewLayout = new gridModule.GridLayout();
 
     var arrayRows = new Array();
     var arrayColumns = new Array();
@@ -62,8 +58,8 @@ function drawList(data) {
     createRows(1,arrayRows,viewLayout,1,"auto");   //  |
                                                    //  |
                                 //       ______________|
-    var xLists = new Array(3);  //  <---| Numero de Campos
     var xLabels = new Array(3); //  <---| Numero de Campos
+    var xList = new listViewModule.ListView();
     
     for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
 
@@ -77,29 +73,59 @@ function drawList(data) {
 
     }
 
-    for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
+    var newGridLayout = new Array();
+    var i = 0;
+    var j = 0;
+    var contador = -1;
 
-        xLists[i] = new listViewModule.ListView();
-        xLists[i].items = [];
-        xLists[i].items = data.campsInfo[i];
-        xLists[i].className = "Info";
+    for( i = 0 ; i < data.campsInfo[0].length ; i++ ){
 
-        gridModule.GridLayout.setColumn(xLists[i],i);
-        gridModule.GridLayout.setRow(xLists[i],1);
-        //if( i == 0 ){
-         
-           // gridModule.GridLayout.setColumnSpan(xLists[i], 9999 /* Numero de Campos */)
-        
-         //}
-        viewLayout.addChild(xLists[i]);
+        newGridLayout[i] = new gridModule.GridLayout();
+        newGridLayout.className = "Info";
 
     }
+
+    for( i = 0 ; i < data.campsInfo[0].length ; i++ ){
+
+        createColumns(numbColumns,arrayColumns,newGridLayout[i],1,"star");
+        createRows(1,arrayRows,newGridLayout[i],40,"pixel");
+
+        for( j = 0 ; j < numbColumns ; j++ ){
+
+            contador++;
+
+            xLabels[contador] = new labelModule.Label();
+            xLabels[contador].text = data.campsInfo[j][i];
+            xLabels[contador].className = "Info";
+            gridModule.GridLayout.setColumn(xLabels[contador],j);
+            gridModule.GridLayout.setRow(xLabels[contador],i);
+            newGridLayout[i].addChild(xLabels[contador]);
+
+        }
+
+    }
+
+        //xList.itemTemplate = new GridLayout;
+        xList.className = "Info";
+        xList.items = newGridLayout;
+
+        gridModule.GridLayout.setColumn(xList,0);
+        gridModule.GridLayout.setRow(xList,1);
+        gridModule.GridLayout.setColumnSpan(xList,numbColumns);
+        
+        viewLayout.addChild(xList);
+
+    gridModule.GridLayout.setColumn(viewLayout,0);
+    gridModule.GridLayout.setRow(viewLayout,0);
+    gridModule.GridLayout.setColumnSpan(viewLayout,3);
+
+    viewGrid.addChild(viewLayout);
     
-    page.content = viewLayout;
+    page.content = viewGrid;
 
 }
 
-requestForm = function(constructorForm) {
+requestForm = function(constructorForm,viewGrid) {
 
     var urlForm = localStorage.getItem("server_url");
 
@@ -133,7 +159,7 @@ requestForm = function(constructorForm) {
 
         } else if( constructorForm == "list" ){
 
-            drawList(data);
+            drawList(data,viewGrid);
 
         } else if( constructorForm == "webview" ){
 
@@ -160,66 +186,72 @@ drawForm = function(data){
             case "checkbox":
                 fieldsArray[i] = new checkModule.CheckBox();
                 fieldsArray[i].value = data[i].value;
+                fieldsArray[i].id = data[i].id;
+                fieldsArray[i].text = data[i].text;
+
+                newStackLayout.addChild(fieldsArray[i]);
             break;
+
             case "dropdown":
                 var arrayDados = new Array();
                 fieldsArray[i] = new dropModule.DropDown();
                 fieldsArray[i].items = data[i].items;
+                fieldsArray[i].id = data[i].id;
+
+                newStackLayout.addChild(fieldsArray[i]);
             break;
+
+            case "radiogroup":
+                fieldsArray[i] = new radioBtnModule.RadioGroup();
+                fieldsArray[i].id = data[i].id;
+                newStackLayout.addChild(fieldsArray[i]);
+        
+            break;
+
             case "radiobutton":
-                // radiogroupd (luis help)
                 fieldsArray[i] = new radioBtnModule.RadioButton();
-                fieldsArray[i].radioGroup = data[i].group;
+                fieldsArray[i].id = data[i].id;
+                fieldsArray[i].text = data[i].text;
                 fieldsArray[i].value = data[i].value;
+
+                newStackLayout.getViewById(data[i].group).addChild(fieldsArray[i]);
             break;
-            case "button":
-                fieldsArray[i] = new buttonModule.Button();
-               /* fieldsArray[i].on(buttonModule.Button.tapEvent, function() {
-                    navigate
-                    var barcodescanner = new BarcodeScanner();
-                    barcodescanner.scan({
-                        formats: "QR_CODE",   // Pass in of you want to restrict scanning to certain types
-                        //cancelLabel: "EXIT. Also, try the volume buttons!", // iOS only, default 'Close'
-                        //cancelLabelBackgroundColor: "#333333", // iOS only, default '#000000' (black)
-                        message: "Use the volume buttons for extra light", // Android only, default is 'Place a barcode inside the viewfinder rectangle to scan it.'
-                        showFlipCameraButton: true,   // default false
-                        preferFrontCamera: false,     // default false
-                        showTorchButton: true,        // default false
-                        beepOnScan: true,             // Play or Suppress beep on scan (default true)
-                        torchOn: false,               // launch with the flashlight on (default false)
-                        resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
-                        orientation: "portrait",     // Android only, optionally lock the orientation to either "portrait" or "landscape"
-                        //openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
-                    }).then(
-                        function(result) {
-                            console.log("Scan format: " + result.format);
-                            console.log("Scan text:   " + result.text);
-                            localStorage.setItem("merda",result.text);
-                        },
-                        function(error) {
-                            console.log("No scan: " + error);
-                        }
-                    );
-                });*/
-            break;
+
             case "label":
                 fieldsArray[i] = new labelModule.Label();
+                fieldsArray[i].id = data[i].id;
+                fieldsArray[i].text = data[i].text;
+
+                newStackLayout.addChild(fieldsArray[i]);
             break;
+
             case "textfield":
                 fieldsArray[i] = new textFieldModule.TextField();
                 fieldsArray[i].hint = data[i].hint;
+                fieldsArray[i].id = data[i].id;
+
+                newStackLayout.addChild(fieldsArray[i]);
+            break;
+            
+            default:
             break;
         }
-        fieldsArray[i].id = data[i].id;
-        fieldsArray[i].text = data[i].text;
-        
-        newStackLayout.addChild(fieldsArray[i]);
-            
     }
+    var verif = new buttonModule.Button();
+    verif.text = "verif";
+    newStackLayout.addChild(verif);
+
     var submitBtn = new buttonModule.Button();
     submitBtn.text = "submit";
     newStackLayout.addChild(submitBtn);
     page.content = newStackLayout;
+
+    verif.on(buttonModule.Button.tapEvent, function (){
+        //fieldsArray[i].checkedButton
+       // console.dump(fieldsArray[5]);
+      //  console.dump(fieldsArray[5].checkedButton);
+        console.dump(newStackLayout._childrenCount);
+    });
 
     submitBtn.on(buttonModule.Button.tapEvent, function (){
         var submitInfo = new Array();
@@ -245,24 +277,17 @@ drawForm = function(data){
                         submitInfo[i-cont] = fieldsArray[i].value;
                         varNames[i-cont] = data[i].varName;
                 break;
-              /*  case "button":
-                    if(i == 0){
-                        submitInfo = fieldsArray[i].value
-                    }
-                    else{
-                        submitInfo = submitInfo + "," + fieldsArray[i].value;
-                    }
-                break;*/
                 case "label":
                     cont +=1;
                 break;
+                default:
+                break;
             }
         }
-        console.log(varNames);
-        console.log(submitInfo);
-        
-        // Send data to DB
-        con.add('/aasd', submitInfo);
+
+        firebase.push( '/aasd', {
+            varNames: submitInfo
+        });
     });
 }
 
@@ -320,14 +345,68 @@ function drawWebView(data){
 
 exports.constructorLoad = function(args) {
     page = args.object;
+
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "ListView";
+
+
     var gotData = page.navigationContext;
     var Info = gotData.typeView;
 
-    //localStorage.setItem("default_url","http://www.google.com");
-    //localStorage.clear();
+    var viewGrid = new gridModule.GridLayout();
+    var arrayRows = new Array();
+    var arrayColumns = new Array();
+
+    createRows(1,arrayRows,viewGrid,1,"star");
+    createRows(1,arrayRows,viewGrid,70,"pixel");
+    createColumns(3,arrayColumns,viewGrid,1,"star");
+
+    var textSpan = new spansModule.Span();
+
+    var button1 = new buttonModule.Button();
+    var button2 = new buttonModule.Button();
+    var button3 = new buttonModule.Button();
+
+    button1.className = "btnIcon";
+    var formattedString1 = new formattedStringModule.FormattedString();
+    var iconSpan1 = new spansModule.Span();
+    iconSpan1.fontSize = 25;
+    iconSpan1.text = String.fromCharCode("0xef015");
+    formattedString1.spans.push(iconSpan1);
+    button1.formattedText = formattedString1;
+
+    button2.className = "btnIcon";
+    var formattedString2 = new formattedStringModule.FormattedString();
+    var iconSpan2 = new spansModule.Span();
+    iconSpan2.fontSize = 25;
+    iconSpan2.text = String.fromCharCode("0xef15c");
+    formattedString2.spans.push(iconSpan2);
+    button2.formattedText = formattedString2;
+
+    button3.className = "btnIcon";
+    var formattedString3 = new formattedStringModule.FormattedString();
+    var iconSpan3 = new spansModule.Span();
+    iconSpan3.fontSize = 25;
+    iconSpan3.text = String.fromCharCode("0xef013");
+    formattedString3.spans.push(iconSpan3);
+    button3.formattedText = formattedString3;
+
+    gridModule.GridLayout.setColumn(button1,0);
+    gridModule.GridLayout.setRow(button1,1);
+    viewGrid.addChild(button1);
+    
+    gridModule.GridLayout.setColumn(button2,1);
+    gridModule.GridLayout.setRow(button2,1);
+    viewGrid.addChild(button2);
+
+    gridModule.GridLayout.setColumn(button3,2);
+    gridModule.GridLayout.setRow(button3,1);
+    viewGrid.addChild(button3);
+
    if( Info.toLowerCase() == "list" ){
 
-        requestForm("list");
+        requestForm("list",viewGrid);
 
    } else if ( Info.toLowerCase() == "form" ) {
 
@@ -339,7 +418,7 @@ exports.constructorLoad = function(args) {
 
    } else if ( Info.toLowerCase() == "options" ) {
 
-        // requestForm("options");
+        requestForm("options");
 
    } else {
 
