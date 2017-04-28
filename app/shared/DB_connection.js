@@ -36,6 +36,7 @@ function Connection()
         ).then(function (result)
         {
             console.log(JSON.stringify(result));
+            config.uid = response.uid;
         },
         function (errorMessage)
         {
