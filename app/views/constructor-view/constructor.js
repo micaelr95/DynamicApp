@@ -76,47 +76,20 @@ function drawList(data,viewGrid) {
 
     }
 
-    var newGridLayout = new Array();
-    var i = 0;
-    var j = 0;
-    var contador = -1;
-
-    for( i = 0 ; i < data.campsInfo[0].length ; i++ ){
-
-        newGridLayout[i] = new gridModule.GridLayout();
-        newGridLayout.className = "Info";
-
-    }
-
-    for( i = 0 ; i < data.campsInfo[0].length ; i++ ){
-
-        createColumns(numbColumns,arrayColumns,newGridLayout[i],1,"star");
-        createRows(1,arrayRows,newGridLayout[i],40,"pixel");
-
-        for( j = 0 ; j < numbColumns ; j++ ){
-
-            contador++;
-
-            xLabels[contador] = new labelModule.Label();
-            xLabels[contador].text = data.campsInfo[j][i];
-            xLabels[contador].className = "Info";
-            gridModule.GridLayout.setColumn(xLabels[contador],j);
-            gridModule.GridLayout.setRow(xLabels[contador],i);
-            newGridLayout[i].addChild(xLabels[contador]);
-
-        }
-
-    }
-
-        //xList.itemTemplate = new GridLayout;
-        xList.className = "Info";
-        xList.items = newGridLayout;
-
-        gridModule.GridLayout.setColumn(xList,0);
-        gridModule.GridLayout.setRow(xList,1);
-        gridModule.GridLayout.setColumnSpan(xList,numbColumns);
+    xList.itemTemplate="<GridLayout columns='* , *, auto' rows='auto, *' >"+
+                                "<Label text='{{name}}' col='0' ></Label>"+
+                                "<Label text='{{value}}' col='1' ></Label>"+
+                            "</GridLayout>";
         
-        viewLayout.addChild(xList);
+    xList.className = "Info";
+
+    xList.items = [ { name: data.campsInfo[0][0] , value: data.campsInfo[1][0] } , { name: data.campsInfo[0][1] , value: data.campsInfo[1][1] } , { name: data.campsInfo[0][2] , value: data.campsInfo[1][2] } , { name: data.campsInfo[0][3] , value: data.campsInfo[1][3] } , { name: data.campsInfo[0][4] , value: data.campsInfo[1][4] } ]
+    
+    gridModule.GridLayout.setColumn(xList,0);
+    gridModule.GridLayout.setRow(xList,1);
+    gridModule.GridLayout.setColumnSpan(xList,numbColumns);
+    
+    viewLayout.addChild(xList);
 
     gridModule.GridLayout.setColumn(viewLayout,0);
     gridModule.GridLayout.setRow(viewLayout,0);
