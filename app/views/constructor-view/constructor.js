@@ -12,6 +12,8 @@ var listViewModule = require("ui/list-view");
 var scrollModule = require("ui/scroll-view");
 var textFieldModule = require("ui/text-field");
 var webModule = require("ui/web-view");
+var frameModule = require("ui/frame");
+var topmost = frameModule.topmost();
 var localStorage = require("nativescript-localstorage");
 var spansModule = require("text/span");
 var formattedStringModule = require("text/formatted-string");
@@ -46,7 +48,7 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 
 function drawList(data,viewGrid) {
 
-var viewLayout = new gridModule.GridLayout();
+    var viewLayout = new gridModule.GridLayout();
 
     var arrayRows = new Array();
     var arrayColumns = new Array();
@@ -155,7 +157,7 @@ requestForm = function(constructorForm,viewGrid) {
 
         if( constructorForm == "form" ){
 
-        drawForm(data);
+        drawForm(data,viewGrid);
 
         } else if( constructorForm == "list" ){
 
@@ -174,7 +176,7 @@ requestForm = function(constructorForm,viewGrid) {
     });   
 }
 
-drawForm = function(data){
+drawForm = function(data,viewGrid){
     var fieldsSize = data.length;
 
     var newStackLayout = new stackModule.StackLayout();
@@ -244,7 +246,14 @@ drawForm = function(data){
     var submitBtn = new buttonModule.Button();
     submitBtn.text = "submit";
     newStackLayout.addChild(submitBtn);
-    page.content = newStackLayout;
+
+    gridModule.GridLayout.setColumn(newStackLayout,0);
+    gridModule.GridLayout.setRow(newStackLayout,0);
+    gridModule.GridLayout.setColumnSpan(newStackLayout,3);
+
+    viewGrid.addChild(newStackLayout);
+
+    page.content = viewGrid;
 
     verif.on(buttonModule.Button.tapEvent, function (){
         //fieldsArray[i].checkedButton
@@ -375,6 +384,18 @@ exports.constructorLoad = function(args) {
     iconSpan1.text = String.fromCharCode("0xef015");
     formattedString1.spans.push(iconSpan1);
     button1.formattedText = formattedString1;
+    button1.on(buttonModule.Button.tapEvent , function() {
+
+        var navigationOptions = {
+
+            moduleName: "views/main-api-view/main-api",
+            clearHistory: true
+
+        }
+        
+        topmost.navigate(navigationOptions);
+
+    });
 
     button2.className = "btnIcon";
     var formattedString2 = new formattedStringModule.FormattedString();
@@ -383,6 +404,18 @@ exports.constructorLoad = function(args) {
     iconSpan2.text = String.fromCharCode("0xef15c");
     formattedString2.spans.push(iconSpan2);
     button2.formattedText = formattedString2;
+    button2.on(buttonModule.Button.tapEvent , function() {
+
+        var navigationOptions = {
+
+            moduleName: "views/main-api-view/main-api",
+            clearHistory: true
+
+        }
+        
+        topmost.navigate(navigationOptions);
+
+    });
 
     button3.className = "btnIcon";
     var formattedString3 = new formattedStringModule.FormattedString();
@@ -391,6 +424,17 @@ exports.constructorLoad = function(args) {
     iconSpan3.text = String.fromCharCode("0xef013");
     formattedString3.spans.push(iconSpan3);
     button3.formattedText = formattedString3;
+    button3.on(buttonModule.Button.tapEvent , function() {
+
+        var navigationOptions = {
+
+            moduleName: "views/options-view/options"
+
+        }
+        
+        topmost.navigate(navigationOptions);
+
+    });
 
     gridModule.GridLayout.setColumn(button1,0);
     gridModule.GridLayout.setRow(button1,1);
@@ -410,15 +454,15 @@ exports.constructorLoad = function(args) {
 
    } else if ( Info.toLowerCase() == "form" ) {
 
-        requestForm("form");
+        requestForm("form",viewGrid);
 
    } else if ( Info.toLowerCase() == "webview" ) {
 
-        requestForm("webview");
+        requestForm("webview",viewGrid);
 
    } else if ( Info.toLowerCase() == "options" ) {
 
-        requestForm("options");
+        // requestForm("options",viewGrid);
 
    } else {
 
