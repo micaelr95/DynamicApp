@@ -14,6 +14,8 @@ dropdown{
 }
 
 .Title{
+
+    margin-top: 10;
     font-size: 20px;
     horizontal-align: center;
 }
@@ -23,5 +25,17 @@ dropdown{
     font-size: 16px;
     border-width: 1px;
     border-color: lightgray;
-    height: 85%;
+    height: 90%;
+}
+
+.btnIcon {
+
+    font-family: FontAwesome, fontawesome-webfont;
+    font-size: 20px;
+    background-color: brown;
+    border-width: 2px;
+    border-color: rgb(148, 41, 17);
+    color: white;
+    padding: 15px 21px;
+
 }
