@@ -76,9 +76,9 @@ function drawList(data,viewGrid) {
 
     }
 
-    xList.itemTemplate="<GridLayout columns='* , *, auto' rows='auto, *' >"+
-                                "<Label text='{{name}}' col='0' ></Label>"+
-                                "<Label text='{{value}}' col='1' ></Label>"+
+    xList.itemTemplate="<GridLayout columns='* , *, auto' rows='auto, *' >" /
+                                "<Label text='{{name}}' col='0' ></Label>" /
+                                "<Label text='{{value}}' col='1' ></Label>" /
                             "</GridLayout>";
         
     xList.className = "Info";
@@ -327,9 +327,9 @@ function drawWebView(data){
 exports.constructorLoad = function(args) {
     page = args.object;
 
-    page.actionBar.backgroundColor = "brown";
+    /*page.actionBar.backgroundColor = "brown";
     page.actionBar.color = "white";
-    page.actionBar.title = "ListView";
+    page.actionBar.title = "ListView";*/
 
 
     var gotData = page.navigationContext;
@@ -442,5 +442,8 @@ exports.constructorLoad = function(args) {
         //error
 
    }
+}
 
+exports.onAdd = function() {
+    console.log("Add button tapped!");
 }

@@ -1,3 +1,5 @@
 <Page loaded="constructorLoad">
-
+    <ActionBar title="List view">
+        <ActionItem android.systemIcon="ic_menu_add" tap="onAdd" />
+    </ActionBar>
 </Page>
