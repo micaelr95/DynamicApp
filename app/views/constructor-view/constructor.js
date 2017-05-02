@@ -136,7 +136,7 @@ requestForm = function(constructorForm,viewGrid) {
         } else if( constructorForm == "list" ){
 
             drawList(data,viewGrid);
-
+//
         } else if( constructorForm == "webview" ){
 
             drawWebView(data);
