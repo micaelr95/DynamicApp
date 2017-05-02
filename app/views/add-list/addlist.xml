@@ -1,0 +1,5 @@
+<Page loaded="addlistLoad">
+    
+    <ActionBar title="Adicionar Registo" backgroundColor="brown" color="white" />
+
+</Page>

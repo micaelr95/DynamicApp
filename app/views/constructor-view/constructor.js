@@ -55,13 +55,13 @@ function drawList(data,viewGrid) {
     var arrayColumns = new Array();
 
     var numbColumns = data.camps.length; //        <---| Numero de Campos
-    var titleArray = data.camps; //                <---| Informação dada pelo JSON                                                //     |
+    var titleArray = data.camps; //                <---| Informação dada pelo JSON
     createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
     createRows(1,arrayRows,viewLayout,50,"pixel"); //  |
     createRows(1,arrayRows,viewLayout,1,"auto");   //  |
                                                    //  |
-                                //       ______________|
-    var xLabels = new Array(3); //  <---| Numero de Campos
+                                          //       ____|
+    var xLabels = new Array(numbColumns); //  <---| Numero de Campos
     var xList = new listViewModule.ListView();
     
     for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
@@ -70,11 +70,17 @@ function drawList(data,viewGrid) {
         xLabels[i].text = titleArray[i];
         xLabels[i].className = "Title";
 
+        localStorage.setItem("camp" + i , titleArray[i]);
+
         gridModule.GridLayout.setColumn(xLabels[i],i);
         gridModule.GridLayout.setRow(xLabels[i],0);
         viewLayout.addChild(xLabels[i]);
 
     }
+
+    localStorage.setItem("campsNumber" , numbColumns);
+
+    page.getViewById("titleList").items = titleArray;
 
     var numbColumnsStars = "columns='";
 
@@ -487,6 +493,17 @@ exports.constructorLoad = function(args) {
    }
 }
 
-exports.onAdd = function() {
-    console.log("Add button tapped!");
+exports.onAdd = function(args) {
+
+    page = args.object;
+    
+    var navigationOptions = {
+
+            moduleName: "views/add-list/addlist",
+            
+
+    }
+        
+    topmost.navigate(navigationOptions);
+
 }
