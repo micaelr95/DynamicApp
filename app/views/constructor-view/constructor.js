@@ -76,15 +76,58 @@ function drawList(data,viewGrid) {
 
     }
 
-    xList.itemTemplate="<GridLayout columns='* , *, auto' rows='auto, *' >" /
-                                "<Label text='{{name}}' col='0' ></Label>" /
-                                "<Label text='{{value}}' col='1' ></Label>" /
-                            "</GridLayout>";
-        
+    var numbColumnsStars = "columns='";
+
+    for( i = 0 ; i < numbColumns ; i++ ){
+
+        if( i == 0 ){
+
+            numbColumnsStars += "*";
+            
+        } else {
+
+            numbColumnsStars += ",*";
+
+        }
+    }
+
+    numbColumnsStars += ", auto'";
+
+    var columnLabels = "<GridLayout " + numbColumnsStars + " rows='auto, *' >";
+
+    for( i = 0 ; i < numbColumns ; i++ ){
+
+        columnLabels += "<Label text='{{" + titleArray[i] + "}}' col='" + i + "' />";
+
+    }
+
+    columnLabels += "</GridLayout>";
+
+    xList.itemTemplate = columnLabels;
     xList.className = "Info";
 
-    xList.items = [ { name: data.campsInfo[0][0] , value: data.campsInfo[1][0] } , { name: data.campsInfo[0][1] , value: data.campsInfo[1][1] } , { name: data.campsInfo[0][2] , value: data.campsInfo[1][2] } , { name: data.campsInfo[0][3] , value: data.campsInfo[1][3] } , { name: data.campsInfo[0][4] , value: data.campsInfo[1][4] } ]
+    var listArray = new Array();
+    var listItems = {};
+
+    for( i = 0 ; i < data.campsInfo[0].length ; i++ ){
+
+        listItems = {};
+
+        for( j = 0 ; j < numbColumns ; j++ ){
+
+            listItems[titleArray[j]] = data.campsInfo[j][i];
+
+        }
+
+        listArray.push(listItems);
+
+    }
+
+    xList.items = listArray;
     
+
+    // Add ListView to View
+
     gridModule.GridLayout.setColumn(xList,0);
     gridModule.GridLayout.setRow(xList,1);
     gridModule.GridLayout.setColumnSpan(xList,numbColumns);
@@ -136,7 +179,7 @@ requestForm = function(constructorForm,viewGrid) {
         } else if( constructorForm == "list" ){
 
             drawList(data,viewGrid);
-//
+
         } else if( constructorForm == "webview" ){
 
             drawWebView(data);
