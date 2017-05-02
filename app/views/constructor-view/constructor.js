@@ -289,17 +289,17 @@ function drawWebView(data){
     btnsearch.text = "Search";
     btnsearch.id = "btnsearch";
 
-    if(data.defaultUrl == ""){
+    if(data.defaultUrl == "" || data.url_prefix == ""){
         myweb.url = "";
-        txt1.text = "http://";
-        alert("Default URL is not defined");
+        txt1.text = "";
+        alert("Default URL or prefix is not defined");
     }else{
-        myweb.url = data.defaultUrl;
+        myweb.url = data.url_prefix + data.defaultUrl;
         txt1.text = data.defaultUrl;
     }
     
     btnsearch.on(buttonModule.Button.tapEvent, function (){
-        myweb.url = txt1.text;
+        myweb.url = data.url_prefix + txt1.text;
     });
 
     createRows(1,linhas,mygrid,50,"pixel");
