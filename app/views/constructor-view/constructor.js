@@ -55,13 +55,13 @@ function drawList(data,viewGrid) {
     var arrayColumns = new Array();
 
     var numbColumns = data.camps.length; //        <---| Numero de Campos
-    var titleArray = data.camps; //                <---| Informação dada pelo JSON                                                //     |
+    var titleArray = data.camps; //                <---| Informação dada pelo JSON
     createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
     createRows(1,arrayRows,viewLayout,50,"pixel"); //  |
     createRows(1,arrayRows,viewLayout,1,"auto");   //  |
                                                    //  |
-                                //       ______________|
-    var xLabels = new Array(3); //  <---| Numero de Campos
+                                          //       ____|
+    var xLabels = new Array(numbColumns); //  <---| Numero de Campos
     var xList = new listViewModule.ListView();
     
     for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
@@ -70,21 +70,68 @@ function drawList(data,viewGrid) {
         xLabels[i].text = titleArray[i];
         xLabels[i].className = "Title";
 
+        localStorage.setItem("camp" + i , titleArray[i]);
+
         gridModule.GridLayout.setColumn(xLabels[i],i);
         gridModule.GridLayout.setRow(xLabels[i],0);
         viewLayout.addChild(xLabels[i]);
 
     }
 
-    xList.itemTemplate="<GridLayout columns='* , *, auto' rows='auto, *' >"+
-                                "<Label text='{{name}}' col='0' ></Label>"+
-                                "<Label text='{{value}}' col='1' ></Label>"+
-                            "</GridLayout>";
-        
+    localStorage.setItem("campsNumber" , numbColumns);
+
+    var numbColumnsStars = "columns='";
+
+    for( i = 0 ; i < numbColumns ; i++ ){
+
+        if( i == 0 ){
+
+            numbColumnsStars += "*";
+            
+        } else {
+
+            numbColumnsStars += ",*";
+
+        }
+    }
+
+    numbColumnsStars += ", auto'";
+
+    var columnLabels = "<GridLayout " + numbColumnsStars + " rows='auto, *' >";
+
+    for( i = 0 ; i < numbColumns ; i++ ){
+
+        columnLabels += "<Label text='{{" + titleArray[i] + "}}' col='" + i + "' />";
+
+    }
+
+    columnLabels += "</GridLayout>";
+
+    xList.itemTemplate = columnLabels;
     xList.className = "Info";
 
-    xList.items = [ { name: data.campsInfo[0][0] , value: data.campsInfo[1][0] } , { name: data.campsInfo[0][1] , value: data.campsInfo[1][1] } , { name: data.campsInfo[0][2] , value: data.campsInfo[1][2] } , { name: data.campsInfo[0][3] , value: data.campsInfo[1][3] } , { name: data.campsInfo[0][4] , value: data.campsInfo[1][4] } ]
+    var listArray = new Array();
+    var listItems = {};
+
+    for( i = 0 ; i < data.campsInfo[0].length ; i++ ){
+
+        listItems = {};
+
+        for( j = 0 ; j < numbColumns ; j++ ){
+
+            listItems[titleArray[j]] = data.campsInfo[j][i];
+
+        }
+
+        listArray.push(listItems);
+
+    }
+
+    xList.items = listArray;
     
+
+    // Add ListView to View
+
     gridModule.GridLayout.setColumn(xList,0);
     gridModule.GridLayout.setRow(xList,1);
     gridModule.GridLayout.setColumnSpan(xList,numbColumns);
@@ -327,9 +374,9 @@ function drawWebView(data){
 exports.constructorLoad = function(args) {
     page = args.object;
 
-    page.actionBar.backgroundColor = "brown";
+    /*page.actionBar.backgroundColor = "brown";
     page.actionBar.color = "white";
-    page.actionBar.title = "ListView";
+    page.actionBar.title = "ListView";*/
 
 
     var gotData = page.navigationContext;
@@ -442,5 +489,18 @@ exports.constructorLoad = function(args) {
         //error
 
    }
+}
+
+exports.onAdd = function(args) {
+
+    page = args.object;
+    
+    var navigationOptions = {
+
+            moduleName: "views/add-list/addlist"
+
+    }
+        
+    topmost.navigate(navigationOptions);
 
 }
