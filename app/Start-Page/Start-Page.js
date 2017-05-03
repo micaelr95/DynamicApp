@@ -52,6 +52,12 @@ exports.confirmURL = function(){
         localstorage.setItem("server_url",my_url);
         localstorage.setItem("isConfigured",true);
         var topmost = frameModule.topmost();
-        topmost.navigate("views/main-api-view/main-api"); //Alterar para página correta quando for feita */~
+        var navigationOptions = {
+
+             moduleName: "views/main-api-view/main-api",
+             clearHistory: true
+
+        }
+        topmost.navigate(navigationOptions); //Alterar para página correta quando for feita */~
     }
 }

@@ -80,8 +80,6 @@ function drawList(data,viewGrid) {
 
     localStorage.setItem("campsNumber" , numbColumns);
 
-    page.getViewById("titleList").items = titleArray;
-
     var numbColumnsStars = "columns='";
 
     for( i = 0 ; i < numbColumns ; i++ ){
@@ -499,8 +497,7 @@ exports.onAdd = function(args) {
     
     var navigationOptions = {
 
-            moduleName: "views/add-list/addlist",
-            
+            moduleName: "views/add-list/addlist"
 
     }
         
