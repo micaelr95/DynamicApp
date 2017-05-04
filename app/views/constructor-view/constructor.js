@@ -389,7 +389,7 @@ exports.constructorLoad = function(args) {
     var arrayColumns = new Array();
 
     createRows(1,arrayRows,viewGrid,1,"star");
-    createRows(1,arrayRows,viewGrid,50,"pixel");
+    createRows(1,arrayRows,viewGrid,45,"pixel");
     createColumns(3,arrayColumns,viewGrid,1,"star");
 
     var textSpan = new spansModule.Span();
