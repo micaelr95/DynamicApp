@@ -1,5 +1,6 @@
 <Page loaded="constructorLoad">
     <ActionBar title="List view" backgroundColor="brown" color="white" >
+        <ActionItem android.systemIcon="ic_menu_delete" tap="onAdd" />
         <ActionItem android.systemIcon="ic_menu_add" tap="onAdd" />
     </ActionBar>
 

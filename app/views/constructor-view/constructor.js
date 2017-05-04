@@ -79,6 +79,7 @@ function drawList(data,viewGrid) {
     }
 
     localStorage.setItem("campsNumber" , numbColumns);
+    localStorage.setItem("numberItems" , data.campsInfo[0].length);
 
     var numbColumnsStars = "columns='";
 
@@ -120,6 +121,7 @@ function drawList(data,viewGrid) {
         for( j = 0 ; j < numbColumns ; j++ ){
 
             listItems[titleArray[j]] = data.campsInfo[j][i];
+            localStorage.setItem( "listItems" + j + i , data.campsInfo[j][i] );
 
         }
 

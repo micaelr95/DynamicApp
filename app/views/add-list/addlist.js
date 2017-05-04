@@ -1,6 +1,10 @@
 var textFieldModule = require("ui/text-field");
 var stackModule = require("ui/layouts/stack-layout");
 var buttonModule = require("ui/button");
+var frameModule = require("ui/frame");
+var topmost = frameModule.topmost();
+var Connection = require("../../shared/DB_connection");
+var con = new Connection();
 
 exports.addlistLoad = function(args) {
     var page = args.object;
@@ -29,6 +33,39 @@ exports.addlistLoad = function(args) {
     var submitBtn = new buttonModule.Button();
     submitBtn.text = "Submit";
     submitBtn.className = "submitBtn";
+
+    submitBtn.on(buttonModule.Button.tapEvent , function() {
+        
+        var stuff = [];
+        var infoArray = [];
+
+
+        for( i = 0 ; i < parseInt(localStorage.getItem("campsNumber")) ; i++ ){
+            
+            infoArray = [];
+
+            for( j = 0 ; j < parseInt(localStorage.getItem("numberItems")) ; j++ ){
+
+                infoArray.push( localStorage.getItem( "listItems" + i + j ) )
+
+            }
+
+            infoArray.push(textboxArray[i].text);
+            stuff[i] = infoArray;
+
+        }
+
+
+
+        for( i = 0 ; i < parseInt(localStorage.getItem("campsNumber")) ; i++ ){
+
+            con.addListInfo('/list/campsInfo/' + i , stuff[i] );
+
+        }
+
+        topmost.goBack();
+
+    });
     
     stackView.addChild(submitBtn);
     

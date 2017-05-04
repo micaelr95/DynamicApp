@@ -54,6 +54,10 @@ function Connection()
         )
     };
 
+    viewModel.addListInfo = function(table, data) {
+        return firebase.setValue(table,data)
+    };
+
     return viewModel;
 }
 
