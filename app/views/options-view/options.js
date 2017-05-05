@@ -11,7 +11,8 @@ var selectedForm = 0;
 var colorActionBar = localstorage.getItem("color_actionBar");
 var colorButtons = localstorage.getItem("color_buttons");
 
-exports.options = function(args) {   
+exports.options = function(args)
+{   
     page = args.object;
 
     var layout = new stackLayout.StackLayout();
@@ -23,14 +24,16 @@ exports.options = function(args) {
     page.content = layout;
 }
 
-drawActionBar = function(p) {
+drawActionBar = function(p)
+{
     var bar = new actionBarModule.ActionBar();
     bar.title = "Options";
     bar.backgroundColor = colorActionBar;
     p.actionBar = bar;
 }
 
-drawDropDown = function(l) {
+drawDropDown = function(l)
+{
     var dropForms = new dropModule.DropDown();
     dropForms.items = ["Forms", "Main Api", "Options"];
     dropForms.selectedIndex = 0;
@@ -42,35 +45,40 @@ drawDropDown = function(l) {
     var saveButton = new buttonModule.Button();
     saveButton.backgroundColor = colorButtons;
     saveButton.text = "save";
-    saveButton.on(buttonModule.Button.tapEvent, function() {
-        if (dropColors.selectedIndex != 0) {
-            switch (selectedOption) {
+    saveButton.on(buttonModule.Button.tapEvent, function()
+    {
+        if(dropColors.selectedIndex != 0)
+        {
+            switch(selectedOption)
+            {
                 case "buttons":
                     localStorage.setItem("color_buttons", dropColors.items[dropColors.selectedIndex]);                    
-                    break;
+                break;
                 case "actionBar":
                     localstorage.setItem("color_actionBar", dropColors.items[dropColors.selectedIndex]);
-                    break;
+                break;
             }
         }
     });
-
     l.addChild(dropForms);
     l.addChild(dropColors);
     l.addChild(saveButton);
 }
 
-drawRadioButton = function(l) {
+drawRadioButton = function(l)
+{
     var radioGroup = new radioModule.RadioGroup();
     var radioButton1 = new radioModule.RadioButton();
     radioButton1.text = "Buttons";   
-    radioButton1.on(buttonModule.Button.tapEvent, function() {
+    radioButton1.on(buttonModule.Button.tapEvent, function()
+    {
         selectedOption = "buttons";
     });
 
     var radioButton2 = new radioModule.RadioButton();
     radioButton2.text = "Action Bar";
-    radioButton2.on(buttonModule.Button.tapEvent, function() {
+    radioButton2.on(buttonModule.Button.tapEvent, function()
+    {
         selectedOption = "actionBar";
     });
 

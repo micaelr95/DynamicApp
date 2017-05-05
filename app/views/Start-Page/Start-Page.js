@@ -3,20 +3,24 @@ var localstorage = require("nativescript-localstorage");
 var frameModule = require("ui/frame");
 var page;
 
-exports.pageLoaded = function(args) {
+exports.pageLoaded = function(args)
+{
     // localstorage.clear();
     page = args.object;
 
-    if(localstorage.getItem("isConfigured") == true){
+    if(localstorage.getItem("isConfigured") == true)
+    {
         var topmost = frameModule.topmost();
         topmost.navigate("views/main-api-view/main-api"); //Alterar para página correta mais tarde
     }
 }
 
-exports.scanQR = function(){
+exports.scanQR = function()
+{
     var barcodescanner = new BarcodeScanner();
 
-    barcodescanner.scan({
+    barcodescanner.scan(
+    {
         formats: "QR_CODE",   // Pass in of you want to restrict scanning to certain types
         //cancelLabel: "EXIT. Also, try the volume buttons!", // iOS only, default 'Close'
         //cancelLabelBackgroundColor: "#333333", // iOS only, default '#000000' (black)
@@ -29,34 +33,34 @@ exports.scanQR = function(){
         resultDisplayDuration: 500,   // Android only, default 1500 (ms), set to 0 to disable echoing the scanned text
         orientation: "landscape",     // Android only, optionally lock the orientation to either "portrait" or "landscape"
         //openSettingsIfPermissionWasPreviouslyDenied: true // On iOS you can send the user to the settings app if access was previously denied
-    }).then(
-      function(result) {
-        console.log("Scan format: " + result.format);
-        console.log("Scan text:   " + result.text);
+    })
+    .then(function(result)
+    {
         page.getViewById("urlTextField").text = result.text;
     },
-      function(error) {
+    function(error)
+    {
         console.log("No scan: " + error);
-    }
-  );
-    
+    });
 }
 
-exports.confirmURL = function(){
+exports.confirmURL = function()
+{
     var my_url = page.getViewById("urlTextField").text;
 
-    if(my_url == "" || my_url == "https://" || my_url == "http://"){
+    if(my_url == "" || my_url == "https://" || my_url == "http://")
+    {
         alert("Please insert or scan a valid URL");
     }
-    else {
+    else
+    {
         localstorage.setItem("server_url",my_url);
         localstorage.setItem("isConfigured",true);
         var topmost = frameModule.topmost();
-        var navigationOptions = {
-
+        var navigationOptions =
+        {
              moduleName: "views/main-api-view/main-api",
              clearHistory: true
-
         }
         topmost.navigate(navigationOptions); //Alterar para página correta quando for feita */~
     }

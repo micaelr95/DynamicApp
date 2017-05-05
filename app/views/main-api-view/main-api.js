@@ -23,7 +23,8 @@ var urlJson = localstorage.getItem("server_url") + "/form.json";
 var colorActionBar = localstorage.getItem("color_actionBar");
 var colorButtons = localstorage.getItem("color_buttons");
 
-exports.mainMenu = function(args) {    
+exports.mainMenu = function(args)
+{    
     page = args.object;
     
     // action bar
@@ -40,24 +41,29 @@ exports.mainMenu = function(args) {
     requestJson(); 
 }
 
-requestJson = function() {    
-    fetch(urlJson).then(response => {
+requestJson = function()
+{    
+    fetch(urlJson).then(response =>
+    {
         return response.json();
     })
-    .then(function (r) {
+    .then(function (r)
+    {
         var data = r;
         drawJson(data);
     });   
 }
 
-drawImage = function(s, path) {
+drawImage = function(s, path)
+{
     // draw image
     var image = new imageModule.Image();
     image.src = path;                 
     s.addChild(image);
 }
 
-drawJson = function(data) {
+drawJson = function(data)
+{
     var radioGroup = new radioModule.RadioGroup();
     var glayout = new gridLayout.GridLayout();
     var slayout = new stackLayout.StackLayout();
@@ -70,14 +76,13 @@ drawJson = function(data) {
     var y = 1;
     var pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
     drawImage(slayout, pathImage);
-    console.info("NUMEro: " + num);
-    for(i = 0; i < num; i++) {
+    for(i = 0; i < num; i++)
+    {
         const cont = i;
         
-        console.info(data[i].Type);
-        switch (data[i].Type) {
+        switch(data[i].Type)
+        {
             case "button":
-            console.info("entrou no botao");
                 var formattedString = new formattedStringModule.FormattedString();
                 var iconSpan = new spansModule.Span();
                 iconSpan.text = String.fromCharCode(data[cont].icon);
@@ -91,60 +96,61 @@ drawJson = function(data) {
                 button[cont] = new buttonModule.Button();
                 button[cont].id = data[i].id;
                 button[cont].backgroundColor = colorButtons;
-                console.info(colorButtons);
                 button[cont].formattedText = formattedString;
                 button[cont].className = "btnIcon";
                 button[cont].value = data[i].typeview;
-                button[cont].on(buttonModule.Button.tapEvent, function() {
+                button[cont].on(buttonModule.Button.tapEvent, function()
+                {
                     // verifica se é options
-                    if (button[cont].value == "options") {
+                    if(button[cont].value == "options")
+                    {
                         topmost.navigate("views/options-view/options");
                     }
-                    else {
-                        var navigationOptions = {
+                    else
+                    {
+                        var navigationOptions =
+                        {
                             moduleName: "views/constructor-view/constructor",
-                            context:{
-                            typeView: button[cont].value
-                        }
+                            context:
+                            {
+                                typeView: button[cont].value
+                            }
                     }
                         topmost.navigate(navigationOptions);
                     }
                 });
 
                 // columns and rows of datagrid
-                if (x >= 1) {
+                if(x >= 1)
+                {
                     x = 0;
                     y += 1;
                 } 
-                else {
+                else
+                {
                     x += 1;
                 }
 
                 gridLayout.GridLayout.setColumn(button[cont], x);
-                gridLayout.GridLayout.setRow(button[cont], y);
-                console.info("X DO BUTTON: " + x);
-                console.info("Y DO BUTTON: " + y);                
+                gridLayout.GridLayout.setRow(button[cont], y);             
                                
                 var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
                 var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
                 glayout.addColumn(column);
                 glayout.addRow(row);
                 glayout.addChild(button[cont]);              
-                break;
-           case "radiobutton":
-                console.info("entrou no radio");
+            break;
+            case "radiobutton":
                 radiobutton[cont] = new radioModule.RadioButton();
                 radiobutton[cont].id = data[i].id;
-                radiobutton[cont].on(buttonModule.Button.tapEvent, function() {
+                radiobutton[cont].on(buttonModule.Button.tapEvent, function()
+                {
                     savePathImage[cont] = data[cont].linkImg;
-                    console.info(data[cont].linkImg);
                     drawImage(slayout, savePathImage[cont]);
                 });
                 
                 gridLayout.GridLayout.setColumn(radiobutton[cont], x);
                 gridLayout.GridLayout.setRow(radiobutton[cont], y);
-                console.info("X: DO RADIO: " + x);
-                console.info("Y: DO RADIO: " + y);
                 x += 1;
                 y += 1;          
                 var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
@@ -153,22 +159,24 @@ drawJson = function(data) {
                 glayout.addRow(row);
                 radioGroup.addChild(radiobutton[cont]);
                 
-                if (x > 1) {
+                if(x > 1)
+                {
                     glayout.addChild(radioGroup);
                     slayout.addChild(glayout);
                 }
-                break; 
+            break; 
         }
-       
     page.content = slayout;
     }
 }
 
 // functions of action bar
-exports.options0 = function() {
+exports.options0 = function()
+{
     alert("OPTIONS 0");
 }
 
-exports.options1 = function() {
+exports.options1 = function()
+{
     alert("OPTIONS 1"); 
 }

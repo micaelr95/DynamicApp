@@ -22,33 +22,26 @@ var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var page;
 
-function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
-
-    for ( i = 0 ; i < numbRows ; i++ )
+function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode)
+{
+    for(i = 0 ; i < numbRows ; i++)
     {
-
         arrayRows[i] = new gridModule.ItemSpec(RowHeight, gridModule.GridUnitType[RowMode]);
         gridLayout.addRow(arrayRows[i]);
-
-
     }
-
 }
 
-function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, ColumnMode) {
-
-    for ( i = 0 ; i < numbColumns ; i++ )
+function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, ColumnMode)
+{
+    for(i = 0 ; i < numbColumns ; i++)
     {
-            arrayColumns[i] = new gridModule.ItemSpec(ColumnHeight, gridModule.GridUnitType[ColumnMode]);
-
+        arrayColumns[i] = new gridModule.ItemSpec(ColumnHeight, gridModule.GridUnitType[ColumnMode]);
         gridLayout.addColumn(arrayColumns[i]);
-
     }
-
 }
 
-function drawList(data,viewGrid) {
-
+function drawList(data,viewGrid)
+{
     page.actionBar.backgroundColor = "brown";
     page.actionBar.color = "white";
     page.actionBar.title = "ListView"
@@ -68,8 +61,8 @@ function drawList(data,viewGrid) {
     var xLabels = new Array(numbColumns); //  <---| Numero de Campos
     var xList = new listViewModule.ListView();
     
-    for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
-
+    for(i = 0 ; i < numbColumns /* Numero de Campos */ ; i++)
+    {
         xLabels[i] = new labelModule.Label();
         xLabels[i].text = titleArray[i];
         xLabels[i].className = "Title";
@@ -79,7 +72,6 @@ function drawList(data,viewGrid) {
         gridModule.GridLayout.setColumn(xLabels[i],i);
         gridModule.GridLayout.setRow(xLabels[i],0);
         viewLayout.addChild(xLabels[i]);
-
     }
 
     localStorage.setItem("campsNumber" , numbColumns);
@@ -87,16 +79,15 @@ function drawList(data,viewGrid) {
 
     var numbColumnsStars = "columns='";
 
-    for( i = 0 ; i < numbColumns ; i++ ){
-
-        if( i == 0 ){
-
+    for(i = 0 ; i < numbColumns ; i++)
+    {
+        if(i == 0)
+        {
             numbColumnsStars += "*";
-            
-        } else {
-
+        }
+        else
+        {
             numbColumnsStars += ",*";
-
         }
     }
 
@@ -104,10 +95,9 @@ function drawList(data,viewGrid) {
 
     var columnLabels = "<GridLayout " + numbColumnsStars + " rows='auto, *' >";
 
-    for( i = 0 ; i < numbColumns ; i++ ){
-
+    for(i = 0 ; i < numbColumns ; i++)
+    {
         columnLabels += "<Label text='{{" + titleArray[i] + "}}' col='" + i + "' />";
-
     }
 
     columnLabels += "</GridLayout>";
@@ -118,26 +108,21 @@ function drawList(data,viewGrid) {
     var listArray = new Array();
     var listItems = {};
 
-    for( i = 0 ; i < data.campsInfo[0].length ; i++ ){
-
+    for(i = 0 ; i < data.campsInfo[0].length ; i++)
+    {
         listItems = {};
-
-        for( j = 0 ; j < numbColumns ; j++ ){
-
+        for(j = 0 ; j < numbColumns ; j++)
+        {
             listItems[titleArray[j]] = data.campsInfo[j][i];
             localStorage.setItem( "listItems" + j + i , data.campsInfo[j][i] );
-
         }
-
         listArray.push(listItems);
-
     }
 
     xList.items = listArray;
     
 
     // Add ListView to View
-
     gridModule.GridLayout.setColumn(xList,0);
     gridModule.GridLayout.setRow(xList,1);
     gridModule.GridLayout.setColumnSpan(xList,numbColumns);
@@ -151,60 +136,58 @@ function drawList(data,viewGrid) {
     viewGrid.addChild(viewLayout);
     
     page.content = viewGrid;
-
 }
 
-requestForm = function(constructorForm,viewGrid) {
-
+requestForm = function(constructorForm,viewGrid)
+{
     var urlForm = localStorage.getItem("server_url");
 
-    if( constructorForm == "form" ){
-
+    if(constructorForm == "form")
+    {
         urlForm += "/constructForm.json";
-
-    } else if( constructorForm == "list" ){
-
+    }
+    else if(constructorForm == "list")
+    {
         urlForm += "/list.json"
-
-    } else if( constructorForm == "webview" ){
-
+    }
+    else if(constructorForm == "webview")
+    {
         urlForm += "/webview.json"
-
-    } else {
-
+    }
+    else
+    {
         urlForm += "/options.json"
-
     }
 
-    fetch(urlForm).then(response => {
+    fetch(urlForm).then(response =>
+    {
         return response.json();
     })
-    .then(function (r) {
+    .then(function (r)
+    {
         var data = r;
 
-        if( constructorForm == "form" ){
-
-        drawForm(data,viewGrid);
-
-        } else if( constructorForm == "list" ){
-
-            drawList(data,viewGrid);
-
-        } else if( constructorForm == "webview" ){
-
-            drawWebView(data);
-
-        } else {
-
-            drawOptions(data);
-
+        if(constructorForm == "form")
+        {
+            drawForm(data,viewGrid);
         }
-
+        else if(constructorForm == "list")
+        {
+            drawList(data,viewGrid);
+        }
+        else if(constructorForm == "webview")
+        {
+            drawWebView(data);
+        }
+        else
+        {
+            drawOptions(data);
+        }
     });   
 }
 
-drawForm = function(data,viewGrid){
-
+drawForm = function(data,viewGrid)
+{
     page.actionBar.backgroundColor = "brown";
     page.actionBar.color = "white";
     page.actionBar.title = "FormView"
@@ -215,7 +198,8 @@ drawForm = function(data,viewGrid){
 
     var fieldsArray = new Array();
     
-    for(i=0; i < fieldsSize; i++){
+    for(i=0; i < fieldsSize; i++)
+    {
         switch(data[i].type){
             case "checkbox":
                 fieldsArray[i] = new checkModule.CheckBox();
@@ -225,7 +209,6 @@ drawForm = function(data,viewGrid){
 
                 newStackLayout.addChild(fieldsArray[i]);
             break;
-
             case "dropdown":
                 var arrayDados = new Array();
                 fieldsArray[i] = new dropModule.DropDown();
@@ -234,14 +217,12 @@ drawForm = function(data,viewGrid){
 
                 newStackLayout.addChild(fieldsArray[i]);
             break;
-
             case "radiogroup":
                 fieldsArray[i] = new radioBtnModule.RadioGroup();
                 fieldsArray[i].id = data[i].id;
                 newStackLayout.addChild(fieldsArray[i]);
         
             break;
-
             case "radiobutton":
                 fieldsArray[i] = new radioBtnModule.RadioButton();
                 fieldsArray[i].id = data[i].id;
@@ -250,7 +231,6 @@ drawForm = function(data,viewGrid){
 
                 newStackLayout.getViewById(data[i].group).addChild(fieldsArray[i]);
             break;
-
             case "label":
                 fieldsArray[i] = new labelModule.Label();
                 fieldsArray[i].id = data[i].id;
@@ -258,16 +238,12 @@ drawForm = function(data,viewGrid){
 
                 newStackLayout.addChild(fieldsArray[i]);
             break;
-
             case "textfield":
                 fieldsArray[i] = new textFieldModule.TextField();
                 fieldsArray[i].hint = data[i].hint;
                 fieldsArray[i].id = data[i].id;
 
                 newStackLayout.addChild(fieldsArray[i]);
-            break;
-            
-            default:
             break;
         }
     }
@@ -287,14 +263,13 @@ drawForm = function(data,viewGrid){
 
     page.content = viewGrid;
 
-    verif.on(buttonModule.Button.tapEvent, function (){
+    verif.on(buttonModule.Button.tapEvent, function ()
+    {
         //fieldsArray[i].checkedButton
-       // console.dump(fieldsArray[5]);
-      //  console.dump(fieldsArray[5].checkedButton);
-        console.dump(newStackLayout._childrenCount);
     });
 
-    submitBtn.on(buttonModule.Button.tapEvent, function (){
+    submitBtn.on(buttonModule.Button.tapEvent, function ()
+    {
         var submitInfo = new Array();
         var varNames = new Array();
         var cont = 0;
@@ -321,73 +296,46 @@ drawForm = function(data,viewGrid){
                 case "label":
                     cont +=1;
                 break;
-                default:
-                break;
             }
         }
-
-       con.add('/aasd', submitInfo);
+        con.add('/aasd', submitInfo);
     });
 }
 
-
-function drawWebView(data){
-
+function drawWebView(data)
+{
     page.actionBar.backgroundColor = "brown";
     page.actionBar.color = "white";
     page.actionBar.title = "WebView"
 
     var mygrid = new gridModule.GridLayout();
-    //var txt1 = new textFieldModule.TextField();
-    //var btnsearch = new buttonModule.Button();
     var myweb = new webModule.WebView();
 
     var colunas = new Array();
     var linhas = new Array();
 
-    //txt1.height = 30;
-    //txt1.id = "txtsearch";
-
-    //btnsearch.height = 30;
-    //btnsearch.text = "Search";
-    //btnsearch.id = "btnsearch";
-
-    if(data.defaultUrl == "" || data.url_prefix == ""){
+    if(data.defaultUrl == "" || data.url_prefix == "")
+    {
         myweb.url = "";
-        //txt1.text = "";
         alert("Default URL or prefix is not defined");
-    }else{
-        myweb.url = data.url_prefix + data.defaultUrl;
-        //txt1.text = data.defaultUrl;
     }
-    
-    /*btnsearch.on(buttonModule.Button.tapEvent, function (){
-        myweb.url = data.url_prefix + txt1.text;
-    });*/
+    else
+    {
+        myweb.url = data.url_prefix + data.defaultUrl;
+    }
 
-    //createRows(1,linhas,mygrid,50,"pixel");
     createRows(1,linhas,mygrid,1,"star");
-    //createColumns(1,colunas,mygrid,230,"pixel");
     createColumns(1,colunas,mygrid,1,"star");
-
-    //gridModule.GridLayout.setColumn(txt1,0);
-    //gridModule.GridLayout.setRow(txt1,0);
-    //mygrid.addChild(txt1);
-
-    //gridModule.GridLayout.setColumn(btnsearch,1);
-    //gridModule.GridLayout.setRow(btnsearch,0);
-    //mygrid.addChild(btnsearch);
 
     gridModule.GridLayout.setColumn(myweb,0);
     gridModule.GridLayout.setRow(myweb,0);
-    //gridModule.GridLayout.setColumnSpan(myweb, 2)
     mygrid.addChild(myweb);
 
     page.content = mygrid;
-
 }
 
-exports.constructorLoad = function(args) {
+exports.constructorLoad = function(args)
+{
     page = args.object;
 
     page.actionBar.actionItems._items[0].visibility = "collapse";
@@ -416,17 +364,15 @@ exports.constructorLoad = function(args) {
     iconSpan1.text = String.fromCharCode("0xef015");
     formattedString1.spans.push(iconSpan1);
     button1.formattedText = formattedString1;
-    button1.on(buttonModule.Button.tapEvent , function() {
-
-        var navigationOptions = {
-
+    button1.on(buttonModule.Button.tapEvent , function()
+    {
+        var navigationOptions =
+        {
             moduleName: "views/main-api-view/main-api",
             clearHistory: true
-
         }
         
         topmost.navigate(navigationOptions);
-
     });
 
     button2.className = "btnIcon";
@@ -436,17 +382,15 @@ exports.constructorLoad = function(args) {
     iconSpan2.text = String.fromCharCode("0xef15c");
     formattedString2.spans.push(iconSpan2);
     button2.formattedText = formattedString2;
-    button2.on(buttonModule.Button.tapEvent , function() {
-
-        var navigationOptions = {
-
+    button2.on(buttonModule.Button.tapEvent , function()
+    {
+        var navigationOptions =
+        {
             moduleName: "views/main-api-view/main-api",
             clearHistory: true
-
         }
         
         topmost.navigate(navigationOptions);
-
     });
 
     button3.className = "btnIcon";
@@ -456,16 +400,13 @@ exports.constructorLoad = function(args) {
     iconSpan3.text = String.fromCharCode("0xef013");
     formattedString3.spans.push(iconSpan3);
     button3.formattedText = formattedString3;
-    button3.on(buttonModule.Button.tapEvent , function() {
-
-        var navigationOptions = {
-
+    button3.on(buttonModule.Button.tapEvent , function()
+    {
+        var navigationOptions =
+        {
             moduleName: "views/options-view/options"
-
         }
-        
         topmost.navigate(navigationOptions);
-
     });
 
     gridModule.GridLayout.setColumn(button1,0);
@@ -480,41 +421,36 @@ exports.constructorLoad = function(args) {
     gridModule.GridLayout.setRow(button3,1);
     viewGrid.addChild(button3);
 
-   if( Info.toLowerCase() == "list" ){
-
+   if(Info.toLowerCase() == "list")
+   {
         requestForm("list",viewGrid);
         page.actionBar.actionItems._items[0].visibility = "visible";
-
-   } else if ( Info.toLowerCase() == "form" ) {
-
+   }
+   else if(Info.toLowerCase() == "form")
+   {
         requestForm("form",viewGrid);
-
-   } else if ( Info.toLowerCase() == "webview" ) {
-
+   }
+   else if(Info.toLowerCase() == "webview")
+   {
         requestForm("webview",viewGrid);
-
-   } else if ( Info.toLowerCase() == "options" ) {
-
+   }
+   else if(Info.toLowerCase() == "options")
+   {
         // requestForm("options",viewGrid);
-
-   } else {
-
+   }
+   else
+   {
         alert("NOPE!");
-        //error
-
    }
 }
 
-exports.onAdd = function(args) {
-
+exports.onAdd = function(args)
+{
     page = args.object;
     
-    var navigationOptions = {
-
+    var navigationOptions =
+    {
             moduleName: "views/add-list/addlist"
-
     }
-        
     topmost.navigate(navigationOptions);
-
 }

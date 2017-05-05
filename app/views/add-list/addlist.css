@@ -1,19 +1,17 @@
-textfield{
-
+textfield
+{
     margin-top: 20px;
     margin-bottom: 20px;
     margin-left: 10px;
     margin-right: 10px;
-
 }
 
-.submitBtn{
-
+.submitBtn
+{
     background-color: brown;
     color: white;
     height: 15%;
     margin-top: 5%;
     margin-left: 25%;
     margin-right: 25%;
-
 }
