@@ -49,6 +49,10 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 
 function drawList(data,viewGrid) {
 
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "ListView"
+
     var viewLayout = new gridModule.GridLayout();
 
     var arrayRows = new Array();
@@ -200,6 +204,11 @@ requestForm = function(constructorForm,viewGrid) {
 }
 
 drawForm = function(data,viewGrid){
+
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "FormView"
+
     var fieldsSize = data.length;
 
     var newStackLayout = new stackModule.StackLayout();
@@ -323,6 +332,11 @@ drawForm = function(data,viewGrid){
 
 
 function drawWebView(data){
+
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "WebView"
+
     var mygrid = new gridModule.GridLayout();
     //var txt1 = new textFieldModule.TextField();
     //var btnsearch = new buttonModule.Button();
@@ -375,11 +389,6 @@ function drawWebView(data){
 
 exports.constructorLoad = function(args) {
     page = args.object;
-
-    /*page.actionBar.backgroundColor = "brown";
-    page.actionBar.color = "white";
-    page.actionBar.title = "ListView";*/
-
 
     var gotData = page.navigationContext;
     var Info = gotData.typeView;
