@@ -390,6 +390,8 @@ function drawWebView(data){
 exports.constructorLoad = function(args) {
     page = args.object;
 
+    page.actionBar.actionItems._items[0].visibility = "collapse";
+
     var gotData = page.navigationContext;
     var Info = gotData.typeView;
 
@@ -481,6 +483,7 @@ exports.constructorLoad = function(args) {
    if( Info.toLowerCase() == "list" ){
 
         requestForm("list",viewGrid);
+        page.actionBar.actionItems._items[0].visibility = "visible";
 
    } else if ( Info.toLowerCase() == "form" ) {
 
