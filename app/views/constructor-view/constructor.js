@@ -138,138 +138,86 @@ function drawList(data,viewGrid)
     page.content = viewGrid;
 }
 
-requestForm = function(constructorForm,viewGrid)
-{
-    var urlForm = localStorage.getItem("server_url");
-
-    if(constructorForm == "form")
-    {
-        urlForm += "/constructForm.json";
-    }
-    else if(constructorForm == "list")
-    {
-        urlForm += "/list.json"
-    }
-    else if(constructorForm == "webview")
-    {
-        urlForm += "/webview.json"
-    }
-    else
-    {
-        urlForm += "/options.json"
-    }
-
-    fetch(urlForm).then(response =>
-    {
-        return response.json();
-    })
-    .then(function (r)
-    {
-        var data = r;
-
-        if(constructorForm == "form")
-        {
-            drawForm(data,viewGrid);
-        }
-        else if(constructorForm == "list")
-        {
-            drawList(data,viewGrid);
-        }
-        else if(constructorForm == "webview")
-        {
-            drawWebView(data);
-        }
-        else
-        {
-            drawOptions(data);
-        }
-    });   
-}
-
-drawForm = function(data,viewGrid)
-{
-    page.actionBar.backgroundColor = "brown";
-    page.actionBar.color = "white";
-    page.actionBar.title = "FormView"
-
+drawForm = function(data,viewGrid){
     var fieldsSize = data.length;
 
     var newStackLayout = new stackModule.StackLayout();
+    var scrollView = new scrollModule.ScrollView();
 
     var fieldsArray = new Array();
-    
-    for(i=0; i < fieldsSize; i++)
-    {
-        switch(data[i].type){
-            case "checkbox":
-                fieldsArray[i] = new checkModule.CheckBox();
-                fieldsArray[i].value = data[i].value;
-                fieldsArray[i].id = data[i].id;
-                fieldsArray[i].text = data[i].text;
 
-                newStackLayout.addChild(fieldsArray[i]);
+    for(i=0; i < fieldsSize; i++){
+        const cont = i;
+        switch(data[cont].type){
+            case "checkbox":
+                fieldsArray[cont] = new checkModule.CheckBox();
+                fieldsArray[cont].value = data[cont].value;
+                fieldsArray[cont].id = data[cont].id;
+                fieldsArray[cont].text = data[cont].text;
+
+                newStackLayout.addChild(fieldsArray[cont]);
             break;
+
             case "dropdown":
                 var arrayDados = new Array();
-                fieldsArray[i] = new dropModule.DropDown();
-                fieldsArray[i].items = data[i].items;
-                fieldsArray[i].id = data[i].id;
+                fieldsArray[cont] = new dropModule.DropDown();
+                fieldsArray[cont].items = data[cont].items;
+                fieldsArray[cont].id = data[cont].id;
 
-                newStackLayout.addChild(fieldsArray[i]);
+                newStackLayout.addChild(fieldsArray[cont]);
             break;
+
             case "radiogroup":
-                fieldsArray[i] = new radioBtnModule.RadioGroup();
-                fieldsArray[i].id = data[i].id;
-                newStackLayout.addChild(fieldsArray[i]);
+                fieldsArray[cont] = new radioBtnModule.RadioGroup();
+                fieldsArray[cont].id = data[cont].id;
+                newStackLayout.addChild(fieldsArray[cont]);
         
             break;
+
             case "radiobutton":
-                fieldsArray[i] = new radioBtnModule.RadioButton();
-                fieldsArray[i].id = data[i].id;
-                fieldsArray[i].text = data[i].text;
-                fieldsArray[i].value = data[i].value;
+                fieldsArray[cont] = new radioBtnModule.RadioButton();
+                fieldsArray[cont].id = data[cont].id;
+                fieldsArray[cont].text = data[cont].text;
+                fieldsArray[cont].value = data[cont].value;
 
-                newStackLayout.getViewById(data[i].group).addChild(fieldsArray[i]);
+                newStackLayout.getViewById(data[cont].group).addChild(fieldsArray[cont]);
             break;
+
             case "label":
-                fieldsArray[i] = new labelModule.Label();
-                fieldsArray[i].id = data[i].id;
-                fieldsArray[i].text = data[i].text;
+                fieldsArray[cont] = new labelModule.Label();
+                fieldsArray[cont].id = data[cont].id;
+                fieldsArray[cont].text = data[cont].text;
 
-                newStackLayout.addChild(fieldsArray[i]);
+                newStackLayout.addChild(fieldsArray[cont]);
             break;
-            case "textfield":
-                fieldsArray[i] = new textFieldModule.TextField();
-                fieldsArray[i].hint = data[i].hint;
-                fieldsArray[i].id = data[i].id;
 
-                newStackLayout.addChild(fieldsArray[i]);
+            case "textfield":
+                fieldsArray[cont] = new textFieldModule.TextField();
+                fieldsArray[cont].hint = data[cont].hint;
+                fieldsArray[cont].id = data[cont].id;
+
+                newStackLayout.addChild(fieldsArray[cont]);
+            break;
+            
+            default:
             break;
         }
     }
-    var verif = new buttonModule.Button();
-    verif.text = "verif";
-    newStackLayout.addChild(verif);
 
     var submitBtn = new buttonModule.Button();
     submitBtn.text = "submit";
     newStackLayout.addChild(submitBtn);
+    scrollView.content = newStackLayout;
 
-    gridModule.GridLayout.setColumn(newStackLayout,0);
-    gridModule.GridLayout.setRow(newStackLayout,0);
-    gridModule.GridLayout.setColumnSpan(newStackLayout,3);
+    gridModule.GridLayout.setColumn(scrollView,0);
+    gridModule.GridLayout.setRow(scrollView,0);
+    gridModule.GridLayout.setColumnSpan(scrollView,3);
 
-    viewGrid.addChild(newStackLayout);
+    viewGrid.addChild(scrollView);
 
     page.content = viewGrid;
 
-    verif.on(buttonModule.Button.tapEvent, function ()
-    {
-        //fieldsArray[i].checkedButton
-    });
-
-    submitBtn.on(buttonModule.Button.tapEvent, function ()
-    {
+    submitBtn.on(buttonModule.Button.tapEvent, function (){
         var submitInfo = new Array();
         var varNames = new Array();
         var cont = 0;
@@ -289,16 +237,25 @@ drawForm = function(data,viewGrid)
                         submitInfo[i-cont] = fieldsArray[i].checked;
                         varNames[i-cont] = data[i].varName;
                 break;
-                case "radiobutton":
-                        submitInfo[i-cont] = fieldsArray[i].value;
-                        varNames[i-cont] = data[i].varName;
+                case "radiogroup":
+                        var countt = fieldsArray[i]._childrenCount;
+                        for(j = 0;j < countt; j ++){
+                            if(fieldsArray[i]._subViews[j].checked == true){
+                                submitInfo[i-cont] = fieldsArray[i]._subViews[j].value;
+                                varNames[i-cont] = data[i].varName;
+                            }
+                        }
                 break;
                 case "label":
                     cont +=1;
                 break;
+                default:
+                    cont +=1;
+                break;
             }
         }
-        con.add('/aasd', submitInfo);
+
+       con.add('/aasd', submitInfo);
     });
 }
 
