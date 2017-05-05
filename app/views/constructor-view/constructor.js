@@ -324,49 +324,49 @@ drawForm = function(data,viewGrid){
 
 function drawWebView(data){
     var mygrid = new gridModule.GridLayout();
-    var txt1 = new textFieldModule.TextField();
-    var btnsearch = new buttonModule.Button();
+    //var txt1 = new textFieldModule.TextField();
+    //var btnsearch = new buttonModule.Button();
     var myweb = new webModule.WebView();
 
     var colunas = new Array();
     var linhas = new Array();
 
     //txt1.height = 30;
-    txt1.id = "txtsearch";
+    //txt1.id = "txtsearch";
 
     //btnsearch.height = 30;
-    btnsearch.text = "Search";
-    btnsearch.id = "btnsearch";
+    //btnsearch.text = "Search";
+    //btnsearch.id = "btnsearch";
 
     if(data.defaultUrl == "" || data.url_prefix == ""){
         myweb.url = "";
-        txt1.text = "";
+        //txt1.text = "";
         alert("Default URL or prefix is not defined");
     }else{
         myweb.url = data.url_prefix + data.defaultUrl;
-        txt1.text = data.defaultUrl;
+        //txt1.text = data.defaultUrl;
     }
     
-    btnsearch.on(buttonModule.Button.tapEvent, function (){
+    /*btnsearch.on(buttonModule.Button.tapEvent, function (){
         myweb.url = data.url_prefix + txt1.text;
-    });
+    });*/
 
-    createRows(1,linhas,mygrid,50,"pixel");
-    createRows(1,linhas,mygrid,500,"pixel");
-    createColumns(1,colunas,mygrid,230,"pixel");
-    createColumns(1,colunas,mygrid,90,"pixel");
+    //createRows(1,linhas,mygrid,50,"pixel");
+    createRows(1,linhas,mygrid,1,"star");
+    //createColumns(1,colunas,mygrid,230,"pixel");
+    createColumns(1,colunas,mygrid,1,"star");
 
-    gridModule.GridLayout.setColumn(txt1,0);
-    gridModule.GridLayout.setRow(txt1,0);
-    mygrid.addChild(txt1);
+    //gridModule.GridLayout.setColumn(txt1,0);
+    //gridModule.GridLayout.setRow(txt1,0);
+    //mygrid.addChild(txt1);
 
-    gridModule.GridLayout.setColumn(btnsearch,1);
-    gridModule.GridLayout.setRow(btnsearch,0);
-    mygrid.addChild(btnsearch);
+    //gridModule.GridLayout.setColumn(btnsearch,1);
+    //gridModule.GridLayout.setRow(btnsearch,0);
+    //mygrid.addChild(btnsearch);
 
     gridModule.GridLayout.setColumn(myweb,0);
-    gridModule.GridLayout.setRow(myweb,1);
-    gridModule.GridLayout.setColumnSpan(myweb, 2)
+    gridModule.GridLayout.setRow(myweb,0);
+    //gridModule.GridLayout.setColumnSpan(myweb, 2)
     mygrid.addChild(myweb);
 
     page.content = mygrid;
