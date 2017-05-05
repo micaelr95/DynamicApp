@@ -138,6 +138,54 @@ function drawList(data,viewGrid)
     page.content = viewGrid;
 }
 
+requestForm = function(constructorForm,viewGrid)
+{
+    var urlForm = localStorage.getItem("server_url");
+
+    if(constructorForm == "form")
+    {
+        urlForm += "/constructForm.json";
+    }
+    else if(constructorForm == "list")
+    {
+        urlForm += "/list.json"
+    }
+    else if(constructorForm == "webview")
+    {
+        urlForm += "/webview.json"
+    }
+    else
+    {
+        urlForm += "/options.json"
+    }
+
+    fetch(urlForm).then(response =>
+    {
+        return response.json();
+    })
+    .then(function (r)
+    {
+        var data = r;
+
+        if(constructorForm == "form")
+        {
+            drawForm(data,viewGrid);
+        }
+        else if(constructorForm == "list")
+        {
+            drawList(data,viewGrid);
+        }
+        else if(constructorForm == "webview")
+        {
+            drawWebView(data);
+        }
+        else
+        {
+            drawOptions(data);
+        }
+    });   
+}
+
 drawForm = function(data,viewGrid){
     var fieldsSize = data.length;
 
