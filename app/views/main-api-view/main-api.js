@@ -17,12 +17,16 @@ var imageModule = require("ui/image")
 var actionBarModule = require("ui/action-bar");
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
+var timer = require("timer");
 
 // vars storage
 var urlJson = localstorage.getItem("server_url") + "/form.json";
 var colorActionBar = localstorage.getItem("color_actionBar");
 var colorButtons = localstorage.getItem("color_buttons");
 
+var pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
+var data = "";
+var changeImg = 0;
 exports.mainMenu = function(args)
 {    
     page = args.object;
@@ -39,6 +43,19 @@ exports.mainMenu = function(args)
     con.login();
 
     requestJson(); 
+
+    // timer para mudar imagem
+	timer.setInterval(function() {       
+        if (changeImg == 0) {
+            changeImg = 1;
+            pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
+        }
+        else if (changeImg == 1) {
+            changeImg = 0;
+            pathImage = "http://www.clickgratis.com.br/fotos-imagens/imagem/aHR0cDovL3d3dy5jbGlja2dyYXRpcy5jb20uYnIvZm90b3MtaW1hZ2Vucy9pbWFnZW0vYUhSMGNEb3ZMM2QzZHk1aGNISmxibVJsY21WNFkyVnNMbU52YlM1aWNpOHZhVzFoWjJWdWN5OXViM1JwWTJsaEx6TTROUzh5T1RBeExURXVhbkJuLmpwZw==.jpg";
+        }
+        drawJson(data);        
+    }, 15000);  // a cada 15 segundos muda de imagem
 }
 
 requestJson = function()
@@ -49,7 +66,7 @@ requestJson = function()
     })
     .then(function (r)
     {
-        var data = r;
+        data = r;
         drawJson(data);
     });   
 }
@@ -68,13 +85,12 @@ drawJson = function(data)
     var glayout = new gridLayout.GridLayout();
     var slayout = new stackLayout.StackLayout();
     var image = new imageModule.Image();
-    var savePathImage = new Array();
+    savePathImage = new Array();
     var button = new Array();
     var radiobutton = new Array();
     var num = data.length;
     var x = 0;
     var y = 1;
-    var pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
     drawImage(slayout, pathImage);
     for(i = 0; i < num; i++)
     {
@@ -146,7 +162,8 @@ drawJson = function(data)
                 radiobutton[cont].on(buttonModule.Button.tapEvent, function()
                 {
                     savePathImage[cont] = data[cont].linkImg;
-                    drawImage(slayout, savePathImage[cont]);
+                    pathImage = data[cont].linkImg;
+                    drawJson(data);
                 });
                 
                 gridLayout.GridLayout.setColumn(radiobutton[cont], x);
