@@ -17,6 +17,7 @@ var topmost = frameModule.topmost();
 var localStorage = require("nativescript-localstorage");
 var spansModule = require("text/span");
 var formattedStringModule = require("text/formatted-string");
+var dialogs = require("ui/dialogs");
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
@@ -120,6 +121,84 @@ function drawList(data,viewGrid)
     }
 
     xList.items = listArray;
+
+    xList.on(listViewModule.ListView.itemTapEvent, function (args) {
+
+        var tappedItemIndex = args.index;
+
+        dialogs.confirm({
+
+            title: "Remover",
+            message: "Pretende remover este registo?",
+            okButtonText: "OK",
+            cancelButtonText: "CANCEL",
+
+        }).then(function (result) {
+            
+            if( result == true)
+            {
+
+                var stuff = [];
+                var infoArray = [];
+                var removedItem = false;
+
+                var i = 0;
+                var j = 0;
+
+                for(i = 0 ; i < localStorage.getItem("campsNumber"); i++)
+                {
+
+                    infoArray = [];
+
+                    for(j = 0 ; j < localStorage.getItem("numberItems"); j++)
+                    {
+
+                        if( j == tappedItemIndex ){
+
+                            if( j == (localStorage.getItem("numberItems") - 1 )){
+
+                            } else {
+
+                                j++;
+
+                                infoArray.push(localStorage.getItem("listItems" + i + j ));
+
+                            }
+
+                        } else {
+
+                            infoArray.push(localStorage.getItem("listItems" + i + j ));
+
+                        }
+
+                    }
+
+                    stuff[i] = infoArray;
+
+                }    
+
+                for(i = 0 ; i < parseInt(localStorage.getItem("campsNumber")); i++)
+                {
+
+                    con.addListInfo('/list/campsInfo/' + i , stuff[i]);
+
+                }
+
+                var navigationOptions = {
+
+                    moduleName: "views/constructor-view/constructor",
+                    context: {
+                                typeView: "list"
+                             }
+                    }
+                
+                topmost.navigate(navigationOptions);
+
+            } else {}
+            
+        });
+
+    });
     
 
     // Add ListView to View
@@ -187,6 +266,11 @@ requestForm = function(constructorForm,viewGrid)
 }
 
 drawForm = function(data,viewGrid){
+
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "FormView"
+
     var fieldsSize = data.length;
 
     var newStackLayout = new stackModule.StackLayout();
