@@ -150,12 +150,12 @@ function drawList(data,viewGrid)
 
                     infoArray = [];
 
-                    for(j = 0 ; j < localStorage.getItem("numberItems"); j++)
+                    for(j = 0 ; j < (localStorage.getItem("numberItems") - 1 ); j++)
                     {
 
                         if( j == tappedItemIndex ){
 
-                            if( j == (localStorage.getItem("numberItems") - 1 )){
+                            if( j == localStorage.getItem("numberItems")){
 
                             } else {
 
@@ -175,7 +175,9 @@ function drawList(data,viewGrid)
 
                     stuff[i] = infoArray;
 
-                }    
+                    localStorage.removeItem("listItems" + i + j ); 
+
+                }   
 
                 for(i = 0 ; i < parseInt(localStorage.getItem("campsNumber")); i++)
                 {
@@ -183,6 +185,8 @@ function drawList(data,viewGrid)
                     con.addListInfo('/list/campsInfo/' + i , stuff[i]);
 
                 }
+
+                alert("Removido");
 
                 var navigationOptions = {
 
