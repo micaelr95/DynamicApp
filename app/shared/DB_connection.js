@@ -35,7 +35,6 @@ function Connection()
         }
         ).then(function (result)
         {
-            console.log(JSON.stringify(result));
             config.uid = response.uid;
         },
         function (errorMessage)
@@ -45,13 +44,19 @@ function Connection()
     };
 
     // Add data to database
-    viewModel.add = function(table, data) {
+    viewModel.add = function(table, data)
+    {
         return firebase.push(table,
             {
                 data,
                 'UID': config.uid
             }
         )
+    };
+
+    viewModel.addListInfo = function(table, data)
+    {
+        return firebase.setValue(table,data)
     };
 
     return viewModel;

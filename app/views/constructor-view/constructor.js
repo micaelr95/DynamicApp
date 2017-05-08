@@ -22,32 +22,29 @@ var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var page;
 
-function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode) {
-
-    for ( i = 0 ; i < numbRows ; i++ )
+function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode)
+{
+    for(i = 0 ; i < numbRows ; i++)
     {
-
         arrayRows[i] = new gridModule.ItemSpec(RowHeight, gridModule.GridUnitType[RowMode]);
         gridLayout.addRow(arrayRows[i]);
-
-
     }
-
 }
 
-function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, ColumnMode) {
-
-    for ( i = 0 ; i < numbColumns ; i++ )
+function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, ColumnMode)
+{
+    for(i = 0 ; i < numbColumns ; i++)
     {
-            arrayColumns[i] = new gridModule.ItemSpec(ColumnHeight, gridModule.GridUnitType[ColumnMode]);
-
+        arrayColumns[i] = new gridModule.ItemSpec(ColumnHeight, gridModule.GridUnitType[ColumnMode]);
         gridLayout.addColumn(arrayColumns[i]);
-
     }
-
 }
 
-function drawList(data,viewGrid) {
+function drawList(data,viewGrid)
+{
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "ListView"
 
     var viewLayout = new gridModule.GridLayout();
 
@@ -55,36 +52,77 @@ function drawList(data,viewGrid) {
     var arrayColumns = new Array();
 
     var numbColumns = data.camps.length; //        <---| Numero de Campos
-    var titleArray = data.camps; //                <---| Informação dada pelo JSON                                                //     |
+    var titleArray = data.camps; //                <---| Informação dada pelo JSON
     createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
     createRows(1,arrayRows,viewLayout,50,"pixel"); //  |
     createRows(1,arrayRows,viewLayout,1,"auto");   //  |
                                                    //  |
-                                //       ______________|
-    var xLabels = new Array(3); //  <---| Numero de Campos
+                                          //       ____|
+    var xLabels = new Array(numbColumns); //  <---| Numero de Campos
     var xList = new listViewModule.ListView();
     
-    for( i = 0 ; i < numbColumns /* Numero de Campos */ ; i++ ){
-
+    for(i = 0 ; i < numbColumns /* Numero de Campos */ ; i++)
+    {
         xLabels[i] = new labelModule.Label();
         xLabels[i].text = titleArray[i];
         xLabels[i].className = "Title";
 
+        localStorage.setItem("camp" + i , titleArray[i]);
+
         gridModule.GridLayout.setColumn(xLabels[i],i);
         gridModule.GridLayout.setRow(xLabels[i],0);
         viewLayout.addChild(xLabels[i]);
-
     }
 
-    xList.itemTemplate="<GridLayout columns='* , *, auto' rows='auto, *' >"+
-                                "<Label text='{{name}}' col='0' ></Label>"+
-                                "<Label text='{{value}}' col='1' ></Label>"+
-                            "</GridLayout>";
-        
+    localStorage.setItem("campsNumber" , numbColumns);
+    localStorage.setItem("numberItems" , data.campsInfo[0].length);
+
+    var numbColumnsStars = "columns='";
+
+    for(i = 0 ; i < numbColumns ; i++)
+    {
+        if(i == 0)
+        {
+            numbColumnsStars += "*";
+        }
+        else
+        {
+            numbColumnsStars += ",*";
+        }
+    }
+
+    numbColumnsStars += ", auto'";
+
+    var columnLabels = "<GridLayout " + numbColumnsStars + " rows='auto, *' >";
+
+    for(i = 0 ; i < numbColumns ; i++)
+    {
+        columnLabels += "<Label text='{{" + titleArray[i] + "}}' col='" + i + "' />";
+    }
+
+    columnLabels += "</GridLayout>";
+
+    xList.itemTemplate = columnLabels;
     xList.className = "Info";
 
-    xList.items = [ { name: data.campsInfo[0][0] , value: data.campsInfo[1][0] } , { name: data.campsInfo[0][1] , value: data.campsInfo[1][1] } , { name: data.campsInfo[0][2] , value: data.campsInfo[1][2] } , { name: data.campsInfo[0][3] , value: data.campsInfo[1][3] } , { name: data.campsInfo[0][4] , value: data.campsInfo[1][4] } ]
+    var listArray = new Array();
+    var listItems = {};
+
+    for(i = 0 ; i < data.campsInfo[0].length ; i++)
+    {
+        listItems = {};
+        for(j = 0 ; j < numbColumns ; j++)
+        {
+            listItems[titleArray[j]] = data.campsInfo[j][i];
+            localStorage.setItem( "listItems" + j + i , data.campsInfo[j][i] );
+        }
+        listArray.push(listItems);
+    }
+
+    xList.items = listArray;
     
+
+    // Add ListView to View
     gridModule.GridLayout.setColumn(xList,0);
     gridModule.GridLayout.setRow(xList,1);
     gridModule.GridLayout.setColumnSpan(xList,numbColumns);
@@ -98,55 +136,53 @@ function drawList(data,viewGrid) {
     viewGrid.addChild(viewLayout);
     
     page.content = viewGrid;
-
 }
 
-requestForm = function(constructorForm,viewGrid) {
-
+requestForm = function(constructorForm,viewGrid)
+{
     var urlForm = localStorage.getItem("server_url");
 
-    if( constructorForm == "form" ){
-
+    if(constructorForm == "form")
+    {
         urlForm += "/constructForm.json";
-
-    } else if( constructorForm == "list" ){
-
+    }
+    else if(constructorForm == "list")
+    {
         urlForm += "/list.json"
-
-    } else if( constructorForm == "webview" ){
-
+    }
+    else if(constructorForm == "webview")
+    {
         urlForm += "/webview.json"
-
-    } else {
-
+    }
+    else
+    {
         urlForm += "/options.json"
-
     }
 
-    fetch(urlForm).then(response => {
+    fetch(urlForm).then(response =>
+    {
         return response.json();
     })
-    .then(function (r) {
+    .then(function (r)
+    {
         var data = r;
 
-        if( constructorForm == "form" ){
-
-        drawForm(data,viewGrid);
-
-        } else if( constructorForm == "list" ){
-
-            drawList(data,viewGrid);
-
-        } else if( constructorForm == "webview" ){
-
-            drawWebView(data);
-
-        } else {
-
-            drawOptions(data);
-
+        if(constructorForm == "form")
+        {
+            drawForm(data,viewGrid);
         }
-
+        else if(constructorForm == "list")
+        {
+            drawList(data,viewGrid);
+        }
+        else if(constructorForm == "webview")
+        {
+            drawWebView(data,viewGrid);
+        }
+        else
+        {
+            drawOptions(data);
+        }
     });   
 }
 
@@ -154,87 +190,80 @@ drawForm = function(data,viewGrid){
     var fieldsSize = data.length;
 
     var newStackLayout = new stackModule.StackLayout();
+    var scrollView = new scrollModule.ScrollView();
 
     var fieldsArray = new Array();
-    
-    for(i=0; i < fieldsSize; i++){
-        switch(data[i].type){
-            case "checkbox":
-                fieldsArray[i] = new checkModule.CheckBox();
-                fieldsArray[i].value = data[i].value;
-                fieldsArray[i].id = data[i].id;
-                fieldsArray[i].text = data[i].text;
 
-                newStackLayout.addChild(fieldsArray[i]);
+    for(i=0; i < fieldsSize; i++){
+        const cont = i;
+        switch(data[cont].type){
+            case "checkbox":
+                fieldsArray[cont] = new checkModule.CheckBox();
+                fieldsArray[cont].value = data[cont].value;
+                fieldsArray[cont].id = data[cont].id;
+                fieldsArray[cont].text = data[cont].text;
+
+                newStackLayout.addChild(fieldsArray[cont]);
             break;
 
             case "dropdown":
                 var arrayDados = new Array();
-                fieldsArray[i] = new dropModule.DropDown();
-                fieldsArray[i].items = data[i].items;
-                fieldsArray[i].id = data[i].id;
+                fieldsArray[cont] = new dropModule.DropDown();
+                fieldsArray[cont].items = data[cont].items;
+                fieldsArray[cont].id = data[cont].id;
 
-                newStackLayout.addChild(fieldsArray[i]);
+                newStackLayout.addChild(fieldsArray[cont]);
             break;
 
             case "radiogroup":
-                fieldsArray[i] = new radioBtnModule.RadioGroup();
-                fieldsArray[i].id = data[i].id;
-                newStackLayout.addChild(fieldsArray[i]);
+                fieldsArray[cont] = new radioBtnModule.RadioGroup();
+                fieldsArray[cont].id = data[cont].id;
+                newStackLayout.addChild(fieldsArray[cont]);
         
             break;
 
             case "radiobutton":
-                fieldsArray[i] = new radioBtnModule.RadioButton();
-                fieldsArray[i].id = data[i].id;
-                fieldsArray[i].text = data[i].text;
-                fieldsArray[i].value = data[i].value;
+                fieldsArray[cont] = new radioBtnModule.RadioButton();
+                fieldsArray[cont].id = data[cont].id;
+                fieldsArray[cont].text = data[cont].text;
+                fieldsArray[cont].value = data[cont].value;
 
-                newStackLayout.getViewById(data[i].group).addChild(fieldsArray[i]);
+                newStackLayout.getViewById(data[cont].group).addChild(fieldsArray[cont]);
             break;
 
             case "label":
-                fieldsArray[i] = new labelModule.Label();
-                fieldsArray[i].id = data[i].id;
-                fieldsArray[i].text = data[i].text;
+                fieldsArray[cont] = new labelModule.Label();
+                fieldsArray[cont].id = data[cont].id;
+                fieldsArray[cont].text = data[cont].text;
 
-                newStackLayout.addChild(fieldsArray[i]);
+                newStackLayout.addChild(fieldsArray[cont]);
             break;
 
             case "textfield":
-                fieldsArray[i] = new textFieldModule.TextField();
-                fieldsArray[i].hint = data[i].hint;
-                fieldsArray[i].id = data[i].id;
+                fieldsArray[cont] = new textFieldModule.TextField();
+                fieldsArray[cont].hint = data[cont].hint;
+                fieldsArray[cont].id = data[cont].id;
 
-                newStackLayout.addChild(fieldsArray[i]);
+                newStackLayout.addChild(fieldsArray[cont]);
             break;
             
             default:
             break;
         }
     }
-    var verif = new buttonModule.Button();
-    verif.text = "verif";
-    newStackLayout.addChild(verif);
 
     var submitBtn = new buttonModule.Button();
     submitBtn.text = "submit";
     newStackLayout.addChild(submitBtn);
+    scrollView.content = newStackLayout;
 
-    gridModule.GridLayout.setColumn(newStackLayout,0);
-    gridModule.GridLayout.setRow(newStackLayout,0);
-    gridModule.GridLayout.setColumnSpan(newStackLayout,3);
+    gridModule.GridLayout.setColumn(scrollView,0);
+    gridModule.GridLayout.setRow(scrollView,0);
+    gridModule.GridLayout.setColumnSpan(scrollView,3);
 
-    viewGrid.addChild(newStackLayout);
+    viewGrid.addChild(scrollView);
 
     page.content = viewGrid;
-
-    verif.on(buttonModule.Button.tapEvent, function (){
-        //fieldsArray[i].checkedButton
-       // console.dump(fieldsArray[5]);
-      //  console.dump(fieldsArray[5].checkedButton);
-        console.dump(newStackLayout._childrenCount);
-    });
 
     submitBtn.on(buttonModule.Button.tapEvent, function (){
         var submitInfo = new Array();
@@ -256,14 +285,20 @@ drawForm = function(data,viewGrid){
                         submitInfo[i-cont] = fieldsArray[i].checked;
                         varNames[i-cont] = data[i].varName;
                 break;
-                case "radiobutton":
-                        submitInfo[i-cont] = fieldsArray[i].value;
-                        varNames[i-cont] = data[i].varName;
+                case "radiogroup":
+                        var countt = fieldsArray[i]._childrenCount;
+                        for(j = 0;j < countt; j ++){
+                            if(fieldsArray[i]._subViews[j].checked == true){
+                                submitInfo[i-cont] = fieldsArray[i]._subViews[j].value;
+                                varNames[i-cont] = data[i].varName;
+                            }
+                        }
                 break;
                 case "label":
                     cont +=1;
                 break;
                 default:
+                    cont +=1;
                 break;
             }
         }
@@ -272,65 +307,48 @@ drawForm = function(data,viewGrid){
     });
 }
 
+function drawWebView(data,viewGrid)
+{
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "WebView"
 
-function drawWebView(data){
     var mygrid = new gridModule.GridLayout();
-    var txt1 = new textFieldModule.TextField();
-    var btnsearch = new buttonModule.Button();
     var myweb = new webModule.WebView();
 
     var colunas = new Array();
     var linhas = new Array();
 
-    //txt1.height = 30;
-    txt1.id = "txtsearch";
-
-    //btnsearch.height = 30;
-    btnsearch.text = "Search";
-    btnsearch.id = "btnsearch";
-
-    if(data.defaultUrl == ""){
+    if(data.defaultUrl == "" || data.url_prefix == "")
+    {
         myweb.url = "";
-        txt1.text = "http://";
-        alert("Default URL is not defined");
-    }else{
-        myweb.url = data.defaultUrl;
-        txt1.text = data.defaultUrl;
+        alert("Default URL or prefix is not defined");
     }
-    
-    btnsearch.on(buttonModule.Button.tapEvent, function (){
-        myweb.url = txt1.text;
-    });
+    else
+    {
+        myweb.url = data.url_prefix + data.defaultUrl;
+    }
 
-    createRows(1,linhas,mygrid,50,"pixel");
-    createRows(1,linhas,mygrid,500,"pixel");
-    createColumns(1,colunas,mygrid,230,"pixel");
-    createColumns(1,colunas,mygrid,90,"pixel");
-
-    gridModule.GridLayout.setColumn(txt1,0);
-    gridModule.GridLayout.setRow(txt1,0);
-    mygrid.addChild(txt1);
-
-    gridModule.GridLayout.setColumn(btnsearch,1);
-    gridModule.GridLayout.setRow(btnsearch,0);
-    mygrid.addChild(btnsearch);
+    createRows(1,linhas,mygrid,1,"star");
+    createColumns(1,colunas,mygrid,1,"star");
 
     gridModule.GridLayout.setColumn(myweb,0);
-    gridModule.GridLayout.setRow(myweb,1);
-    gridModule.GridLayout.setColumnSpan(myweb, 2)
+    gridModule.GridLayout.setRow(myweb,0);
     mygrid.addChild(myweb);
 
-    page.content = mygrid;
+    gridModule.GridLayout.setColumn(mygrid,0);
+    gridModule.GridLayout.setRow(mygrid,0);
+    gridModule.GridLayout.setColumnSpan(mygrid,3);
+    viewGrid.addChild(mygrid);
 
+    page.content = viewGrid;
 }
 
-exports.constructorLoad = function(args) {
+exports.constructorLoad = function(args)
+{
     page = args.object;
 
-    page.actionBar.backgroundColor = "brown";
-    page.actionBar.color = "white";
-    page.actionBar.title = "ListView";
-
+    page.actionBar.actionItems._items[0].visibility = "collapse";
 
     var gotData = page.navigationContext;
     var Info = gotData.typeView;
@@ -340,7 +358,7 @@ exports.constructorLoad = function(args) {
     var arrayColumns = new Array();
 
     createRows(1,arrayRows,viewGrid,1,"star");
-    createRows(1,arrayRows,viewGrid,70,"pixel");
+    createRows(1,arrayRows,viewGrid,45,"pixel");
     createColumns(3,arrayColumns,viewGrid,1,"star");
 
     var textSpan = new spansModule.Span();
@@ -356,17 +374,15 @@ exports.constructorLoad = function(args) {
     iconSpan1.text = String.fromCharCode("0xef015");
     formattedString1.spans.push(iconSpan1);
     button1.formattedText = formattedString1;
-    button1.on(buttonModule.Button.tapEvent , function() {
-
-        var navigationOptions = {
-
+    button1.on(buttonModule.Button.tapEvent , function()
+    {
+        var navigationOptions =
+        {
             moduleName: "views/main-api-view/main-api",
             clearHistory: true
-
         }
         
         topmost.navigate(navigationOptions);
-
     });
 
     button2.className = "btnIcon";
@@ -376,17 +392,15 @@ exports.constructorLoad = function(args) {
     iconSpan2.text = String.fromCharCode("0xef15c");
     formattedString2.spans.push(iconSpan2);
     button2.formattedText = formattedString2;
-    button2.on(buttonModule.Button.tapEvent , function() {
-
-        var navigationOptions = {
-
+    button2.on(buttonModule.Button.tapEvent , function()
+    {
+        var navigationOptions =
+        {
             moduleName: "views/main-api-view/main-api",
             clearHistory: true
-
         }
         
         topmost.navigate(navigationOptions);
-
     });
 
     button3.className = "btnIcon";
@@ -396,16 +410,13 @@ exports.constructorLoad = function(args) {
     iconSpan3.text = String.fromCharCode("0xef013");
     formattedString3.spans.push(iconSpan3);
     button3.formattedText = formattedString3;
-    button3.on(buttonModule.Button.tapEvent , function() {
-
-        var navigationOptions = {
-
+    button3.on(buttonModule.Button.tapEvent , function()
+    {
+        var navigationOptions =
+        {
             moduleName: "views/options-view/options"
-
         }
-        
         topmost.navigate(navigationOptions);
-
     });
 
     gridModule.GridLayout.setColumn(button1,0);
@@ -420,27 +431,36 @@ exports.constructorLoad = function(args) {
     gridModule.GridLayout.setRow(button3,1);
     viewGrid.addChild(button3);
 
-   if( Info.toLowerCase() == "list" ){
-
+   if(Info.toLowerCase() == "list")
+   {
         requestForm("list",viewGrid);
-
-   } else if ( Info.toLowerCase() == "form" ) {
-
-        requestForm("form",viewGrid);
-
-   } else if ( Info.toLowerCase() == "webview" ) {
-
-        requestForm("webview",viewGrid);
-
-   } else if ( Info.toLowerCase() == "options" ) {
-
-        // requestForm("options",viewGrid);
-
-   } else {
-
-        alert("NOPE!");
-        //error
-
+        page.actionBar.actionItems._items[0].visibility = "visible";
    }
+   else if(Info.toLowerCase() == "form")
+   {
+        requestForm("form",viewGrid);
+   }
+   else if(Info.toLowerCase() == "webview")
+   {
+        requestForm("webview",viewGrid);
+   }
+   else if(Info.toLowerCase() == "options")
+   {
+        // requestForm("options",viewGrid);
+   }
+   else
+   {
+        alert("NOPE!");
+   }
+}
 
+exports.onAdd = function(args)
+{
+    page = args.object;
+    
+    var navigationOptions =
+    {
+            moduleName: "views/add-list/addlist"
+    }
+    topmost.navigate(navigationOptions);
 }
