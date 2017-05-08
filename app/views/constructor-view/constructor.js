@@ -175,7 +175,7 @@ function drawList(data,viewGrid)
 
                     stuff[i] = infoArray;
 
-                    localStorage.removeItem("listItems" + i + j ); 
+                    localStorage.removeItem("listItems" + i + j );
 
                 }   
 
