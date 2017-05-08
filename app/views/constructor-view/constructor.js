@@ -177,7 +177,7 @@ requestForm = function(constructorForm,viewGrid)
         }
         else if(constructorForm == "webview")
         {
-            drawWebView(data);
+            drawWebView(data,viewGrid);
         }
         else
         {
@@ -307,7 +307,7 @@ drawForm = function(data,viewGrid){
     });
 }
 
-function drawWebView(data)
+function drawWebView(data,viewGrid)
 {
     page.actionBar.backgroundColor = "brown";
     page.actionBar.color = "white";
@@ -336,7 +336,12 @@ function drawWebView(data)
     gridModule.GridLayout.setRow(myweb,0);
     mygrid.addChild(myweb);
 
-    page.content = mygrid;
+    gridModule.GridLayout.setColumn(mygrid,0);
+    gridModule.GridLayout.setRow(mygrid,0);
+    gridModule.GridLayout.setColumnSpan(mygrid,3);
+    viewGrid.addChild(mygrid);
+
+    page.content = viewGrid;
 }
 
 exports.constructorLoad = function(args)
