@@ -17,6 +17,7 @@ var imageModule = require("ui/image")
 var actionBarModule = require("ui/action-bar");
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
+var id;
 var timer = require("timer");
 
 // vars storage
@@ -45,7 +46,7 @@ exports.mainMenu = function(args)
     requestJson(); 
 
     // timer para mudar imagem
-	timer.setInterval(function() {       
+	id = timer.setInterval(function() {       
         if (changeImg == 0) {
             changeImg = 1;
             pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
@@ -55,7 +56,7 @@ exports.mainMenu = function(args)
             pathImage = "http://www.clickgratis.com.br/fotos-imagens/imagem/aHR0cDovL3d3dy5jbGlja2dyYXRpcy5jb20uYnIvZm90b3MtaW1hZ2Vucy9pbWFnZW0vYUhSMGNEb3ZMM2QzZHk1aGNISmxibVJsY21WNFkyVnNMbU52YlM1aWNpOHZhVzFoWjJWdWN5OXViM1JwWTJsaEx6TTROUzh5T1RBeExURXVhbkJuLmpwZw==.jpg";
         }
         drawJson(data);        
-    }, 15000);  // a cada 15 segundos muda de imagem
+    }, 5000);  // a cada 15 segundos muda de imagem
 }
 
 requestJson = function()
@@ -117,6 +118,9 @@ drawJson = function(data)
                 button[cont].value = data[i].typeview;
                 button[cont].on(buttonModule.Button.tapEvent, function()
                 {
+
+                    timer.clearInterval(id);
+                    
                     // verifica se é options
                     if(button[cont].value == "options")
                     {
