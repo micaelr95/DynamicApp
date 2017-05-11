@@ -19,6 +19,7 @@ var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var id;
 var timer = require("timer");
+var page;
 
 // vars storage
 var urlJson = localstorage.getItem("server_url") + "/form.json";
@@ -28,15 +29,41 @@ var colorButtons = localstorage.getItem("color_buttons");
 var pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
 var data = "";
 var changeImg = 0;
+
+var application = require("application");
+var activity = application.android.startActivity ||
+        application.android.foregroundActivity ||
+        frameModule.topmost().android.currentActivity ||
+        frameModule.topmost().android.activity;
+
+activity.onBackPressed = function()
+{
+    console.log("Pressed " + page.actionBar.title);
+    if (page.actionBar.title == "Menu - Api View")
+    {
+        console.log("main");
+        var startMain = new android.content.Intent(android.content.Intent.ACTION_MAIN);
+        startMain.addCategory(android.content.Intent.CATEGORY_HOME);
+        startMain.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(startMain);
+    }
+    else
+    {
+        console.log("outra");
+        frameModule.topmost().goBack();
+    }
+}
+
 exports.mainMenu = function(args)
 {    
     page = args.object;
-    
+
     // action bar
-    var bar = new actionBarModule.ActionBar();
-    bar.title = "Menu - Api View";
-    bar.backgroundColor = colorActionBar;
-    page.actionBar = bar;
+    //var bar = new actionBarModule.ActionBar();
+    //bar.title = "Menu - Api View";
+    //bar.backgroundColor = colorActionBar;
+    page.actionBar.title = "Menu - Api View";
+    page.actionBar.backgroundColor = "orange";
 
     // Initiate database connection
     con.init();
@@ -100,6 +127,7 @@ drawJson = function(data)
         switch(data[i].Type)
         {
             case "button":
+                mainPage = false;
                 var formattedString = new formattedStringModule.FormattedString();
                 var iconSpan = new spansModule.Span();
                 iconSpan.text = String.fromCharCode(data[cont].icon);
@@ -124,6 +152,7 @@ drawJson = function(data)
                     // verifica se é options
                     if(button[cont].value == "options")
                     {
+                        mainPage = false;
                         topmost.navigate("views/options-view/options");
                     }
                     else
