@@ -23,36 +23,6 @@ var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var page;
 
-var application = require("application");
-var activity = application.android.startActivity ||
-        application.android.foregroundActivity ||
-        frameModule.topmost().android.currentActivity ||
-        frameModule.topmost().android.activity;
-
-activity.onBackPressed = function()
-{
-    console.log("Pressed " + page.actionBar.title);
-    if (page.actionBar.title == "Menu - Api View")
-    {
-        console.log("main");
-        var startMain = new android.content.Intent(android.content.Intent.ACTION_MAIN);
-        startMain.addCategory(android.content.Intent.CATEGORY_HOME);
-        startMain.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(startMain);
-    }
-    else
-    {
-        console.log("outra");
-        var navigationOptions =
-        {
-            moduleName: "views/main-api-view/main-api",
-            clearHistory: true
-        }
-        frameModule.topmost(navigationOptions);
-        frameModule.topmost().goBack();
-    }
-}
-
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode)
 {
     for(i = 0 ; i < numbRows ; i++)
@@ -258,18 +228,17 @@ requestForm = function(constructorForm,viewGrid)
     if(constructorForm == "form")
     {
         urlForm += "/constructForm.json";
+            localStorage.setItem("currentPage" , "form");
     }
     else if(constructorForm == "list")
     {
         urlForm += "/list.json"
+            localStorage.setItem("currentPage" , "list");
     }
     else if(constructorForm == "webview")
     {
         urlForm += "/webview.json"
-    }
-    else
-    {
-        urlForm += "/options.json"
+            localStorage.setItem("currentPage" , "webView");
     }
 
     fetch(urlForm).then(response =>

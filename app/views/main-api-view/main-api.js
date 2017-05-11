@@ -38,8 +38,8 @@ var activity = application.android.startActivity ||
 
 activity.onBackPressed = function()
 {
-    console.log("Pressed " + page.actionBar.title);
-    if (page.actionBar.title == "Menu - Api View")
+    console.log("Pressed " + localstorage.getItem("currentPage"));
+    if (localstorage.getItem("currentPage") == "mainAPI")
     {
         console.log("main");
         var startMain = new android.content.Intent(android.content.Intent.ACTION_MAIN);
@@ -57,6 +57,8 @@ activity.onBackPressed = function()
 exports.mainMenu = function(args)
 {    
     page = args.object;
+
+    localstorage.setItem("currentPage" , "mainAPI");
 
     // action bar
     //var bar = new actionBarModule.ActionBar();
