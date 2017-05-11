@@ -38,18 +38,19 @@ var activity = application.android.startActivity ||
 
 activity.onBackPressed = function()
 {
-    console.log("Pressed " + localstorage.getItem("currentPage"));
     if (localstorage.getItem("currentPage") == "mainAPI")
     {
-        console.log("main");
         var startMain = new android.content.Intent(android.content.Intent.ACTION_MAIN);
         startMain.addCategory(android.content.Intent.CATEGORY_HOME);
         startMain.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(startMain);
     }
+    else if(localstorage.getItem("currentPage") == "options" )
+    {
+        topmost.navigate("views/main-api-view/main-api");
+    }
     else
     {
-        console.log("outra");
         frameModule.topmost().goBack();
     }
 }
@@ -129,7 +130,6 @@ drawJson = function(data)
         switch(data[i].Type)
         {
             case "button":
-                mainPage = false;
                 var formattedString = new formattedStringModule.FormattedString();
                 var iconSpan = new spansModule.Span();
                 iconSpan.text = String.fromCharCode(data[cont].icon);
@@ -154,7 +154,6 @@ drawJson = function(data)
                     // verifica se é options
                     if(button[cont].value == "options")
                     {
-                        mainPage = false;
                         topmost.navigate("views/options-view/options");
                     }
                     else

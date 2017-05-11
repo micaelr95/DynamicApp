@@ -14,6 +14,7 @@ var colorButtons = localstorage.getItem("color_buttons");
 exports.options = function(args)
 {   
     page = args.object;
+    localstorage.setItem("currentPage" , "options");
 
     var layout = new stackLayout.StackLayout();
     
@@ -52,7 +53,7 @@ drawDropDown = function(l)
             switch(selectedOption)
             {
                 case "buttons":
-                    localStorage.setItem("color_buttons", dropColors.items[dropColors.selectedIndex]);                    
+                    localstorage.setItem("color_buttons", dropColors.items[dropColors.selectedIndex]);                    
                 break;
                 case "actionBar":
                     localstorage.setItem("color_actionBar", dropColors.items[dropColors.selectedIndex]);
