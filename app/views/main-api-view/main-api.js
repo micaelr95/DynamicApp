@@ -15,6 +15,7 @@ var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
 var imageModule = require("ui/image")
 var actionBarModule = require("ui/action-bar");
+var application = require("application");
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var id;
@@ -25,12 +26,12 @@ var page;
 var urlJson = localstorage.getItem("server_url") + "/form.json";
 var colorActionBar = localstorage.getItem("color_actionBar");
 var colorButtons = localstorage.getItem("color_buttons");
+var dataJsonStorage = localstorage.getItem("dados_json");
 
 var pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
 var data = "";
 var changeImg = 0;
 
-var application = require("application");
 var activity = application.android.startActivity ||
         application.android.foregroundActivity ||
         frameModule.topmost().android.currentActivity ||
@@ -57,14 +58,9 @@ activity.onBackPressed = function()
 
 exports.mainMenu = function(args)
 {    
+
     page = args.object;
-
     localstorage.setItem("currentPage" , "mainAPI");
-
-    // action bar
-    //var bar = new actionBarModule.ActionBar();
-    //bar.title = "Menu - Api View";
-    //bar.backgroundColor = colorActionBar;
     page.actionBar.title = "Menu - Api View";
     page.actionBar.backgroundColor = "orange";
 
@@ -73,7 +69,19 @@ exports.mainMenu = function(args)
     // Starts ANONYMOUS connection to database
     con.login();
 
-    requestJson(); 
+    // meter na bd campo para verificar se há alterações para voltar a fazer request
+    // meter na bd campo para verificar se há alterações para voltar a fazer request
+    // meter na bd campo para verificar se há alterações para voltar a fazer request
+    // meter na bd campo para verificar se há alterações para voltar a fazer request
+
+    // verifica se há registo nos storage 
+    var verifyStorage = localstorage.getItem("verify_storage");
+    if (verifyStorage == null || verifyStorage == 0) {
+        requestJson();
+    }
+    else if (verifyStorage == 1) {
+        drawStorage();
+    }   
 
     // timer para mudar imagem
 	id = timer.setInterval(function() {       
@@ -85,7 +93,7 @@ exports.mainMenu = function(args)
             changeImg = 0;
             pathImage = "http://www.clickgratis.com.br/fotos-imagens/imagem/aHR0cDovL3d3dy5jbGlja2dyYXRpcy5jb20uYnIvZm90b3MtaW1hZ2Vucy9pbWFnZW0vYUhSMGNEb3ZMM2QzZHk1aGNISmxibVJsY21WNFkyVnNMbU52YlM1aWNpOHZhVzFoWjJWdWN5OXViM1JwWTJsaEx6TTROUzh5T1RBeExURXVhbkJuLmpwZw==.jpg";
         }
-        drawJson(data);        
+       drawStorage();        
     }, 5000);  // a cada 15 segundos muda de imagem
 }
 
@@ -97,8 +105,7 @@ requestJson = function()
     })
     .then(function (r)
     {
-        data = r;
-        drawJson(data);
+        getJson(r);
     });   
 }
 
@@ -110,49 +117,80 @@ drawImage = function(s, path)
     s.addChild(image);
 }
 
-drawJson = function(data)
-{
-    var radioGroup = new radioModule.RadioGroup();
+getJson = function(data) {
+    var num = data.length;
+    localstorage.setItem("num_object_json", num);
+    localstorage.setItem("verify_storage", 1);
+
+    for(i = 0; i < num; i++) {        
+        switch(data[i].Type) {
+            case "button":             
+                localstorage.setItem("object_icon" + i, data[i].icon);
+                localstorage.setItem("object_text" + i, data[i].text);
+                localstorage.setItem("object_linkJson" + i, data[i].linkJson);
+                localstorage.setItem("object_className" + i, "btnIcon");
+                break;
+            case "radiobutton":
+                localstorage.setItem("object_linkImg" + i, data[i].linkImg);
+                break; 
+        }
+        // storage saves
+        localstorage.setItem("object_type" + i, data[i].Type);
+        localstorage.setItem("object_id" + i, data[i].id);
+        localstorage.setItem("object_value" + i, data[i].typeview);
+    }
+
+    drawStorage();
+}
+
+
+drawStorage = function() {
+    // layout
     var glayout = new gridLayout.GridLayout();
     var slayout = new stackLayout.StackLayout();
-    var image = new imageModule.Image();
-    savePathImage = new Array();
-    var button = new Array();
-    var radiobutton = new Array();
     var num = data.length;
     var x = 0;
     var y = 1;
+
+    // objects
+    var radioGroup = new radioModule.RadioGroup();
+    var image = new imageModule.Image();
+
+    // array to get data of objects
+    var object_field = new Array();
+
+    // quant of objects
+    var num = localstorage.getItem("num_object_json");
+
     drawImage(slayout, pathImage);
-    for(i = 0; i < num; i++)
-    {
+
+    for(i = 0; i < num; i++) {
         const cont = i;
-        
-        switch(data[i].Type)
-        {
+        var type_object = localstorage.getItem("object_type" + i);
+
+        switch (type_object) {
             case "button":
                 var formattedString = new formattedStringModule.FormattedString();
                 var iconSpan = new spansModule.Span();
-                iconSpan.text = String.fromCharCode(data[cont].icon);
+                iconSpan.text = String.fromCharCode(localstorage.getItem("object_icon" + i));
                 iconSpan.fontSize = 25;
                 formattedString.spans.push(iconSpan);
 
                 var textSpan = new spansModule.Span();
-                textSpan.text = "\n\n" + data[cont].text;;   
+                textSpan.text = "\n\n" + localstorage.getItem("object_text" + i); 
                 formattedString.spans.push(textSpan);   
-                
-                button[cont] = new buttonModule.Button();
-                button[cont].id = data[i].id;
-                button[cont].backgroundColor = colorButtons;
-                button[cont].formattedText = formattedString;
-                button[cont].className = "btnIcon";
-                button[cont].value = data[i].typeview;
-                button[cont].on(buttonModule.Button.tapEvent, function()
-                {
 
-                    timer.clearInterval(id);
+                object_field[cont] = new buttonModule.Button();
+                object_field[cont].id = localstorage.getItem("object_id" + i);
+                object_field[cont].formattedText = formattedString;
+                object_field[cont].className = "btnIcon";
+                object_field[cont].value = localstorage.getItem("object_value" + i);
+
+                object_field[cont].on(buttonModule.Button.tapEvent, function() {
+                     timer.clearInterval(id);
                     
                     // verifica se é options
-                    if(button[cont].value == "options")
+                    if(object_field[cont].value == "options")
                     {
                         topmost.navigate("views/options-view/options");
                     }
@@ -163,71 +201,58 @@ drawJson = function(data)
                             moduleName: "views/constructor-view/constructor",
                             context:
                             {
-                                typeView: button[cont].value
+                                typeView: object_field[cont].value
                             }
                     }
                         topmost.navigate(navigationOptions);
                     }
-                });
+                 });
 
                 // columns and rows of datagrid
-                if(x >= 1)
-                {
+                if(x >= 1) {
                     x = 0;
                     y += 1;
                 } 
-                else
-                {
+                else {
                     x += 1;
                 }
 
-                gridLayout.GridLayout.setColumn(button[cont], x);
-                gridLayout.GridLayout.setRow(button[cont], y);             
-                               
+                // add button to layout
+                gridLayout.GridLayout.setColumn(object_field[cont], x);
+                gridLayout.GridLayout.setRow(object_field[cont], y);
                 var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
                 var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
                 glayout.addColumn(column);
                 glayout.addRow(row);
-                glayout.addChild(button[cont]);              
-            break;
+                glayout.addChild(object_field[cont]);
+                break;
+
             case "radiobutton":
-                radiobutton[cont] = new radioModule.RadioButton();
-                radiobutton[cont].id = data[i].id;
-                radiobutton[cont].on(buttonModule.Button.tapEvent, function()
-                {
-                    savePathImage[cont] = data[cont].linkImg;
-                    pathImage = data[cont].linkImg;
-                    drawJson(data);
-                });
-                
-                gridLayout.GridLayout.setColumn(radiobutton[cont], x);
-                gridLayout.GridLayout.setRow(radiobutton[cont], y);
+                object_field[cont] = new radioModule.RadioButton();
+                object_field[cont].value = localstorage.getItem("object_value" + i);
+                object_field[cont].id = localstorage.getItem("object_id" + i);
+
+                object_field[cont].on(buttonModule.Button.tapEvent, function() {
+                    // PROGRAMAR PARA MUDAR DE IMAGEM
+                }); 
+
+                gridLayout.GridLayout.setColumn(object_field[cont], x);
+                gridLayout.GridLayout.setRow(object_field[cont], y);
                 x += 1;
-                y += 1;          
+                y += 1;
+
                 var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
                 var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
                 glayout.addColumn(column);
                 glayout.addRow(row);
-                radioGroup.addChild(radiobutton[cont]);
+                radioGroup.addChild(object_field[cont]);
                 
-                if(x > 1)
-                {
+                if(x > 1) {
                     glayout.addChild(radioGroup);
                     slayout.addChild(glayout);
                 }
-            break; 
-        }
-    page.content = slayout;
+                break;
+        } 
+        page.content = slayout;       
     }
-}
-
-// functions of action bar
-exports.options0 = function()
-{
-    alert("OPTIONS 0");
-}
-
-exports.options1 = function()
-{
-    alert("OPTIONS 1"); 
 }
