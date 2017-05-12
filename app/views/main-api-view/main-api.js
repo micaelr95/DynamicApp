@@ -1,20 +1,20 @@
 // modules
-var frameModule = require("ui/frame");
+var frameModule = require("tns-core-modules/ui/frame");
 var topmost = frameModule.topmost();
-var labelModule = require("ui/label");
+var labelModule = require("tns-core-modules/ui/label");
 var checkboxModule = require("nativescript-checkbox");
 var dropdownModule = require("nativescript-drop-down/drop-down");
-var buttonModule = require("ui/button");
+var buttonModule = require("tns-core-modules/ui/button");
 var radioModule = require("nativescript-radiobutton");
-var textfieldModule = require("ui/text-field");
-var stackLayout = require("ui/layouts/stack-layout");
-var gridLayout = require("ui/layouts/grid-layout");
+var textfieldModule = require("tns-core-modules/ui/text-field");
+var stackLayout = require("tns-core-modules/ui/layouts/stack-layout");
+var gridLayout = require("tns-core-modules/ui/layouts/grid-layout");
 var localstorage = require("nativescript-localstorage");
 var formattedStringModule = require("text/formatted-string");
 var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
-var imageModule = require("ui/image")
-var actionBarModule = require("ui/action-bar");
+var imageModule = require("tns-core-modules/ui/image")
+var actionBarModule = require("tns-core-modules/ui/action-bar");
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var id;
