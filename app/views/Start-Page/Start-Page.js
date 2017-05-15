@@ -1,6 +1,6 @@
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
 var localstorage = require("nativescript-localstorage");
-var frameModule = require("ui/frame");
+var frameModule = require("tns-core-modules/ui/frame");
 var page;
 
 exports.pageLoaded = function(args)
