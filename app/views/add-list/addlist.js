@@ -43,8 +43,9 @@ exports.addlistLoad = function(args)
 
             for(j = 0 ; j < parseInt(localStorage.getItem("numberItems")); j++)
             {
-                infoArray.push(localStorage.getItem("listItems" + i + j))
+                infoArray.push(localStorage.getItem("listItems" + i + j));
             }
+            localStorage.setItem("listItems" + i + j , textboxArray[i].text );
             infoArray.push(textboxArray[i].text);
             stuff[i] = infoArray;
         }
