@@ -400,6 +400,10 @@ function drawWebView(data,viewGrid)
 
     var mygrid = new gridModule.GridLayout();
     var myweb = new webModule.WebView();
+    myweb.id = "cenas";
+
+    
+
 
     var colunas = new Array();
     var linhas = new Array();
@@ -423,7 +427,10 @@ function drawWebView(data,viewGrid)
 
     createView(viewGrid , mygrid , "WebView");
 
-    page.content = viewGrid;
+
+    page.content = viewGrid
+    var coco = page.getViewById("cenas");
+    coco.android.getSettings().setBuiltInZoomControls(false);
 }
 
 exports.constructorLoad = function(args)
