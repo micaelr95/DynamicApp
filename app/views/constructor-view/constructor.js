@@ -160,7 +160,7 @@ function drawList(data,viewGrid)
 
                     infoArray = [];
 
-                    for(j = 0 ; j < (localStorage.getItem( parametro + "numberItems") - 1 ); j++)
+                    for(j = 0 ; j < (localStorage.getItem("numberItems") - 1 ); j++)
                     {
 
                         if( j == tappedItemIndex ){
