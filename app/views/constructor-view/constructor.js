@@ -1,22 +1,24 @@
 var app = require("application");
-var stackModule = require("tns-core-modules/ui/layouts/stack-layout");
-var gridModule = require("tns-core-modules/ui/layouts/grid-layout");
-var checkModule = require("node-modules/nativescript-checkbox");
-var dropModule = require("node-modules/nativescript-drop-down");
-var radioBtnModule = require("node-modules/nativescript-radiobutton");
-var buttonModule = require("tns-core-modules/ui/button");
-var labelModule = require("tns-core-modules/ui/label");
-var listViewModule = require("tns-core-modules/ui/list-view");
-var scrollModule = require("tns-core-modules/ui/scroll-view");
-var textFieldModule = require("tns-core-modules/ui/text-field");
-var webModule = require("tns-core-modules/ui/web-view");
-var frameModule = require("tns-core-modules/ui/frame");
+var stackModule = require("ui/layouts/stack-layout");
+var gridModule = require("ui/layouts/grid-layout");
+var observable = require("data/observable");
+var observableArray = require("data/observable-array");
+var checkModule = require("nativescript-checkbox");
+var dropModule = require("nativescript-drop-down");
+var radioBtnModule = require("nativescript-radiobutton");
+var buttonModule = require("ui/button");
+var labelModule = require("ui/label");
+var listViewModule = require("ui/list-view");
+var scrollModule = require("ui/scroll-view");
+var textFieldModule = require("ui/text-field");
+var webModule = require("ui/web-view");
+var frameModule = require("ui/frame");
 var topmost = frameModule.topmost();
-var localStorage = require("node-modules/nativescript-localstorage");
+var localStorage = require("nativescript-localstorage");
 var spansModule = require("text/span");
 var formattedStringModule = require("text/formatted-string");
-var dialogs = require("tns-core-modules/ui/dialogs");
-var BarcodeScanner = require("node-modules/nativescript-barcodescanner").BarcodeScanner;
+var dialogs = require("ui/dialogs");
+var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var page;
@@ -39,23 +41,11 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
     }
 }
 
-function createView(finalView , drawView , formName)
-{
-    
-    page.actionBar.backgroundColor = localStorage.getItem("color_actionBar");
-    page.actionBar.color = "white"; // change to localstorage when u get text color from server
-    page.actionBar.title = formName;
-
-    gridModule.GridLayout.setColumn(drawView,0);
-    gridModule.GridLayout.setRow(drawView,0);
-    gridModule.GridLayout.setColumnSpan(drawView,3);
-
-    finalView.addChild(drawView);
-
-}
-
 function drawList(data,viewGrid)
 {
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "ListView"
 
     var viewLayout = new gridModule.GridLayout();
 
@@ -160,7 +150,7 @@ function drawList(data,viewGrid)
 
                     infoArray = [];
 
-                    for(j = 0 ; j < (localStorage.getItem( parametro + "numberItems") - 1 ); j++)
+                    for(j = 0 ; j < (localStorage.getItem("numberItems") - 1 ); j++)
                     {
 
                         if( j == tappedItemIndex ){
@@ -222,7 +212,11 @@ function drawList(data,viewGrid)
     
     viewLayout.addChild(xList);
 
-    createView(viewGrid , viewLayout , "ListView");
+    gridModule.GridLayout.setColumn(viewLayout,0);
+    gridModule.GridLayout.setRow(viewLayout,0);
+    gridModule.GridLayout.setColumnSpan(viewLayout,3);
+
+    viewGrid.addChild(viewLayout);
     
     page.content = viewGrid;
 }
@@ -275,6 +269,10 @@ requestForm = function(constructorForm,viewGrid)
 }
 
 drawForm = function(data,viewGrid){
+
+    page.actionBar.backgroundColor = "brown";
+    page.actionBar.color = "white";
+    page.actionBar.title = "FormView"
 
     var fieldsSize = data.length;
 
@@ -346,7 +344,11 @@ drawForm = function(data,viewGrid){
     newStackLayout.addChild(submitBtn);
     scrollView.content = newStackLayout;
 
-    createView(viewGrid , scrollView , "FormView");
+    gridModule.GridLayout.setColumn(scrollView,0);
+    gridModule.GridLayout.setRow(scrollView,0);
+    gridModule.GridLayout.setColumnSpan(scrollView,3);
+
+    viewGrid.addChild(scrollView);
 
     page.content = viewGrid;
 
@@ -421,7 +423,10 @@ function drawWebView(data,viewGrid)
     gridModule.GridLayout.setRow(myweb,0);
     mygrid.addChild(myweb);
 
-    createView(viewGrid , mygrid , "WebView");
+    gridModule.GridLayout.setColumn(mygrid,0);
+    gridModule.GridLayout.setRow(mygrid,0);
+    gridModule.GridLayout.setColumnSpan(mygrid,3);
+    viewGrid.addChild(mygrid);
 
     page.content = viewGrid;
 }
@@ -450,7 +455,6 @@ exports.constructorLoad = function(args)
     var button3 = new buttonModule.Button();
 
     button1.className = "btnIcon";
-    button1.backgroundColor = localStorage.getItem("color_actionBar");
     var formattedString1 = new formattedStringModule.FormattedString();
     var iconSpan1 = new spansModule.Span();
     iconSpan1.fontSize = 25;
@@ -469,7 +473,6 @@ exports.constructorLoad = function(args)
     });
 
     button2.className = "btnIcon";
-    button2.backgroundColor = localStorage.getItem("color_actionBar");
     var formattedString2 = new formattedStringModule.FormattedString();
     var iconSpan2 = new spansModule.Span();
     iconSpan2.fontSize = 25;
@@ -488,7 +491,6 @@ exports.constructorLoad = function(args)
     });
 
     button3.className = "btnIcon";
-    button3.backgroundColor = localStorage.getItem("color_actionBar");
     var formattedString3 = new formattedStringModule.FormattedString();
     var iconSpan3 = new spansModule.Span();
     iconSpan3.fontSize = 25;

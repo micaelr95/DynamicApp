@@ -1,9 +1,9 @@
-var stackLayout = require("tns-core-modules/ui/layouts/stack-layout");
-var actionBarModule = require("tns-core-modules/ui/action-bar");
-var dropModule = require("node-modules/nativescript-drop-down");
-var localstorage = require("node-modules/nativescript-localstorage");
-var buttonModule = require("tns-core-modules/ui/button");
-var radioModule = require("node-modules/nativescript-radiobutton");
+var stackLayout = require("ui/layouts/stack-layout");
+var actionBarModule = require("ui/action-bar");
+var dropModule = require("nativescript-drop-down");
+var localstorage = require("nativescript-localstorage");
+var buttonModule = require("ui/button");
+var radioModule = require("nativescript-radiobutton");
 
 var selectedOption = 0;
 var selectedForm = 0;
