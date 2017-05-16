@@ -76,11 +76,9 @@ exports.mainMenu = function(args)
         urlJson = "https://newapp-e758c.firebaseio.com/Options.json";
         condicaoJson = "options";
         requestJson(urlJson);
-        console.info("aqui");
     }
     else if (verifyStorage == 1) {
         drawStorage();
-        console.info("aqui em baixo");
     }   
 }
 
@@ -98,16 +96,13 @@ requestJson = function(linkJson)
     .then(function (r)
     {
         if (condicaoJson == "options") {
-            console.info("options");
             localstorage.setItem("color_actionBar", r.color_actionBar);
             localstorage.setItem("color_buttons", r.color_button);
             condicaoJson = "form";
-            console.info("aqii em baxio");
             linkJson = localstorage.getItem("server_url") + "/form.json";
             requestJson(linkJson);
         }
         else if (condicaoJson == "form") {
-            console.info("form");   
             getJson(r);
         }
     });   
