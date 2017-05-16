@@ -28,9 +28,9 @@ var colorActionBar = localstorage.getItem("color_actionBar");
 var colorButtons = localstorage.getItem("color_buttons");
 var dataJsonStorage = localstorage.getItem("dados_json");
 
-var pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
 var data = "";
-var changeImg = 0;
+
+var condicaoJson = "options";
 
 var activity = application.android.startActivity ||
         application.android.foregroundActivity ||
@@ -57,64 +57,47 @@ activity.onBackPressed = function()
 }
 
 exports.mainMenu = function(args)
-{    
-
+{
     page = args.object;
     localstorage.setItem("currentPage" , "mainAPI");
     page.actionBar.title = "Menu - Api View";
-    page.actionBar.backgroundColor = "orange";
+    page.actionBar.backgroundColor = localstorage.getItem("color_actionBar");
 
     // Initiate database connection
     con.init();
     // Starts ANONYMOUS connection to database
     con.login();
 
-    // meter na bd campo para verificar se há alterações para voltar a fazer request
-    // meter na bd campo para verificar se há alterações para voltar a fazer request
-    // meter na bd campo para verificar se há alterações para voltar a fazer request
-    // meter na bd campo para verificar se há alterações para voltar a fazer request
-
     // verifica se há registo nos storage 
     var verifyStorage = localstorage.getItem("verify_storage");
     if (verifyStorage == null || verifyStorage == 0) {
-        requestJson();
+        // primeiro faz request das options e depois do form
+        // https://newapp-e758c.firebaseio.com/Options
+        var linkOptions = "https://newapp-e758c.firebaseio.com/Options";
+        condicaoJson = "options";
+        requestJson(linkOptions);
     }
     else if (verifyStorage == 1) {
         drawStorage();
     }   
-
-    // timer para mudar imagem
-	id = timer.setInterval(function() {       
-        if (changeImg == 0) {
-            changeImg = 1;
-            pathImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSes5bRVvn-xkiDHTOtXi4yzXkccSO2Ugo0JtHZP2D54GsC6yeZ1g";
-        }
-        else if (changeImg == 1) {
-            changeImg = 0;
-            pathImage = "http://www.clickgratis.com.br/fotos-imagens/imagem/aHR0cDovL3d3dy5jbGlja2dyYXRpcy5jb20uYnIvZm90b3MtaW1hZ2Vucy9pbWFnZW0vYUhSMGNEb3ZMM2QzZHk1aGNISmxibVJsY21WNFkyVnNMbU52YlM1aWNpOHZhVzFoWjJWdWN5OXViM1JwWTJsaEx6TTROUzh5T1RBeExURXVhbkJuLmpwZw==.jpg";
-        }
-       drawStorage();        
-    }, 5000);  // a cada 15 segundos muda de imagem
 }
 
-requestJson = function()
+requestJson = function(url)
 {    
-    fetch(urlJson).then(response =>
+    fetch(url).then(response =>
     {
         return response.json();
     })
     .then(function (r)
     {
-        getJson(r);
+        if (condicaoJson == "options") {
+            localstorage.setItem("color_actionBar", r.color_ActionBar);
+            localstorage.setItem("color_buttons", r.color_button);
+        }
+        else if (condicaoJson == "form") {
+            getJson(r);
+        }
     });   
-}
-
-drawImage = function(s, path)
-{
-    // draw image
-    var image = new imageModule.Image();
-    image.src = path;                 
-    s.addChild(image);
 }
 
 getJson = function(data) {
@@ -139,7 +122,6 @@ getJson = function(data) {
         localstorage.setItem("object_id" + i, data[i].id);
         localstorage.setItem("object_value" + i, data[i].typeview);
     }
-
     drawStorage();
 }
 
@@ -150,7 +132,7 @@ drawStorage = function() {
     var slayout = new stackLayout.StackLayout();
     var num = data.length;
     var x = 0;
-    var y = 1;
+    var y = 0;
 
     // objects
     var radioGroup = new radioModule.RadioGroup();
@@ -161,8 +143,6 @@ drawStorage = function() {
 
     // quant of objects
     var num = localstorage.getItem("num_object_json");
-
-    drawImage(slayout, pathImage);
 
     for(i = 0; i < num; i++) {
         const cont = i;
@@ -185,6 +165,7 @@ drawStorage = function() {
                 object_field[cont].formattedText = formattedString;
                 object_field[cont].className = "btnIcon";
                 object_field[cont].value = localstorage.getItem("object_value" + i);
+                object_field[cont].backgroundColor = localstorage.getItem("color_buttons");
 
                 object_field[cont].on(buttonModule.Button.tapEvent, function() {
                      timer.clearInterval(id);
@@ -208,15 +189,6 @@ drawStorage = function() {
                     }
                  });
 
-                // columns and rows of datagrid
-                if(x >= 1) {
-                    x = 0;
-                    y += 1;
-                } 
-                else {
-                    x += 1;
-                }
-
                 // add button to layout
                 gridLayout.GridLayout.setColumn(object_field[cont], x);
                 gridLayout.GridLayout.setRow(object_field[cont], y);
@@ -225,34 +197,19 @@ drawStorage = function() {
                 glayout.addColumn(column);
                 glayout.addRow(row);
                 glayout.addChild(object_field[cont]);
+                // columns and rows of datagrid
+                if(x >= 1) {
+                    x = 0;
+                    y += 1;
+                } 
+                else {
+                    x += 1;
+                }
                 break;
 
             case "radiobutton":
-                object_field[cont] = new radioModule.RadioButton();
-                object_field[cont].value = localstorage.getItem("object_value" + i);
-                object_field[cont].id = localstorage.getItem("object_id" + i);
-
-                object_field[cont].on(buttonModule.Button.tapEvent, function() {
-                    // PROGRAMAR PARA MUDAR DE IMAGEM
-                }); 
-
-                gridLayout.GridLayout.setColumn(object_field[cont], x);
-                gridLayout.GridLayout.setRow(object_field[cont], y);
-                x += 1;
-                y += 1;
-
-                var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
-                var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
-                glayout.addColumn(column);
-                glayout.addRow(row);
-                radioGroup.addChild(object_field[cont]);
-                
-                if(x > 1) {
-                    glayout.addChild(radioGroup);
-                    slayout.addChild(glayout);
-                }
                 break;
         } 
-        page.content = slayout;       
+        page.content = glayout;       
     }
 }
