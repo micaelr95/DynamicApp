@@ -1,82 +1,27 @@
-var stackLayout = require("ui/layouts/stack-layout");
-var actionBarModule = require("ui/action-bar");
-var dropModule = require("nativescript-drop-down");
+var frameModule = require("ui/frame");
 var localstorage = require("nativescript-localstorage");
-var buttonModule = require("ui/button");
-var radioModule = require("nativescript-radiobutton");
-
-var selectedOption = 0;
-var selectedForm = 0;
-
-var colorActionBar = localstorage.getItem("color_actionBar");
-var colorButtons = localstorage.getItem("color_buttons");
+var observableModule = require("data/observable");
+var viewModel = new observableModule.Observable();
 
 exports.options = function(args)
 {   
     page = args.object;
     page.actionBar.title = "Options";
-    page.actionBar.backgroundColor = colorActionBar;
+    page.actionBar.backgroundColor = localstorage.getItem("color_actionBar");
+    page.actionBar.color = "white";
     localstorage.setItem("currentPage" , "options");
 
-    var layout = new stackLayout.StackLayout();
-    
-    //drawRadioButton(layout);
-    //drawDropDown(layout);
-
-    page.content = layout;
+    page.bindingContext = { ButtonColor: localstorage.getItem("color_buttons")};;
 }
 
-drawDropDown = function(l)
+exports.changeServer = function()
 {
-    var dropForms = new dropModule.DropDown();
-    dropForms.items = ["Forms", "Main Api", "Options"];
-    dropForms.selectedIndex = 0;
-
-    var dropColors = new dropModule.DropDown();
-    dropColors.items = ["Cores", "Brown", "Yellow", "Red", "Orange", "Blue", "Green"];
-    dropColors.selectedIndex = 0;
-
-    var saveButton = new buttonModule.Button();
-    saveButton.backgroundColor = colorButtons;
-    saveButton.text = "save";
-    saveButton.on(buttonModule.Button.tapEvent, function()
+    localstorage.clear();
+    var topmost = frameModule.topmost();
+    var navigationOptions =
     {
-        if(dropColors.selectedIndex != 0)
-        {
-            switch(selectedOption)
-            {
-                case "buttons":
-                    localstorage.setItem("color_buttons", dropColors.items[dropColors.selectedIndex]);                    
-                break;
-                case "actionBar":
-                    localstorage.setItem("color_actionBar", dropColors.items[dropColors.selectedIndex]);
-                break;
-            }
-        }
-    });
-    l.addChild(dropForms);
-    l.addChild(dropColors);
-    l.addChild(saveButton);
-}
-
-drawRadioButton = function(l)
-{
-    var radioGroup = new radioModule.RadioGroup();
-    var radioButton1 = new radioModule.RadioButton();
-    radioButton1.text = "Buttons";   
-    radioButton1.on(buttonModule.Button.tapEvent, function()
-    {
-        selectedOption = "buttons";
-    });
-
-    var radioButton2 = new radioModule.RadioButton();
-    radioButton2.text = "Action Bar";
-    radioButton2.on(buttonModule.Button.tapEvent, function()
-    {
-        selectedOption = "actionBar";
-    });
-
-    radioGroup.addChild(radioButton1);
-    radioGroup.addChild(radioButton2);
-    l.addChild(radioGroup);
+        moduleName: "views/Start-Page/Start-Page",
+        clearHistory: true
+    }
+    topmost.navigate(navigationOptions);
 }
