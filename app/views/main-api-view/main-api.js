@@ -62,11 +62,6 @@ exports.mainMenu = function(args)
     localstorage.setItem("currentPage" , "mainAPI");
     page.actionBar.title = "Menu - Api View";
 
-    // Initiate database connection
-    con.init();
-    // Starts ANONYMOUS connection to database
-    con.login();
-
     // verifica se há registo nos storage 
     var verifyStorage = localstorage.getItem("verify_storage");
 

@@ -1,12 +1,19 @@
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
 var localstorage = require("nativescript-localstorage");
 var frameModule = require("ui/frame");
+var Connection = require("../../shared/DB_connection");
+var con = new Connection();
 var page;
 
 exports.pageLoaded = function(args)
 {
     // localstorage.clear();
     page = args.object;
+
+    // Initiate database connection
+    con.init();
+    // Starts ANONYMOUS connection to database
+    con.login();
 
     if(localstorage.getItem("isConfigured") == true)
     {
