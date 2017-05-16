@@ -329,6 +329,7 @@ requestForm = function(constructorForm,viewGrid)
 
     fetch(urlForm).then(response =>
     {
+        localStorage.setItem("formLocal" , response._bodyText);
         return response.json();
     })
     .then(function (r)
@@ -357,6 +358,10 @@ requestForm = function(constructorForm,viewGrid)
         {
             page.actionBar.actionItems._items[0].visibility = "collapse";
             localDrawList(viewGrid);
+        }
+        else if(constructorForm == "form")
+        {
+            drawForm(JSON.parse(localStorage.getItem("formLocal")) , viewGrid);
         }
 
     });   
