@@ -24,8 +24,6 @@ var page;
 
 // vars storage
 var urlJson;
-var colorActionBar = localstorage.getItem("color_actionBar");
-var colorButtons = localstorage.getItem("color_buttons");
 var dataJsonStorage = localstorage.getItem("dados_json");
 
 var data = "";
@@ -61,7 +59,6 @@ exports.mainMenu = function(args)
     page = args.object;
     localstorage.setItem("currentPage" , "mainAPI");
     page.actionBar.title = "Menu - Api View";
-
     // verifica se há registo nos storage 
     var verifyStorage = localstorage.getItem("verify_storage");
 
@@ -75,11 +72,8 @@ exports.mainMenu = function(args)
     else if (verifyStorage == 1) {
         drawStorage();
     }   
-}
-
-drawActionBar = function() {
-
-    page.actionBar.backgroundColor = colorActionBar;
+    
+    
 }
 
 requestJson = function(linkJson)
@@ -130,6 +124,8 @@ getJson = function(data) {
 
 
 drawStorage = function() {
+    page.actionBar.backgroundColor = localstorage.getItem("color_actionBar");
+
     // layout
     var glayout = new gridLayout.GridLayout();
     var slayout = new stackLayout.StackLayout();
@@ -200,6 +196,7 @@ drawStorage = function() {
                 glayout.addColumn(column);
                 glayout.addRow(row);
                 glayout.addChild(object_field[cont]);
+                
                 // columns and rows of datagrid
                 if(x >= 1) {
                     x = 0;
@@ -213,7 +210,6 @@ drawStorage = function() {
             case "radiobutton":
                 break;
         }
-        drawActionBar();
         page.content = glayout;       
     }
 }
