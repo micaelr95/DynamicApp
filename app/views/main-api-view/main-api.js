@@ -23,7 +23,7 @@ var timer = require("timer");
 var page;
 
 // vars storage
-var urlJson = localstorage.getItem("server_url") + "/form.json";
+var urlJson;
 var colorActionBar = localstorage.getItem("color_actionBar");
 var colorButtons = localstorage.getItem("color_buttons");
 var dataJsonStorage = localstorage.getItem("dados_json");
@@ -61,7 +61,6 @@ exports.mainMenu = function(args)
     page = args.object;
     localstorage.setItem("currentPage" , "mainAPI");
     page.actionBar.title = "Menu - Api View";
-    page.actionBar.backgroundColor = localstorage.getItem("color_actionBar");
 
     // Initiate database connection
     con.init();
@@ -70,31 +69,45 @@ exports.mainMenu = function(args)
 
     // verifica se há registo nos storage 
     var verifyStorage = localstorage.getItem("verify_storage");
+
     if (verifyStorage == null || verifyStorage == 0) {
         // primeiro faz request das options e depois do form
         // https://newapp-e758c.firebaseio.com/Options
-        var linkOptions = "https://newapp-e758c.firebaseio.com/Options";
+        urlJson = "https://newapp-e758c.firebaseio.com/Options.json";
         condicaoJson = "options";
-        requestJson(linkOptions);
+        requestJson(urlJson);
+        console.info("aqui");
     }
     else if (verifyStorage == 1) {
         drawStorage();
+        console.info("aqui em baixo");
     }   
 }
 
-requestJson = function(url)
+drawActionBar = function() {
+
+    page.actionBar.backgroundColor = colorActionBar;
+}
+
+requestJson = function(linkJson)
 {    
-    fetch(url).then(response =>
+    fetch(linkJson).then(response =>
     {
         return response.json();
     })
     .then(function (r)
     {
         if (condicaoJson == "options") {
-            localstorage.setItem("color_actionBar", r.color_ActionBar);
+            console.info("options");
+            localstorage.setItem("color_actionBar", r.color_actionBar);
             localstorage.setItem("color_buttons", r.color_button);
+            condicaoJson = "form";
+            console.info("aqii em baxio");
+            linkJson = localstorage.getItem("server_url") + "/form.json";
+            requestJson(linkJson);
         }
         else if (condicaoJson == "form") {
+            console.info("form");   
             getJson(r);
         }
     });   
@@ -209,7 +222,8 @@ drawStorage = function() {
 
             case "radiobutton":
                 break;
-        } 
+        }
+        drawActionBar();
         page.content = glayout;       
     }
 }
