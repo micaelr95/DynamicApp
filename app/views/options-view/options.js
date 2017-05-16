@@ -14,23 +14,16 @@ var colorButtons = localstorage.getItem("color_buttons");
 exports.options = function(args)
 {   
     page = args.object;
+    page.actionBar.title = "Options";
+    page.actionBar.backgroundColor = colorActionBar;
     localstorage.setItem("currentPage" , "options");
 
     var layout = new stackLayout.StackLayout();
     
-    drawActionBar(page);
-    drawRadioButton(layout);
-    drawDropDown(layout);
+    //drawRadioButton(layout);
+    //drawDropDown(layout);
 
     page.content = layout;
-}
-
-drawActionBar = function(p)
-{
-    var bar = new actionBarModule.ActionBar();
-    bar.title = "Options";
-    bar.backgroundColor = colorActionBar;
-    p.actionBar = bar;
 }
 
 drawDropDown = function(l)
