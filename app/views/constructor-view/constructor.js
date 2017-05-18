@@ -212,19 +212,14 @@ function drawList(data,viewGrid)
                 var navigationOptions = {
 
                     moduleName: "views/constructor-view/constructor",
-                    context: {
-                                typeView: "list"
-                             }
+                    context: { typeView: "list" }
                     }
                 
                 topmost.navigate(navigationOptions);
 
             } else {}
-            
         });
-
     });
-    
 
     // Add ListView to View
     gridModule.GridLayout.setColumn(xList,0);
@@ -304,7 +299,6 @@ localDrawList = function(viewGrid){
     createView(viewGrid , viewLayout , "ListView");
     
     page.content = viewGrid;
-
 };
 
 requestForm = function(constructorForm,viewGrid)
@@ -481,7 +475,14 @@ drawForm = function(data,viewGrid){
             }
         }
 
-       con.add('/aasd', submitInfo);
+        con.add('/aasd', submitInfo);
+        alert("Sended to database");
+        var navigationOptions =
+        {
+            moduleName: "views/main-api-view/main-api",
+            clearHistory: true
+        }
+        topmost.navigate(navigationOptions);
     });
 }
 
@@ -494,9 +495,6 @@ function drawWebView(data,viewGrid)
     var mygrid = new gridModule.GridLayout();
     var myweb = new webModule.WebView();
     myweb.id = "cenas";
-
-    
-
 
     var colunas = new Array();
     var linhas = new Array();
