@@ -46,12 +46,7 @@ function Connection()
     // Add data to database
     viewModel.add = function(table, data)
     {
-        return firebase.push(table,
-            {
-                data,
-                'UID': config.uid
-            }
-        )
+        return firebase.push(table, data)
     };
 
     viewModel.addListInfo = function(table, data)
