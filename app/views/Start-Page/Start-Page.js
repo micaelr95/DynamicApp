@@ -10,11 +10,6 @@ exports.pageLoaded = function(args)
     // localstorage.clear();
     page = args.object;
 
-    // Initiate database connection
-    con.init();
-    // Starts ANONYMOUS connection to database
-    con.login();
-
     if(localstorage.getItem("isConfigured") == true)
     {
         var topmost = frameModule.topmost();
@@ -61,6 +56,13 @@ exports.confirmURL = function()
     }
     else
     {
+        // Initiate database connection
+        con.init();
+        // Starts ANONYMOUS connection to database
+        con.login();
+
+        con.load();
+
         localstorage.setItem("server_url",my_url);
         localstorage.setItem("isConfigured",true);
         var topmost = frameModule.topmost();
@@ -69,6 +71,6 @@ exports.confirmURL = function()
              moduleName: "views/main-api-view/main-api",
              clearHistory: true
         }
-        topmost.navigate(navigationOptions); //Alterar para página correta quando for feita */~
+        topmost.navigate(navigationOptions);
     }
 }
