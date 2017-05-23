@@ -71,9 +71,6 @@ function columnStars(titleArray,numbColumns){
 
 function createView(finalView , drawView , formName)
 {
-    
-    page.actionBar.backgroundColor = localStorage.getItem("color_actionBar");
-    page.actionBar.color = "white"; // change to localstorage when u get text color from server
     page.actionBar.title = formName;
 
     gridModule.GridLayout.setColumn(drawView,0);
@@ -81,6 +78,44 @@ function createView(finalView , drawView , formName)
     gridModule.GridLayout.setColumnSpan(drawView,3);
 
     finalView.addChild(drawView);
+
+}
+
+function createBottomNavButton(viewGrid,iconString,navTo,booleanClear,row,col)
+{
+    var xButton = new buttonModule.Button();
+    var textSpan = new spansModule.Span();
+    var xFormattedString = new formattedStringModule.FormattedString();
+    var xIconSpan = new spansModule.Span();
+
+    var xButton_bgColor = localStorage.getItem("color_actionBar");
+
+    xButton.className = "btnIcon";
+    xButton.backgroundColor = xButton_bgColor;
+    xButton.color = localStorage.getItem("color_textColor")
+
+    xButton.borderColor = "black"
+    
+    xIconSpan.fontSize = 25;
+    xIconSpan.text = String.fromCharCode(iconString);
+
+    xFormattedString.spans.push(xIconSpan);
+
+    xButton.formattedText = xFormattedString;
+    xButton.on(buttonModule.Button.tapEvent , function()
+    {
+        var navigationOptions =
+        {
+            moduleName: navTo,
+            clearHistory: booleanClear
+        }
+        
+        topmost.navigate(navigationOptions);
+    });
+
+    gridModule.GridLayout.setColumn(xButton,col);
+    gridModule.GridLayout.setRow(xButton,row);
+    viewGrid.addChild(xButton);
 
 }
 
@@ -488,8 +523,6 @@ drawForm = function(data,viewGrid){
 
 function drawWebView(data,viewGrid)
 {
-    page.actionBar.backgroundColor = "brown";
-    page.actionBar.color = "white";
     page.actionBar.title = "WebView"
 
     var mygrid = new gridModule.GridLayout();
@@ -528,7 +561,9 @@ exports.constructorLoad = function(args)
 {
     page = args.object;
 
+    page.bindingContext = { ActionColor: localStorage.getItem("color_actionBar")};
     page.actionBar.actionItems._items[0].visibility = "collapse";
+    page.actionBar.color = localStorage.getItem("color_textColor");
 
     var gotData = page.navigationContext;
     var Info = gotData.typeView;
@@ -541,78 +576,9 @@ exports.constructorLoad = function(args)
     createRows(1,arrayRows,viewGrid,45,"pixel");
     createColumns(3,arrayColumns,viewGrid,1,"star");
 
-    var textSpan = new spansModule.Span();
-
-    var button1 = new buttonModule.Button();
-    var button2 = new buttonModule.Button();
-    var button3 = new buttonModule.Button();
-
-    button1.className = "btnIcon";
-    button1.backgroundColor = localStorage.getItem("color_actionBar");
-    var formattedString1 = new formattedStringModule.FormattedString();
-    var iconSpan1 = new spansModule.Span();
-    iconSpan1.fontSize = 25;
-    iconSpan1.text = String.fromCharCode("0xef015");
-    formattedString1.spans.push(iconSpan1);
-    button1.formattedText = formattedString1;
-    button1.on(buttonModule.Button.tapEvent , function()
-    {
-        var navigationOptions =
-        {
-            moduleName: "views/main-api-view/main-api",
-            clearHistory: true
-        }
-        
-        topmost.navigate(navigationOptions);
-    });
-
-    button2.className = "btnIcon";
-    button2.backgroundColor = localStorage.getItem("color_actionBar");
-    var formattedString2 = new formattedStringModule.FormattedString();
-    var iconSpan2 = new spansModule.Span();
-    iconSpan2.fontSize = 25;
-    iconSpan2.text = String.fromCharCode("0xef15c");
-    formattedString2.spans.push(iconSpan2);
-    button2.formattedText = formattedString2;
-    button2.on(buttonModule.Button.tapEvent , function()
-    {
-        var navigationOptions =
-        {
-            moduleName: "views/main-api-view/main-api",
-            clearHistory: true
-        }
-        
-        topmost.navigate(navigationOptions);
-    });
-
-    button3.className = "btnIcon";
-    button3.backgroundColor = localStorage.getItem("color_actionBar");
-    var formattedString3 = new formattedStringModule.FormattedString();
-    var iconSpan3 = new spansModule.Span();
-    iconSpan3.fontSize = 25;
-    iconSpan3.text = String.fromCharCode("0xef013");
-    formattedString3.spans.push(iconSpan3);
-    button3.formattedText = formattedString3;
-    button3.on(buttonModule.Button.tapEvent , function()
-    {
-        var navigationOptions =
-        {
-            moduleName: "views/options-view/options"
-        }
-        topmost.navigate(navigationOptions);
-    });
-
-    gridModule.GridLayout.setColumn(button1,0);
-    gridModule.GridLayout.setRow(button1,1);
-    viewGrid.addChild(button1);
-    
-    gridModule.GridLayout.setColumn(button2,1);
-    gridModule.GridLayout.setRow(button2,1);
-    viewGrid.addChild(button2);
-
-    gridModule.GridLayout.setColumn(button3,2);
-    gridModule.GridLayout.setRow(button3,1);
-    viewGrid.addChild(button3);
+    createBottomNavButton(viewGrid,"0xef015","views/main-api-view/main-api",true,1,0);
+    createBottomNavButton(viewGrid,"0xef015","views/main-api-view/main-api",true,1,1);
+    createBottomNavButton(viewGrid,"0xef013","views/options-view/options",false,1,2);
 
    if(Info.toLowerCase() == "list")
    {

@@ -1,5 +1,5 @@
 <Page loaded="constructorLoad">
-    <ActionBar title="" backgroundColor="brown" color="white" >
+    <ActionBar title="" backgroundColor="{{ ActionColor }}" >
         <ActionItem android.systemIcon="ic_menu_add" tap="onAdd" id="oi" />
     </ActionBar>
 
