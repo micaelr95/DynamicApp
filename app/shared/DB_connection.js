@@ -13,7 +13,8 @@ function Connection()
     {
         firebase.init(
             {
-                url: config.apiUrl
+                url: config.apiUrl,
+                persist: true
             }
             ).then(function (instance)
             {
@@ -42,6 +43,24 @@ function Connection()
             console.log(errorMessage);
         })
     };
+
+    viewModel.load = function() {
+        var onChildEvent = function(result) {
+            if (result.type === "ChildAdded") {
+                console.log("Adicionado");
+            } else if (result.type === "ChildRemoved") {
+                console.log("Removido");
+            }
+        };
+        return firebase.addChildEventListener(onChildEvent, "/").then(
+            function() {
+                console.log("firebase.addChildEventListener added");
+            },
+            function(error) {
+                console.log("firebase.addChildEventListener error: " + error);
+            }
+        )
+    }
 
     // Add data to database
     viewModel.add = function(table, data)
