@@ -1,6 +1,7 @@
 var config = require("../shared/config");
 var firebase = require("nativescript-plugin-firebase");
 var Observable = require("data/observable").Observable;
+var localStorage = require("nativescript-localstorage");
 
 // Handles all database related stuff
 function Connection()
@@ -45,16 +46,8 @@ function Connection()
     };
 
     viewModel.load = function() {
-        var that = this;
         var onChildEvent = function(result) {
-            if (result.type === "ChildAdded") {
-                that.set("type", result.type);
-                that.set("key", result.key);
-                that.set("value", JSON.stringify(result.value));
-                console.log("Adicionado " + that.get("key"));
-            } else if (result.type === "ChildRemoved") {
-                console.log("Removido");
-            }
+            localStorage.setItem(result.key, result.value);
         };
         return firebase.addChildEventListener(onChildEvent, "/").then(
             function() {
