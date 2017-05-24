@@ -39,36 +39,6 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
     }
 }
 
-function columnStars(titleArray,numbColumns){
-
-    var numbColumnsStars = "columns='";
-
-    for(i = 0 ; i < numbColumns ; i++)
-    {
-        if(i == 0)
-        {
-            numbColumnsStars += "*";
-        }
-        else
-        {
-            numbColumnsStars += ",*";
-        }
-    }
-
-    numbColumnsStars += ", auto'";
-
-    var columnLabels = "<GridLayout " + numbColumnsStars + " rows='auto, *' >";
-
-    for(i = 0 ; i < numbColumns ; i++)
-    {
-        columnLabels += "<Label text='{{" + titleArray[i] + "}}' col='" + i + "' />";
-    }
-
-    columnLabels += "</GridLayout>";
-
-    return columnLabels;
-}
-
 function createView(finalView , drawView , formName)
 {
     page.actionBar.title = formName;
@@ -129,24 +99,31 @@ function drawList(data,viewGrid)
 
     var numbColumns = data.camps.length; //        <---| Numero de Campos
     var titleArray = data.camps; //                <---| Informação dada pelo JSON
-    createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
+    var toShowCamps = data.showCamps.campLocation.length;
+    createColumns(toShowCamps,arrayColumns,viewLayout,1,"star");
     createRows(1,arrayRows,viewLayout,50,"pixel"); //  |
     createRows(1,arrayRows,viewLayout,1,"auto");   //  |
                                                    //  |
                                           //       ____|
-    var xLabels = new Array(numbColumns); //  <---| Numero de Campos
+    var xLabels = new Array(toShowCamps); //  <---| Numero de Campos
     var xList = new listViewModule.ListView();
     
     // Adicionar titulos e guardar localmente variaveis com o numbCamps etc...
 
     for(i = 0 ; i < numbColumns /* Numero de Campos */ ; i++)
     {
+        localStorage.setItem("camp" + i , titleArray[i]);
+    }
+
+    for(i = 0 ; i < toShowCamps ; i++)
+    {
         xLabels[i] = new labelModule.Label();
-        xLabels[i].text = titleArray[i];
+        xLabels[i].text = titleArray[data.showCamps.campLocation[i]];
         xLabels[i].className = "Title";
 
-        localStorage.setItem("camp" + i , titleArray[i]);
-
+        localStorage.setItem("toShowCamp" + i , titleArray[data.showCamps.campLocation[i]]);
+        localStorage.setItem("locationCamp" + i , "0");
+        
         gridModule.GridLayout.setColumn(xLabels[i],i);
         gridModule.GridLayout.setRow(xLabels[i],0);
         viewLayout.addChild(xLabels[i]);
@@ -154,8 +131,10 @@ function drawList(data,viewGrid)
 
     localStorage.setItem("campsNumber" , numbColumns);
     localStorage.setItem("numberItems" , data.campsInfo[0].length);
+    localStorage.setItem("toShowCamps" , toShowCamps);
 
-    xList.itemTemplate = columnStars(titleArray,numbColumns);
+    localStorage.setItem("xList_itemTemplate" , data.itemTemplate);
+    xList.itemTemplate = data.itemTemplate;
     xList.className = "Info";
 
     var listArray = new Array();
@@ -165,11 +144,18 @@ function drawList(data,viewGrid)
 
     for(i = 0 ; i < data.campsInfo[0].length ; i++)
     {
-        listItems = {};
         for(j = 0 ; j < numbColumns ; j++)
         {
-            listItems[titleArray[j]] = data.campsInfo[j][i];
             localStorage.setItem( "listItems" + j + i , data.campsInfo[j][i] );
+        }
+    }
+
+    for(i = 0 ; i < data.campsInfo[0].length ; i++)
+    {
+        listItems = {};
+        for(j = 0 ; j < toShowCamps ; j++)
+        {
+            listItems[titleArray[j]] = data.campsInfo[data.showCamps.campLocation[j]][i];
         }
         listArray.push(listItems);
     }
@@ -275,25 +261,24 @@ localDrawList = function(viewGrid){
     var arrayRows = new Array();
     var arrayColumns = new Array();
 
-    var numbColumns = localStorage.getItem("campsNumber");    
+    var toShowCamps = localStorage.getItem("toShowCamps");
     var titleArray = [];
 
-    for( i = 0 ; i < numbColumns ; i++ ){
-
-        titleArray[i] = localStorage.getItem("camp"+i);
-
+    for( i = 0 ; i < toShowCamps ; i++ )
+    {
+        titleArray[i] = localStorage.getItem("toShowCamp"+i);
     }
 
-    createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
+    createColumns(toShowCamps,arrayColumns,viewLayout,1,"star");
     createRows(1,arrayRows,viewLayout,50,"pixel");
     createRows(1,arrayRows,viewLayout,1,"auto");
    
-    var xLabels = new Array(numbColumns);
+    var xLabels = new Array();
     var xList = new listViewModule.ListView();
     
     // Adicionar titulos e guardar localmente variaveis com o numbCamps etc...
 
-    for(i = 0 ; i < numbColumns /* Numero de Campos */ ; i++)
+    for(i = 0 ; i < toShowCamps /* Numero de Campos */ ; i++)
     {
         xLabels[i] = new labelModule.Label();
         xLabels[i].text = titleArray[i];
@@ -304,7 +289,7 @@ localDrawList = function(viewGrid){
         viewLayout.addChild(xLabels[i]);
     }
 
-    xList.itemTemplate = columnStars(titleArray,numbColumns);;
+    xList.itemTemplate = localStorage.getItem("xList_itemTemplate");
     xList.className = "Info";
 
     var listArray = new Array();
@@ -315,10 +300,9 @@ localDrawList = function(viewGrid){
     for(i = 0 ; i < localStorage.getItem("numberItems") ; i++)
     {
         listItems = {};
-        for(j = 0 ; j < numbColumns ; j++)
+        for(j = 0 ; j < toShowCamps ; j++)
         {
-            listItems[titleArray[j]] = localStorage.getItem("listItems" + j + i);
-            
+            listItems[titleArray[j]] = localStorage.getItem("listItems" + localStorage.getItem("locationCamp"+j) + i);
         }
         listArray.push(listItems);
     }
@@ -327,7 +311,7 @@ localDrawList = function(viewGrid){
 
     gridModule.GridLayout.setColumn(xList,0);
     gridModule.GridLayout.setRow(xList,1);
-    gridModule.GridLayout.setColumnSpan(xList,numbColumns);
+    gridModule.GridLayout.setColumnSpan(xList,toShowCamps);
     
     viewLayout.addChild(xList);
 
