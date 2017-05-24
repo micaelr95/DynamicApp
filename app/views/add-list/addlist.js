@@ -9,7 +9,9 @@ var con = new Connection();
 exports.addlistLoad = function(args)
 {
     var page = args.object;
-
+    page.actionBar.backgroundColor = localStorage.getItem("color_actionBar");
+    page.actionBar.color = localStorage.getItem("color_textColor");
+    
     var stackView = new stackModule.StackLayout();
     var items = [];
     var numberX = parseInt(localStorage.getItem("campsNumber"));
@@ -31,6 +33,7 @@ exports.addlistLoad = function(args)
     var submitBtn = new buttonModule.Button();
     submitBtn.text = "Submit";
     submitBtn.className = "submitBtn";
+    submitBtn.backgroundColor = localStorage.getItem("color_buttons");
 
     submitBtn.on(buttonModule.Button.tapEvent , function()
     {
@@ -54,6 +57,7 @@ exports.addlistLoad = function(args)
         {
             con.addListInfo('/list/campsInfo/' + i , stuff[i]);
         }
+        localStorage.setItem("numberItems" , (localStorage.getItem("numberItems") + 1));
         topmost.goBack();
     });
     

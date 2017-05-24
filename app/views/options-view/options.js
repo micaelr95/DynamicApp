@@ -13,6 +13,7 @@ exports.options = function(args)
     localstorage.setItem("currentPage" , "options");
 
     page.bindingContext = { ButtonBackgroundColor: options.color_button, ButtonTextColor: options.color_text};;
+
 }
 
 exports.changeServer = function()
