@@ -45,9 +45,13 @@ function Connection()
     };
 
     viewModel.load = function() {
+        var that = this;
         var onChildEvent = function(result) {
             if (result.type === "ChildAdded") {
-                console.log("Adicionado");
+                that.set("type", result.type);
+                that.set("key", result.key);
+                that.set("value", JSON.stringify(result.value));
+                console.log("Adicionado " + that.get("key"));
             } else if (result.type === "ChildRemoved") {
                 console.log("Removido");
             }
