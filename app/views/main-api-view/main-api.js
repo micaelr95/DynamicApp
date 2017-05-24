@@ -85,6 +85,7 @@ requestJson = function(linkJson)
     .then(function (r)
     {
         if (condicaoJson == "options") {
+            localstorage.setItem("color_textColor", r.color_text);
             localstorage.setItem("color_actionBar", r.color_actionBar);
             localstorage.setItem("color_buttons", r.color_button);
             condicaoJson = "form";
