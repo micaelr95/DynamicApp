@@ -33,10 +33,8 @@ dropdown{
 .btnIcon {
 
     font-family: FontAwesome, fontawesome-webfont;
-    font-size: 20px;
+    font-size: 22.5px;
     background-color: brown;
-    border-width: 2px;
-    border-color: rgb(148, 41, 17);
-    color: white;
+    border-width: 1px;
 
 }

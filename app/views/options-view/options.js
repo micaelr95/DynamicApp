@@ -11,7 +11,7 @@ exports.options = function(args)
     page.actionBar.color = "white";
     localstorage.setItem("currentPage" , "options");
 
-    page.bindingContext = { ButtonColor: localstorage.getItem("color_buttons")};;
+    page.bindingContext = { ButtonColor: localstorage.getItem("color_buttons")};
 }
 
 exports.changeServer = function()
