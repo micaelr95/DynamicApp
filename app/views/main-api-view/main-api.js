@@ -1,24 +1,16 @@
 // modules
 var frameModule = require("ui/frame");
 var topmost = frameModule.topmost();
-var labelModule = require("ui/label");
-var checkboxModule = require("nativescript-checkbox");
-var dropdownModule = require("nativescript-drop-down/drop-down");
 var buttonModule = require("ui/button");
-var radioModule = require("nativescript-radiobutton");
-var textfieldModule = require("ui/text-field");
 var stackLayout = require("ui/layouts/stack-layout");
 var gridLayout = require("ui/layouts/grid-layout");
-var localStorage = require("nativescript-localStorage");
+var localStorage = require("nativescript-localstorage");
 var formattedStringModule = require("text/formatted-string");
 var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
-var actionBarModule = require("ui/action-bar");
 var application = require("application");
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
-var id;
-var timer = require("timer");
 var page;
 
 // vars storage
@@ -67,12 +59,8 @@ drawMain = function()
 {
      // layout
     var glayout = new gridLayout.GridLayout();
-    var slayout = new stackLayout.StackLayout();
     var x = 0;
     var y = 0;
-
-    // objects
-    var radioGroup = new radioModule.RadioGroup();
 
     // array to get data of objects
     var object_field = new Array();
@@ -91,14 +79,13 @@ drawMain = function()
                 textSpan.text = "\n\n" + mainApi[i].text; 
                 formattedString.spans.push(textSpan);   
 
-                object_field[cont] = new buttonModule.Button();
-                object_field[cont].id = mainApi[i].id;
-                object_field[cont].formattedText = formattedString;
-                object_field[cont].className = "btnIcon";
-                object_field[cont].value = mainApi[i].typeview;
-                object_field[cont].backgroundColor = options.color_button;
-                object_field[cont].on(buttonModule.Button.tapEvent, function() {
-                     timer.clearInterval(id);
+                object_field[i] = new buttonModule.Button();
+                object_field[i].id = mainApi[i].id;
+                object_field[i].formattedText = formattedString;
+                object_field[i].className = "btnIcon";
+                object_field[i].value = mainApi[i].typeview;
+                object_field[i].backgroundColor = options.color_button;
+                object_field[i].on(buttonModule.Button.tapEvent, function() {
                     // verifica se é options
                     if(object_field[cont].value == "options")
                     {
@@ -120,13 +107,13 @@ drawMain = function()
                  });
 
                 // add button to layout
-                gridLayout.GridLayout.setColumn(object_field[cont], x);
-                gridLayout.GridLayout.setRow(object_field[cont], y);
+                gridLayout.GridLayout.setColumn(object_field[i], x);
+                gridLayout.GridLayout.setRow(object_field[i], y);
                 var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
                 var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
                 glayout.addColumn(column);
                 glayout.addRow(row);
-                glayout.addChild(object_field[cont]);
+                glayout.addChild(object_field[i]);
                 
                 // columns and rows of datagrid
                 if(x >= 1) {

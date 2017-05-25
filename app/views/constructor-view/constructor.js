@@ -92,7 +92,7 @@ function createBottomNavButton(viewGrid,iconString,navTo,booleanClear,row,col)
 function removeSelectedItem(tappedItemIndex)
 {
 
-    var data = localStorage.getItem(localStorage.getItem("targetTable"));
+   // var data = localStorage.getItem(localStorage.getItem("targetTable"));
 
     var stuff = [];
     var infoArray = [];
@@ -124,15 +124,15 @@ function removeSelectedItem(tappedItemIndex)
     
     data.campsInfo = stuff;
 
-    localStorage.setItem(localStorage.getItem("targetTable") , data);
+    //localStorage.setItem(localStorage.getItem("targetTable") , data);
 
     alert("Removido");
 
     var navigationOptions = {
 
         moduleName: "views/constructor-view/constructor",
-        context: { typeView: "list",
-                   targetTable: localStorage.getItem("targetTable")
+        context: { typeView: "list"
+                   //targetTable: localStorage.getItem("targetTable")
         }
         }
     
@@ -250,15 +250,18 @@ requestForm = function(constructorForm,viewGrid)
 {
     if(constructorForm == "form")
     {
-        drawForm(localStorage.getItem(localStorage.getItem("targetTable")),viewGrid);
+        drawForm(localStorage.getItem("constructForm"),viewGrid);
+        //drawForm(localStorage.getItem(localStorage.getItem("targetTable")),viewGrid);
     }
     else if(constructorForm == "list")
     {
-        drawList(localStorage.getItem(localStorage.getItem("targetTable")),viewGrid);
+         drawList(localStorage.getItem("list"),viewGrid); 
+        //drawList(localStorage.getItem(localStorage.getItem("targetTable")),viewGrid);
     }
     else if(constructorForm == "webview")
     {
-        drawWebView(localStorage.getItem(localStorage.getItem("targetTable")),viewGrid);
+        drawWebView(localStorage.getItem("webview"),viewGrid); 
+        //drawWebView(localStorage.getItem(localStorage.getItem("targetTable")),viewGrid); 
     }   
 }
 
@@ -436,7 +439,7 @@ exports.constructorLoad = function(args)
     var gotData = page.navigationContext;
     var Info = gotData.typeView;
 
-    localStorage.setItem("targetTable" , gotData.targetTable);
+    // localStorage.setItem("targetTable" , gotData.targetTable);
 
     var viewGrid = new gridModule.GridLayout();
     var arrayRows = new Array();
