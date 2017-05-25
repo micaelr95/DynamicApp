@@ -14,7 +14,7 @@ function Connection()
     {
         firebase.init(
             {
-                url: config.apiUrl,
+                url: localStorage.getItem("server_url"),
                 persist: true
             }
             ).then(function (instance)

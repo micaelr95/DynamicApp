@@ -61,16 +61,20 @@ exports.confirmURL = function()
         // Starts ANONYMOUS connection to database
         con.login();
 
-        con.load();
-
-        localstorage.setItem("server_url",my_url);
-        localstorage.setItem("isConfigured",true);
-        var topmost = frameModule.topmost();
-        var navigationOptions =
-        {
-             moduleName: "views/main-api-view/main-api",
-             clearHistory: true
-        }
-        topmost.navigate(navigationOptions);
+        con.load().then(function() {
+            console.log("cenas");
+            if (localStorage.getItem("Options"))
+            {
+                localstorage.setItem("server_url",my_url);
+                localstorage.setItem("isConfigured",true);
+                var topmost = frameModule.topmost();
+                var navigationOptions =
+                {
+                    moduleName: "views/main-api-view/main-api",
+                    clearHistory: true
+                }
+                topmost.navigate(navigationOptions);
+            }
+        });
     }
 }
