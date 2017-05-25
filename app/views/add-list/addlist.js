@@ -9,57 +9,116 @@ var con = new Connection();
 exports.addlistLoad = function(args)
 {
     var page = args.object;
-    page.actionBar.backgroundColor = localStorage.getItem("color_actionBar");
-    page.actionBar.color = localStorage.getItem("color_textColor");
+    var gotData = page.navigationContext;
+
+    var options = localStorage.getItem("Options");
+    var data = localStorage.getItem("list");
+
+
+    page.actionBar.backgroundColor = options.color_actionBar;
+    page.actionBar.color = options.color_text;
     
     var stackView = new stackModule.StackLayout();
-    var items = [];
-    var numberX = parseInt(localStorage.getItem("campsNumber"));
-
-    for(i = 0 ; i < numberX ; i++ )
-    {
-        items[i] = localStorage.getItem("camp" + i );
-    }
-
+    var numberX = data.camps.length;
     var textboxArray = new Array();
+    var submitBtn = new buttonModule.Button();
 
-    for(i = 0 ; i < items.length ; i ++ )
+    submitBtn.className = "submitBtn";
+    submitBtn.backgroundColor = options.color_button;
+    submitBtn.color = options.color_text;
+
+    for(i = 0 ; i < data.camps.length ; i ++ )
     {
         textboxArray[i] = new textFieldModule.TextField();
-        textboxArray[i].hint = items[i];
+        textboxArray[i].hint = data.camps[i];
         stackView.addChild(textboxArray[i]);
     }
 
-    var submitBtn = new buttonModule.Button();
-    submitBtn.text = "Submit";
-    submitBtn.className = "submitBtn";
-    submitBtn.backgroundColor = localStorage.getItem("color_buttons");
-
-    submitBtn.on(buttonModule.Button.tapEvent , function()
+    if( gotData == undefined )
     {
-        var stuff = [];
-        var infoArray = [];
 
-        for(i = 0 ; i < parseInt(localStorage.getItem("campsNumber")); i++)
+        submitBtn.text = "Adicionar";
+
+        submitBtn.on(buttonModule.Button.tapEvent , function()
         {
-            infoArray = [];
+            var stuff = [];
+            var infoArray = [];
 
-            for(j = 0 ; j < parseInt(localStorage.getItem("numberItems")); j++)
+            for(i = 0 ; i < data.camps.length ; i++)
             {
-                infoArray.push(localStorage.getItem("listItems" + i + j));
+                infoArray = [];
+                for(j = 0 ; j < data.campsInfo[0].length ; j++)
+                {
+                    infoArray.push(data.campsInfo[i][j]);
+                }
+                infoArray.push(textboxArray[i].text);
+                stuff[i] = infoArray;
             }
-            localStorage.setItem("listItems" + i + j , textboxArray[i].text );
-            infoArray.push(textboxArray[i].text);
-            stuff[i] = infoArray;
+
+            for(i = 0 ; i < data.camps.length; i++)
+            {
+                con.addListInfo('/list/campsInfo/' + i , stuff[i]);
+            }
+
+            data.campsInfo = stuff;
+
+            localStorage.setItem("list" , data);
+
+            alert("Registo adicionado");
+
+            topmost.goBack();
+        });
+
+    }
+    else
+    {
+
+        var tappedItem = gotData.info;
+
+        for(i = 0 ; i < data.camps.length ; i ++ )
+        {
+            textboxArray[i].text = data.campsInfo[i][tappedItem];
         }
 
-        for(i = 0 ; i < parseInt(localStorage.getItem("campsNumber")); i++)
+        submitBtn.text = "Alterar";
+
+        submitBtn.on(buttonModule.Button.tapEvent , function()
         {
-            con.addListInfo('/list/campsInfo/' + i , stuff[i]);
-        }
-        localStorage.setItem("numberItems" , (localStorage.getItem("numberItems") + 1));
-        topmost.goBack();
-    });
+            var stuff = [];
+            var infoArray = [];
+
+            for(i = 0 ; i < data.camps.length ; i++)
+            {
+                infoArray = [];
+                for(j = 0 ; j < data.campsInfo[0].length ; j++)
+                {
+                    if(j == tappedItem)
+                    {
+                        infoArray.push(textboxArray[i].text);
+                    }
+                    else
+                    {
+                        infoArray.push(data.campsInfo[i][j]);
+                    }
+                }
+                stuff[i] = infoArray;
+            }
+
+            for(i = 0 ; i < data.camps.length; i++)
+            {
+                con.addListInfo('/list/campsInfo/' + i , stuff[i]);
+            }
+
+            data.campsInfo = stuff;
+
+            localStorage.setItem("list" , data);
+
+            alert("Registo alterado");
+
+            topmost.goBack();
+        });
+
+    }
     
     stackView.addChild(submitBtn);
     
