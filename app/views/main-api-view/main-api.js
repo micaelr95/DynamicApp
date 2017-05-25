@@ -60,10 +60,10 @@ exports.mainMenu = function(args)
     page.actionBar.color = options.color_text;
 
     // draw MainApi
-    drawForm();
+    drawMain();
 }
 
-drawForm = function()
+drawMain = function()
 {
      // layout
     var glayout = new gridLayout.GridLayout();
@@ -97,7 +97,6 @@ drawForm = function()
                 object_field[cont].className = "btnIcon";
                 object_field[cont].value = mainApi[i].typeview;
                 object_field[cont].backgroundColor = options.color_button;
-
                 object_field[cont].on(buttonModule.Button.tapEvent, function() {
                      timer.clearInterval(id);
                     // verifica se é options
