@@ -9,7 +9,7 @@ var radioModule = require("nativescript-radiobutton");
 var textfieldModule = require("ui/text-field");
 var stackLayout = require("ui/layouts/stack-layout");
 var gridLayout = require("ui/layouts/grid-layout");
-var localStorage = require("nativescript-localstorage");
+var localStorage = require("nativescript-localStorage");
 var formattedStringModule = require("text/formatted-string");
 var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
@@ -111,7 +111,8 @@ drawMain = function()
                             moduleName: "views/constructor-view/constructor",
                             context:
                             {
-                                typeView: object_field[cont].value
+                                typeView: object_field[cont].value,
+                                targetTable: mainApi[cont].targetTable
                             }
                     }
                         topmost.navigate(navigationOptions);

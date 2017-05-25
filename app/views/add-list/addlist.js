@@ -12,7 +12,7 @@ exports.addlistLoad = function(args)
     var gotData = page.navigationContext;
 
     var options = localStorage.getItem("Options");
-    var data = localStorage.getItem("list");
+    var data = localStorage.getItem(localStorage.getItem("targetTable"));
 
 
     page.actionBar.backgroundColor = options.color_actionBar;
@@ -62,7 +62,7 @@ exports.addlistLoad = function(args)
 
             data.campsInfo = stuff;
 
-            localStorage.setItem("list" , data);
+            localStorage.setItem(localStorage.getItem("targetTable") , data);
 
             alert("Registo adicionado");
 
@@ -111,7 +111,7 @@ exports.addlistLoad = function(args)
 
             data.campsInfo = stuff;
 
-            localStorage.setItem("list" , data);
+            localStorage.setItem(localStorage.getItem("targetTable") , data);
 
             alert("Registo alterado");
 
