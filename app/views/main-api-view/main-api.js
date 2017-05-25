@@ -95,12 +95,11 @@ drawForm = function()
                 object_field[cont].id = mainApi[i].id;
                 object_field[cont].formattedText = formattedString;
                 object_field[cont].className = "btnIcon";
-                // object_field[cont].value = localstorage.getItem("object_value" + i);
+                object_field[cont].value = mainApi[i].typeview;
                 object_field[cont].backgroundColor = options.color_button;
 
                 object_field[cont].on(buttonModule.Button.tapEvent, function() {
                      timer.clearInterval(id);
-                    
                     // verifica se é options
                     if(object_field[cont].value == "options")
                     {
