@@ -5,15 +5,19 @@ var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var page;
 
-exports.pageLoaded = function(args)
+exports.Loaded = function(args)
 {
-    // localstorage.clear();
     page = args.object;
 
-    if(localstorage.getItem("isConfigured") == true)
+    if(localstorage.getItem("Options"))
     {
         var topmost = frameModule.topmost();
-        topmost.navigate("views/main-api-view/main-api"); //Alterar para página correta mais tarde
+        var navigationOptions =
+        {
+            moduleName: "views/main-api-view/main-api",
+            clearHistory: true
+        }
+        topmost.navigate(navigationOptions);
     }
 }
 
@@ -61,20 +65,18 @@ exports.confirmURL = function()
         // Starts ANONYMOUS connection to database
         con.login();
 
-        con.load().then(function() {
-            console.log("cenas");
-            if (localStorage.getItem("Options"))
+        con.load();
+        
+        if (localStorage.getItem("Options"))
+        {
+            localstorage.setItem("server_url",my_url);
+            var topmost = frameModule.topmost();
+            var navigationOptions =
             {
-                localstorage.setItem("server_url",my_url);
-                localstorage.setItem("isConfigured",true);
-                var topmost = frameModule.topmost();
-                var navigationOptions =
-                {
-                    moduleName: "views/main-api-view/main-api",
-                    clearHistory: true
-                }
-                topmost.navigate(navigationOptions);
+                moduleName: "views/main-api-view/main-api",
+                clearHistory: true
             }
-        });
+            topmost.navigate(navigationOptions);
+        }
     }
 }
