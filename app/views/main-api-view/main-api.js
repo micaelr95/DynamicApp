@@ -31,9 +31,23 @@ activity.onBackPressed = function()
         startMain.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(startMain);
     }
-    else if(localStorage.getItem("currentPage") == "options" )
+    else if(localStorage.getItem("currentPage") == "options" || localStorage.getItem("currentPage") == "construct" )
     {
         topmost.navigate("views/main-api-view/main-api");
+    }
+    else if(localStorage.getItem("addlist") == "true" )
+    {
+        localStorage.setItem("addlist" , "false");
+        var navigationOptions =
+        {
+            moduleName: "views/constructor-view/constructor",
+            context:
+            {
+                typeView: "list",
+                targetTable: localStorage.getItem("targetTable")
+            }
+        }
+            topmost.navigate(navigationOptions);
     }
     else
     {

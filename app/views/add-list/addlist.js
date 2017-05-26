@@ -8,11 +8,17 @@ var con = new Connection();
 
 exports.addlistLoad = function(args)
 {
+
+    localStorage.setItem("addlist" , "true");
+    localStorage.setItem("currentPage" , "addlist");
+
     var page = args.object;
     var gotData = page.navigationContext;
 
+    var targetTable = localStorage.getItem("targetTable");
+
     var options = localStorage.getItem("Options");
-    var data = localStorage.getItem(localStorage.getItem("targetTable"));
+    var data = localStorage.getItem(targetTable);
 
 
     page.actionBar.backgroundColor = options.color_actionBar;
