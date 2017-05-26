@@ -9,6 +9,7 @@ var labelModule = require("ui/label");
 var listViewModule = require("ui/list-view");
 var scrollModule = require("ui/scroll-view");
 var textFieldModule = require("ui/text-field");
+var textViewModule = require("ui/text-view");
 var webModule = require("ui/web-view");
 var frameModule = require("ui/frame");
 var topmost = frameModule.topmost();
@@ -422,6 +423,7 @@ drawForm = function(data,viewGrid){
                 fieldsArray[cont] = new dropModule.DropDown();
                 fieldsArray[cont].items = data[cont].items;
                 fieldsArray[cont].id = data[cont].id;
+                fieldsArray[cont].selectedIndex = 0;
 
                 newStackLayout.addChild(fieldsArray[cont]);
             break;
@@ -452,6 +454,14 @@ drawForm = function(data,viewGrid){
 
             case "textfield":
                 fieldsArray[cont] = new textFieldModule.TextField();
+                fieldsArray[cont].hint = data[cont].hint;
+                fieldsArray[cont].id = data[cont].id;
+
+                newStackLayout.addChild(fieldsArray[cont]);
+            break;
+
+            case "textview":
+                fieldsArray[cont] = new textViewModule.TextView();
                 fieldsArray[cont].hint = data[cont].hint;
                 fieldsArray[cont].id = data[cont].id;
 
