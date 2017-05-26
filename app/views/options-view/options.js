@@ -6,12 +6,14 @@ var viewModel = new observableModule.Observable();
 exports.options = function(args)
 {   
     page = args.object;
+    var options = localstorage.getItem("Options");
     page.actionBar.title = "Options";
-    page.actionBar.backgroundColor = localstorage.getItem("color_actionBar");
-    page.actionBar.color = "white";
+    page.actionBar.backgroundColor = options.color_actionBar;
+    page.actionBar.color = options.color_text;
     localstorage.setItem("currentPage" , "options");
 
-    page.bindingContext = { ButtonColor: localstorage.getItem("color_buttons")};
+    page.bindingContext = { ButtonBackgroundColor: options.color_button, ButtonTextColor: options.color_text};;
+
 }
 
 exports.changeServer = function()

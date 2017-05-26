@@ -40,36 +40,6 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
     }
 }
 
-function columnStars(titleArray,numbColumns){
-
-    var numbColumnsStars = "columns='";
-
-    for(i = 0 ; i < numbColumns ; i++)
-    {
-        if(i == 0)
-        {
-            numbColumnsStars += "*";
-        }
-        else
-        {
-            numbColumnsStars += ",*";
-        }
-    }
-
-    numbColumnsStars += ", auto'";
-
-    var columnLabels = "<GridLayout " + numbColumnsStars + " rows='auto, *' >";
-
-    for(i = 0 ; i < numbColumns ; i++)
-    {
-        columnLabels += "<Label text='{{" + titleArray[i] + "}}' col='" + i + "' />";
-    }
-
-    columnLabels += "</GridLayout>";
-
-    return columnLabels;
-}
-
 function createView(finalView , drawView , formName)
 {
     page.actionBar.title = formName;
@@ -84,16 +54,16 @@ function createView(finalView , drawView , formName)
 
 function createBottomNavButton(viewGrid,iconString,navTo,booleanClear,row,col)
 {
+    var options_colors = localStorage.getItem("Options");
+
     var xButton = new buttonModule.Button();
     var textSpan = new spansModule.Span();
     var xFormattedString = new formattedStringModule.FormattedString();
     var xIconSpan = new spansModule.Span();
 
-    var xButton_bgColor = localStorage.getItem("color_actionBar");
-
     xButton.className = "btnIcon";
-    xButton.backgroundColor = xButton_bgColor;
-    xButton.color = localStorage.getItem("color_textColor")
+    xButton.backgroundColor = options_colors.color_button;
+    xButton.color = options_colors.color_text;
 
     xButton.borderColor = "black"
     
@@ -120,6 +90,72 @@ function createBottomNavButton(viewGrid,iconString,navTo,booleanClear,row,col)
 
 }
 
+function removeSelectedItem(tappedItemIndex)
+{
+
+   var data = localStorage.getItem(localStorage.getItem("targetTable"));
+
+    var stuff = [];
+    var infoArray = [];
+    var i = 0;
+    var j = 0;
+
+    for(i = 0 ; i < data.camps.length ; i++)
+    {
+        infoArray = [];
+        for(j = 0 ; j < (data.campsInfo[0].length - 1 ) ; j++)
+        {
+            if( j == tappedItemIndex ){
+                if( j == data.campsInfo[0].length){
+                } else {
+                    j++;
+                    infoArray.push(data.campsInfo[i][j]);
+                }
+            } else {
+                infoArray.push(data.campsInfo[i][j]);
+            }
+        }
+        stuff[i] = infoArray;
+    }   
+
+    for(i = 0 ; i < data.camps.length ; i++)
+    {
+        con.addListInfo('/list/campsInfo/' + i , stuff[i]);
+    }
+    
+    data.campsInfo = stuff;
+
+    localStorage.setItem(localStorage.getItem("targetTable") , data);
+
+    alert("Removido");
+
+    var navigationOptions = {
+
+        moduleName: "views/constructor-view/constructor",
+        context: { typeView: "list",
+                   targetTable: localStorage.getItem("targetTable")
+        }
+        }
+    
+    topmost.navigate(navigationOptions);
+
+}
+
+function editSelectedItem(tappedItemIndex)
+{
+
+    var navigationOptions = {
+
+        moduleName: "views/add-list/addlist",
+        context: { info: tappedItemIndex },
+        clearHistory: false
+        }
+        
+    
+    topmost.navigate(navigationOptions);
+
+}
+
 function drawList(data,viewGrid)
 {
 
@@ -128,56 +164,45 @@ function drawList(data,viewGrid)
     var arrayRows = new Array();
     var arrayColumns = new Array();
 
-    var numbColumns = data.camps.length; //        <---| Numero de Campos
-    var titleArray = data.camps; //                <---| Informação dada pelo JSON
-    createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
-    createRows(1,arrayRows,viewLayout,50,"pixel"); //  |
-    createRows(1,arrayRows,viewLayout,1,"auto");   //  |
-                                                   //  |
-                                          //       ____|
-    var xLabels = new Array(numbColumns); //  <---| Numero de Campos
+    var numbColumns = data.camps.length;
+    var titleArray = data.camps;
+    var toShowCamps = data.showCamps.campLocation.length;
+
+    createColumns(toShowCamps,arrayColumns,viewLayout,1,"star");
+    createRows(1,arrayRows,viewLayout,50,"pixel");
+    createRows(1,arrayRows,viewLayout,1,"auto");
+
+    var xLabels = new Array(toShowCamps);
     var xList = new listViewModule.ListView();
     
-    // Adicionar titulos e guardar localmente variaveis com o numbCamps etc...
-
-    for(i = 0 ; i < numbColumns /* Numero de Campos */ ; i++)
+    for(i = 0 ; i < toShowCamps ; i++)
     {
         xLabels[i] = new labelModule.Label();
-        xLabels[i].text = titleArray[i];
+        xLabels[i].text = titleArray[data.showCamps.campLocation[i]];
         xLabels[i].className = "Title";
-
-        localStorage.setItem("camp" + i , titleArray[i]);
-
+        
         gridModule.GridLayout.setColumn(xLabels[i],i);
         gridModule.GridLayout.setRow(xLabels[i],0);
         viewLayout.addChild(xLabels[i]);
     }
 
-    localStorage.setItem("campsNumber" , numbColumns);
-    localStorage.setItem("numberItems" , data.campsInfo[0].length);
-
-    xList.itemTemplate = columnStars(titleArray,numbColumns);
+    xList.itemTemplate = data.itemTemplate;
     xList.className = "Info";
 
     var listArray = new Array();
     var listItems = {};
 
-    // Guardar dados localmente
-
     for(i = 0 ; i < data.campsInfo[0].length ; i++)
     {
         listItems = {};
-        for(j = 0 ; j < numbColumns ; j++)
+        for(j = 0 ; j < toShowCamps ; j++)
         {
-            listItems[titleArray[j]] = data.campsInfo[j][i];
-            localStorage.setItem( "listItems" + j + i , data.campsInfo[j][i] );
+            listItems[titleArray[j]] = data.campsInfo[data.showCamps.campLocation[j]][i];
         }
         listArray.push(listItems);
     }
 
     xList.items = listArray;
-
-    // Remove Item
 
     xList.on(listViewModule.ListView.itemTapEvent, function (args) {
 
@@ -185,75 +210,28 @@ function drawList(data,viewGrid)
 
         dialogs.confirm({
 
-            title: "Remover",
-            message: "Pretende remover este registo?",
-            okButtonText: "OK",
-            cancelButtonText: "CANCEL",
+            title: "Registo " + (tappedItemIndex + 1),
+            message: "Pretende alterar ou remover o registo?",
+            okButtonText: "CANCEL",
+            neutralButtonText: "Alterar",
+            cancelButtonText: "Remover"
 
         }).then(function (result) {
-            
-            if( result == true)
+
+            if( result == false)
             {
 
-                var stuff = [];
-                var infoArray = [];
-                var removedItem = false;
+                removeSelectedItem(tappedItemIndex);
 
-                var i = 0;
-                var j = 0;
+            }
+            else if( result == undefined )
+            {
 
-                for(i = 0 ; i < localStorage.getItem("campsNumber"); i++)
-                {
+                editSelectedItem(tappedItemIndex);
 
-                    infoArray = [];
+            }
+            else {}
 
-                    for(j = 0 ; j < (localStorage.getItem("numberItems") - 1 ); j++)
-                    {
-
-                        if( j == tappedItemIndex ){
-
-                            if( j == localStorage.getItem("numberItems")){
-
-                            } else {
-
-                                j++;
-
-                                infoArray.push(localStorage.getItem("listItems" + i + j ));
-
-                            }
-
-                        } else {
-
-                            infoArray.push(localStorage.getItem("listItems" + i + j ));
-
-                        }
-
-                    }
-
-                    stuff[i] = infoArray;
-
-                    localStorage.removeItem("listItems" + i + j );
-
-                }   
-
-                for(i = 0 ; i < parseInt(localStorage.getItem("campsNumber")); i++)
-                {
-
-                    con.addListInfo('/list/campsInfo/' + i , stuff[i]);
-
-                }
-
-                alert("Removido");
-
-                var navigationOptions = {
-
-                    moduleName: "views/constructor-view/constructor",
-                    context: { typeView: "list" }
-                    }
-                
-                topmost.navigate(navigationOptions);
-
-            } else {}
         });
     });
 
@@ -269,132 +247,21 @@ function drawList(data,viewGrid)
     page.content = viewGrid;
 };
 
-localDrawList = function(viewGrid){
-
-    var viewLayout = new gridModule.GridLayout();
-
-    var arrayRows = new Array();
-    var arrayColumns = new Array();
-
-    var numbColumns = localStorage.getItem("campsNumber");    
-    var titleArray = [];
-
-    for( i = 0 ; i < numbColumns ; i++ ){
-
-        titleArray[i] = localStorage.getItem("camp"+i);
-
-    }
-
-    createColumns(numbColumns,arrayColumns,viewLayout,1,"star");
-    createRows(1,arrayRows,viewLayout,50,"pixel");
-    createRows(1,arrayRows,viewLayout,1,"auto");
-   
-    var xLabels = new Array(numbColumns);
-    var xList = new listViewModule.ListView();
-    
-    // Adicionar titulos e guardar localmente variaveis com o numbCamps etc...
-
-    for(i = 0 ; i < numbColumns /* Numero de Campos */ ; i++)
-    {
-        xLabels[i] = new labelModule.Label();
-        xLabels[i].text = titleArray[i];
-        xLabels[i].className = "Title";
-
-        gridModule.GridLayout.setColumn(xLabels[i],i);
-        gridModule.GridLayout.setRow(xLabels[i],0);
-        viewLayout.addChild(xLabels[i]);
-    }
-
-    xList.itemTemplate = columnStars(titleArray,numbColumns);;
-    xList.className = "Info";
-
-    var listArray = new Array();
-    var listItems = {};
-
-    // Guardar dados localmente
-
-    for(i = 0 ; i < localStorage.getItem("numberItems") ; i++)
-    {
-        listItems = {};
-        for(j = 0 ; j < numbColumns ; j++)
-        {
-            listItems[titleArray[j]] = localStorage.getItem("listItems" + j + i);
-            
-        }
-        listArray.push(listItems);
-    }
-
-    xList.items = listArray;
-
-    gridModule.GridLayout.setColumn(xList,0);
-    gridModule.GridLayout.setRow(xList,1);
-    gridModule.GridLayout.setColumnSpan(xList,numbColumns);
-    
-    viewLayout.addChild(xList);
-
-    createView(viewGrid , viewLayout , "ListView");
-    
-    page.content = viewGrid;
-};
-
 requestForm = function(constructorForm,viewGrid)
 {
-    var urlForm = localStorage.getItem("server_url");
-
+    var targetTable = localStorage.getItem("targetTable");
     if(constructorForm == "form")
     {
-        urlForm += "/constructForm.json";
-            localStorage.setItem("currentPage" , "form");
+        drawForm(localStorage.getItem(targetTable),viewGrid);
     }
     else if(constructorForm == "list")
     {
-        urlForm += "/list.json"
-            localStorage.setItem("currentPage" , "list");
+         drawList(localStorage.getItem(targetTable),viewGrid); 
     }
     else if(constructorForm == "webview")
     {
-        urlForm += "/webview.json"
-            localStorage.setItem("currentPage" , "webView");
-    }
-
-    fetch(urlForm).then(response =>
-    {
-        localStorage.setItem("formLocal" , response._bodyText);
-        return response.json();
-    })
-    .then(function (r)
-    {
-        var data = r;
-
-        if(constructorForm == "form")
-        {
-            drawForm(data,viewGrid);
-        }
-        else if(constructorForm == "list")
-        {
-            drawList(data,viewGrid);
-        }
-        else if(constructorForm == "webview")
-        {
-            drawWebView(data,viewGrid);
-        }
-        else
-        {
-            drawOptions(data);
-        }
-    }).catch(function(error){
-
-        if(constructorForm == "list")
-        {
-            page.actionBar.actionItems._items[0].visibility = "collapse";
-            localDrawList(viewGrid);
-        }
-        else if(constructorForm == "form")
-        {
-            drawForm(JSON.parse(localStorage.getItem("formLocal")) , viewGrid);
-        }
-
-    });   
+        drawWebView(localStorage.getItem(targetTable),viewGrid); 
+    }   
 }
 
 drawForm = function(data,viewGrid){
@@ -571,12 +438,18 @@ exports.constructorLoad = function(args)
 {
     page = args.object;
 
-    page.bindingContext = { ActionColor: localStorage.getItem("color_actionBar")};
+    localStorage.setItem("currentPage" , "construct");
+
+    var Options = localStorage.getItem("Options");
+
+    page.bindingContext = { ActionColor: Options.color_actionBar};
     page.actionBar.actionItems._items[0].visibility = "collapse";
-    page.actionBar.color = localStorage.getItem("color_textColor");
+    page.actionBar.color = Options.color_text;
 
     var gotData = page.navigationContext;
     var Info = gotData.typeView;
+
+    localStorage.setItem("targetTable" , gotData.targetTable);
 
     var viewGrid = new gridModule.GridLayout();
     var arrayRows = new Array();
@@ -602,10 +475,6 @@ exports.constructorLoad = function(args)
    else if(Info.toLowerCase() == "webview")
    {
         requestForm("webview",viewGrid);
-   }
-   else if(Info.toLowerCase() == "options")
-   {
-        // requestForm("options",viewGrid);
    }
    else
    {

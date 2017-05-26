@@ -5,20 +5,19 @@ var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var page;
 
-exports.pageLoaded = function(args)
+exports.Loaded = function(args)
 {
-    // localstorage.clear();
     page = args.object;
 
-    // Initiate database connection
-    con.init();
-    // Starts ANONYMOUS connection to database
-    con.login();
-
-    if(localstorage.getItem("isConfigured") == true)
+    if(localstorage.getItem("Options"))
     {
         var topmost = frameModule.topmost();
-        topmost.navigate("views/main-api-view/main-api"); //Alterar para página correta mais tarde
+        var navigationOptions =
+        {
+            moduleName: "views/main-api-view/main-api",
+            clearHistory: true
+        }
+        topmost.navigate(navigationOptions);
     }
 }
 
@@ -61,14 +60,23 @@ exports.confirmURL = function()
     }
     else
     {
-        localstorage.setItem("server_url",my_url);
-        localstorage.setItem("isConfigured",true);
-        var topmost = frameModule.topmost();
-        var navigationOptions =
+        // Initiate database connection
+        con.init();
+        // Starts ANONYMOUS connection to database
+        con.login();
+
+        con.load();
+        
+        if (localStorage.getItem("Options"))
         {
-             moduleName: "views/main-api-view/main-api",
-             clearHistory: true
+            localstorage.setItem("server_url",my_url);
+            var topmost = frameModule.topmost();
+            var navigationOptions =
+            {
+                moduleName: "views/main-api-view/main-api",
+                clearHistory: true
+            }
+            topmost.navigate(navigationOptions);
         }
-        topmost.navigate(navigationOptions); //Alterar para página correta quando for feita */~
     }
 }

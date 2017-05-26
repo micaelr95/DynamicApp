@@ -1,5 +1,5 @@
 <Page loaded="options">
     <StackLayout orientation="vertical">
-        <Button text="Change server" backgroundColor="{{ ButtonColor }}" color="white" onTap="changeServer" />
+        <Button text="Change server" backgroundColor="{{ ButtonBackgroundColor }}" color="{{ ButtonTextColor }}" onTap="changeServer" />
     </StackLayout>
 </Page>

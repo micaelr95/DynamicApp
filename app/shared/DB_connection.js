@@ -1,6 +1,7 @@
 var config = require("../shared/config");
 var firebase = require("nativescript-plugin-firebase");
 var Observable = require("data/observable").Observable;
+var localStorage = require("nativescript-localstorage");
 
 // Handles all database related stuff
 function Connection()
@@ -13,7 +14,8 @@ function Connection()
     {
         firebase.init(
             {
-                url: config.apiUrl
+                url: localStorage.getItem("server_url"),
+                persist: true
             }
             ).then(function (instance)
             {
@@ -42,6 +44,20 @@ function Connection()
             console.log(errorMessage);
         })
     };
+
+    viewModel.load = function() {
+        var onChildEvent = function(result) {
+            localStorage.setItem(result.key, result.value);
+        };
+        return firebase.addChildEventListener(onChildEvent, "/").then(
+            function() {
+                console.log("firebase.addChildEventListener added");
+            },
+            function(error) {
+                console.log("firebase.addChildEventListener error: " + error);
+            }
+        )
+    }
 
     // Add data to database
     viewModel.add = function(table, data)
