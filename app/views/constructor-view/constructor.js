@@ -460,7 +460,7 @@ exports.constructorLoad = function(args)
     createColumns(3,arrayColumns,viewGrid,1,"star");
 
     createBottomNavButton(viewGrid,"0xef015","views/main-api-view/main-api",true,1,0);
-    createBottomNavButton(viewGrid,"0xef015","views/main-api-view/main-api",true,1,1);
+    createBottomNavButton(viewGrid,"eeeeeee","views/main-api-view/main-api",true,1,1);
     createBottomNavButton(viewGrid,"0xef013","views/options-view/options",false,1,2);
 
    if(Info.toLowerCase() == "list")
