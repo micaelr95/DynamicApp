@@ -31,7 +31,7 @@ activity.onBackPressed = function()
         startMain.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(startMain);
     }
-    else if(localStorage.getItem("currentPage") == "options" || localStorage.getItem("currentPage") == "construct" )
+    else if(localStorage.getItem("currentPage") == "options" || localStorage.getItem("currentPage") == "construct" || localStorage.getItem("currentPage") == "info")
     {
         topmost.navigate("views/main-api-view/main-api");
     }
@@ -49,7 +49,7 @@ activity.onBackPressed = function()
         }
             topmost.navigate(navigationOptions);
     }
-    else
+    else i
     {
         frameModule.topmost().goBack();
     }
