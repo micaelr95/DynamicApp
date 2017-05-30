@@ -48,9 +48,7 @@ activity.onBackPressed = function()
             }
         }
             topmost.navigate(navigationOptions);
-    }
-    else i
-    {
+    } else {
         frameModule.topmost().goBack();
     }
 }
