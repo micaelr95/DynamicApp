@@ -1,0 +1,6 @@
+<Page loaded="Loaded">
+   <ActionBar title="Info"></ActionBar>
+   <StackLayout orientation="vertical">
+        <Label text="{{ Text }}" textWrap="true" />
+    </StackLayout>
+</Page>

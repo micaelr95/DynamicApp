@@ -12,7 +12,7 @@ exports.options = function(args)
     page.actionBar.color = options.color_text;
     localstorage.setItem("currentPage" , "options");
 
-    page.bindingContext = { ButtonBackgroundColor: options.color_button, ButtonTextColor: options.color_text};;
+    page.bindingContext = { ButtonBackgroundColor: options.color_button, ButtonTextColor: options.color_text};
 
 }
 
