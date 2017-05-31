@@ -376,7 +376,15 @@ drawForm = function(data,viewGrid){
                                 submitInfo[i-cont] = fieldsArray[i]._subViews[j].value;
                                 varNames[i-cont] = data[i].varName;
                             }
+                            else{
+                                submitInfo[i-cont] = "null";
+                                varNames[i-cont] = data[i].varNames;
+                            }
                         }
+                break;
+                case "textview":
+                        submitInfo[i-cont] = fieldsArray[i].text;
+                        varNames[i-cont] = data[i].varName;
                 break;
                 case "label":
                     cont +=1;
