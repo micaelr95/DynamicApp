@@ -1,26 +1,4 @@
 .btnIcon {
     font-family: FontAwesome, fontawesome-webfont;
     color: white;
-    background-color: brown;
-    height: 100px;
-    width: 120px;
-    font-size: 12px;
-}
-
-StackLayout {
-    background-color: #e0e0eb;
-}
-
-GridLayout {
-    horizontal-align: center;
-    vertical-align: center;
-}
-
-Label {
-    color: black;
-}
-
-ActionBar {
-    background-color: brown;
-    color: white;
 }

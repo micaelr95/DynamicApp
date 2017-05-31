@@ -2,7 +2,7 @@
 var frameModule = require("ui/frame");
 var topmost = frameModule.topmost();
 var buttonModule = require("ui/button");
-var stackLayout = require("ui/layouts/stack-layout");
+var StackLayout = require("ui/layouts/stack-layout").StackLayout;
 var gridLayout = require("ui/layouts/grid-layout");
 var localStorage = require("nativescript-localstorage");
 var formattedStringModule = require("text/formatted-string");
@@ -70,9 +70,10 @@ exports.mainMenu = function(args)
 drawMain = function()
 {
      // layout
-    var glayout = new gridLayout.GridLayout();
-    var x = 0;
-    var y = 0;
+    //var glayout = new gridLayout.GridLayout();
+    var stackLayout = new StackLayout();
+    //var x = 0;
+    //var y = 0;
 
     // array to get data of objects
     var object_field = new Array();
@@ -111,7 +112,7 @@ drawMain = function()
                             context:
                             {
                                 typeView: object_field[cont].value,
-                                targetTable: mainApi[cont].targetTable
+                                //targetTable: mainApi[cont].targetTable
                             }
                     }
                         topmost.navigate(navigationOptions);
@@ -119,27 +120,30 @@ drawMain = function()
                  });
 
                 // add button to layout
-                gridLayout.GridLayout.setColumn(object_field[i], x);
-                gridLayout.GridLayout.setRow(object_field[i], y);
-                var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
-                var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
-                glayout.addColumn(column);
+                //gridLayout.GridLayout.setColumn(object_field[i], x);
+                //gridLayout.GridLayout.setRow(object_field[i], y);
+                //var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
+                //var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
+
+                stackLayout.addChild(object_field[i]);
+
+                /*glayout.addColumn(column);
                 glayout.addRow(row);
-                glayout.addChild(object_field[i]);
+                glayout.addChild(object_field[i]);*/
                 
                 // columns and rows of datagrid
-                if(x >= 1) {
+                /*if(x >= 1) {
                     x = 0;
                     y += 1;
                 } 
                 else {
                     x += 1;
-                }
+                }*/
                 break;
 
             case "radiobutton":
                 break;
         }
-        page.content = glayout;       
+        page.content = stackLayout;       
     }
 }
