@@ -112,7 +112,7 @@ drawMain = function()
                             context:
                             {
                                 typeView: object_field[cont].value,
-                                //targetTable: mainApi[cont].targetTable
+                                targetTable: mainApi[cont].targetTable
                             }
                     }
                         topmost.navigate(navigationOptions);
