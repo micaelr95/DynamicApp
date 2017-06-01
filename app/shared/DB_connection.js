@@ -45,11 +45,11 @@ function Connection()
         })
     };
 
-    viewModel.load = function() {
+    viewModel.load = async function() {
         var onChildEvent = function(result) {
             localStorage.setItem(result.key, result.value);
         };
-        return firebase.addChildEventListener(onChildEvent, "/").then(
+        return await firebase.addChildEventListener(onChildEvent, "/").then(
             function() {
                 console.log("firebase.addChildEventListener added");
             },

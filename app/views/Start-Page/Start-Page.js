@@ -66,17 +66,15 @@ exports.confirmURL = function()
         con.login();
 
         con.load();
-        
-        if (localStorage.getItem("Options"))
+
+        localstorage.setItem("server_url",my_url);
+        var topmost = frameModule.topmost();
+        var navigationOptions =
         {
-            localstorage.setItem("server_url",my_url);
-            var topmost = frameModule.topmost();
-            var navigationOptions =
-            {
-                moduleName: "views/main-api-view/main-api",
-                clearHistory: true
-            }
-            topmost.navigate(navigationOptions);
+            moduleName: "views/main-api-view/main-api",
+            clearHistory: true
         }
+        topmost.navigate(navigationOptions);
+
     }
 }
