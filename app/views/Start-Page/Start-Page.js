@@ -1,5 +1,5 @@
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
-var localstorage = require("nativescript-localstorage");
+var localStorage = require("nativescript-localstorage");
 var frameModule = require("ui/frame");
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
@@ -9,7 +9,7 @@ exports.Loaded = function(args)
 {
     page = args.object;
 
-    if(localstorage.getItem("Options"))
+    if(localStorage.getItem("Options"))
     {
         var topmost = frameModule.topmost();
         var navigationOptions =
@@ -64,17 +64,18 @@ exports.confirmURL = function()
         con.init();
         // Starts ANONYMOUS connection to database
         con.login();
-
-        con.load();
-
-        localstorage.setItem("server_url",my_url);
-        var topmost = frameModule.topmost();
-        var navigationOptions =
-        {
-            moduleName: "views/main-api-view/main-api",
-            clearHistory: true
-        }
-        topmost.navigate(navigationOptions);
-
+        
+        con.load().then(function() {
+            localStorage.setItem("server_url",my_url);
+            var topmost = frameModule.topmost();
+            var navigationOptions =
+            {
+                moduleName: "views/main-api-view/main-api",
+                clearHistory: true
+            }
+            topmost.navigate(navigationOptions);
+        }, function() {
+            console.log('rejection');
+        });
     }
 }
