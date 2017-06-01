@@ -60,20 +60,25 @@ exports.confirmURL = function()
     }
     else
     {
+        localStorage.setItem("server_url",my_url);
+        
         // Initiate database connection
         con.init();
         // Starts ANONYMOUS connection to database
         con.login();
         
-        con.load().then(function() {
-            localStorage.setItem("server_url",my_url);
-            var topmost = frameModule.topmost();
-            var navigationOptions =
+        con.load().then(function()
+        {
+            if (localStorage.getItem("Options"))
             {
-                moduleName: "views/main-api-view/main-api",
-                clearHistory: true
+                var topmost = frameModule.topmost();
+                var navigationOptions =
+                {
+                    moduleName: "views/main-api-view/main-api",
+                    clearHistory: true
+                }
+                topmost.navigate(navigationOptions);
             }
-            topmost.navigate(navigationOptions);
         }, function() {
             console.log('rejection');
         });
