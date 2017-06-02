@@ -188,12 +188,13 @@ function drawList(data,viewGrid)
         listItems = {};
         for(j = 0 ; j < toShowCamps ; j++)
         {
+            // error is here
             listItems[titleArray[j]] = data.campsInfo[data.showCamps.campLocation[j]][i];
         }
-        listArray.push(listItems);
+        // listArray.push(listItems);
     }
 
-    xList.items = listArray;
+    /*xList.items = listArray;
 
     xList.on(listViewModule.ListView.itemTapEvent, function (args) {
 
@@ -235,7 +236,7 @@ function drawList(data,viewGrid)
 
     createView(viewGrid , viewLayout , "ListView");
     
-    page.content = viewGrid;
+    page.content = viewGrid;*/
 };
 
 requestForm = function(constructorForm,viewGrid)
