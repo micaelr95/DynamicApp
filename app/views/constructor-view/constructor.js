@@ -49,7 +49,6 @@ function createView(finalView , drawView , formName)
     gridModule.GridLayout.setColumnSpan(drawView,3);
 
     finalView.addChild(drawView);
-
 }
 
 function createBottomNavButton(viewGrid,iconString,navTo,booleanClear,row,col)
@@ -80,19 +79,16 @@ function createBottomNavButton(viewGrid,iconString,navTo,booleanClear,row,col)
             moduleName: navTo,
             clearHistory: booleanClear
         }
-        
         topmost.navigate(navigationOptions);
     });
 
     gridModule.GridLayout.setColumn(xButton,col);
     gridModule.GridLayout.setRow(xButton,row);
     viewGrid.addChild(xButton);
-
 }
 
 function removeSelectedItem(tappedItemIndex)
 {
-
    var data = localStorage.getItem(localStorage.getItem("targetTable"));
 
     var stuff = [];
@@ -129,16 +125,14 @@ function removeSelectedItem(tappedItemIndex)
 
     alert("Removido");
 
-    var navigationOptions = {
-
+    var navigationOptions =
+    {
         moduleName: "views/constructor-view/constructor",
-        context: { typeView: "list",
-                   targetTable: localStorage.getItem("targetTable")
+        context: { 
+            typeView: "list", targetTable: localStorage.getItem("targetTable")
         }
-        }
-    
+    }
     topmost.navigate(navigationOptions);
-
 }
 
 function editSelectedItem(tappedItemIndex)
@@ -149,16 +143,13 @@ function editSelectedItem(tappedItemIndex)
         moduleName: "views/add-list/addlist",
         context: { info: tappedItemIndex },
         clearHistory: false
-        }
+    }
         
-    
     topmost.navigate(navigationOptions);
-
 }
 
 function drawList(data,viewGrid)
 {
-
     var viewLayout = new gridModule.GridLayout();
 
     var arrayRows = new Array();
@@ -410,7 +401,7 @@ function drawWebView(data,viewGrid)
 {
     page.actionBar.title = "WebView"
 
-    /*var mygrid = new gridModule.GridLayout();
+    var mygrid = new gridModule.GridLayout();
     var myweb = new webModule.WebView();
     myweb.id = "cenas";
 
@@ -419,12 +410,12 @@ function drawWebView(data,viewGrid)
 
     if(data.defaultUrl == "" || data.url_prefix == "")
     {
-        myweb.url = "";
+        myweb.src = "";
         alert("Default URL or prefix is not defined");
     }
     else
     {
-        myweb.url = data.url_prefix + data.defaultUrl;
+        myweb.src = data.url_prefix + data.defaultUrl;
     }
 
     createRows(1,linhas,mygrid,1,"star");
@@ -439,7 +430,7 @@ function drawWebView(data,viewGrid)
 
     page.content = viewGrid
     var coco = page.getViewById("cenas");
-    coco.android.getSettings().setBuiltInZoomControls(false);*/
+    coco.android.getSettings().setBuiltInZoomControls(false);
 }
 
 exports.constructorLoad = function(args)
