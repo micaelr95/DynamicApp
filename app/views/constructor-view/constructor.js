@@ -1,9 +1,9 @@
 var app = require("application");
 var stackModule = require("ui/layouts/stack-layout");
 var gridModule = require("ui/layouts/grid-layout");
-var checkModule = require("nativescript-checkbox");
+//var checkModule = require("nativescript-checkbox");
 var dropModule = require("nativescript-drop-down");
-var radioBtnModule = require("nativescript-radiobutton");
+//var radioBtnModule = require("nativescript-radiobutton");
 var buttonModule = require("ui/button");
 var labelModule = require("ui/label");
 var listViewModule = require("ui/list-view");
@@ -277,12 +277,12 @@ drawForm = function(data,viewGrid){
         const cont = i;
         switch(data[cont].type){
             case "checkbox":
-                fieldsArray[cont] = new checkModule.CheckBox();
+                /*fieldsArray[cont] = new checkModule.CheckBox();
                 fieldsArray[cont].value = data[cont].value;
                 fieldsArray[cont].id = data[cont].id;
                 fieldsArray[cont].text = data[cont].text;
 
-                newStackLayout.addChild(fieldsArray[cont]);
+                newStackLayout.addChild(fieldsArray[cont]);*/
             break;
 
             case "dropdown":
@@ -296,19 +296,19 @@ drawForm = function(data,viewGrid){
             break;
 
             case "radiogroup":
-                fieldsArray[cont] = new radioBtnModule.RadioGroup();
+                /*fieldsArray[cont] = new radioBtnModule.RadioGroup();
                 fieldsArray[cont].id = data[cont].id;
-                newStackLayout.addChild(fieldsArray[cont]);
+                newStackLayout.addChild(fieldsArray[cont]);*/
         
             break;
 
             case "radiobutton":
-                fieldsArray[cont] = new radioBtnModule.RadioButton();
+                /*fieldsArray[cont] = new radioBtnModule.RadioButton();
                 fieldsArray[cont].id = data[cont].id;
                 fieldsArray[cont].text = data[cont].text;
                 fieldsArray[cont].value = data[cont].value;
 
-                newStackLayout.getViewById(data[cont].group).addChild(fieldsArray[cont]);
+                newStackLayout.getViewById(data[cont].group).addChild(fieldsArray[cont]);*/
             break;
 
             case "label":

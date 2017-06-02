@@ -67,20 +67,16 @@ exports.confirmURL = function()
         // Starts ANONYMOUS connection to database
         con.login();
         
-        con.load().then(function()
+        con.load();
+        if (localStorage.getItem("Options"))
         {
-            if (localStorage.getItem("Options"))
+            var topmost = frameModule.topmost();
+            var navigationOptions =
             {
-                var topmost = frameModule.topmost();
-                var navigationOptions =
-                {
-                    moduleName: "views/main-api-view/main-api",
-                    clearHistory: true
-                }
-                topmost.navigate(navigationOptions);
+                moduleName: "views/main-api-view/main-api",
+                clearHistory: true
             }
-        }, function() {
-            console.log('rejection');
-        });
+            topmost.navigate(navigationOptions);
+        }
     }
 }
