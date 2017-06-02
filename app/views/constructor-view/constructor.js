@@ -24,9 +24,9 @@ var page;
 
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode)
 {
-    for(i = 0 ; i < numbRows ; i++)
+    for(i = 0; i < numbRows; i++)
     {
-        arrayRows[i] = new gridModule.ItemSpec(RowHeight, gridModule.GridUnitType[RowMode]);
+        arrayRows[i] = new gridModule.ItemSpec(RowHeight, RowMode);
         gridLayout.addRow(arrayRows[i]);
     }
 }
@@ -35,7 +35,7 @@ function createColumns(numbColumns , arrayColumns , gridLayout, ColumnHeight, Co
 {
     for(i = 0 ; i < numbColumns ; i++)
     {
-        arrayColumns[i] = new gridModule.ItemSpec(ColumnHeight, gridModule.GridUnitType[ColumnMode]);
+        arrayColumns[i] = new gridModule.ItemSpec(ColumnHeight, ColumnMode);
         gridLayout.addColumn(arrayColumns[i]);
     }
 }
@@ -410,7 +410,7 @@ function drawWebView(data,viewGrid)
 {
     page.actionBar.title = "WebView"
 
-    var mygrid = new gridModule.GridLayout();
+    /*var mygrid = new gridModule.GridLayout();
     var myweb = new webModule.WebView();
     myweb.id = "cenas";
 
@@ -439,7 +439,7 @@ function drawWebView(data,viewGrid)
 
     page.content = viewGrid
     var coco = page.getViewById("cenas");
-    coco.android.getSettings().setBuiltInZoomControls(false);
+    coco.android.getSettings().setBuiltInZoomControls(false);*/
 }
 
 exports.constructorLoad = function(args)
