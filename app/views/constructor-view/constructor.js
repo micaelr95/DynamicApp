@@ -249,11 +249,7 @@ requestForm = function(constructorForm,viewGrid)
     else if(constructorForm == "list")
     {
          drawList(localStorage.getItem(targetTable),viewGrid); 
-    }
-    else if(constructorForm == "webview")
-    {
-        drawWebView(localStorage.getItem(targetTable),viewGrid); 
-    }   
+    } 
 }
 
 drawForm = function(data,viewGrid){
@@ -435,10 +431,6 @@ exports.constructorLoad = function(args)
    else if(Info.toLowerCase() == "form")
    {
         requestForm("form",viewGrid);
-   }
-   else if(Info.toLowerCase() == "webview")
-   {
-        requestForm("webview",viewGrid);
    }
    else
    {
