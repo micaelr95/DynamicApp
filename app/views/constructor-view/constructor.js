@@ -189,12 +189,12 @@ function drawList(data,viewGrid)
         for(j = 0 ; j < toShowCamps ; j++)
         {
             // error is here
-            listItems[titleArray[j]] = data.campsInfo[data.showCamps.campLocation[j]][i];
+            //listItems[titleArray[j]] = data.campsInfo[data.showCamps.campLocation[j]][i];
         }
         // listArray.push(listItems);
     }
 
-    /*xList.items = listArray;
+    xList.items = listArray;
 
     xList.on(listViewModule.ListView.itemTapEvent, function (args) {
 
@@ -236,7 +236,7 @@ function drawList(data,viewGrid)
 
     createView(viewGrid , viewLayout , "ListView");
     
-    page.content = viewGrid;*/
+    page.content = viewGrid;
 };
 
 requestForm = function(constructorForm,viewGrid)
@@ -396,42 +396,6 @@ drawForm = function(data,viewGrid){
         }
         topmost.navigate(navigationOptions);
     });
-}
-
-function drawWebView(data,viewGrid)
-{
-    page.actionBar.title = "WebView"
-
-    var mygrid = new gridModule.GridLayout();
-    var myweb = new webModule.WebView();
-    myweb.id = "cenas";
-
-    var colunas = new Array();
-    var linhas = new Array();
-
-    if(data.defaultUrl == "" || data.url_prefix == "")
-    {
-        myweb.src = "";
-        alert("Default URL or prefix is not defined");
-    }
-    else
-    {
-        myweb.src = data.url_prefix + data.defaultUrl;
-    }
-
-    createRows(1,linhas,mygrid,1,"star");
-    createColumns(1,colunas,mygrid,1,"star");
-
-    gridModule.GridLayout.setColumn(myweb,0);
-    gridModule.GridLayout.setRow(myweb,0);
-    mygrid.addChild(myweb);
-
-    createView(viewGrid , mygrid , "WebView");
-
-
-    page.content = viewGrid
-    var coco = page.getViewById("cenas");
-    coco.android.getSettings().setBuiltInZoomControls(false);
 }
 
 exports.constructorLoad = function(args)

@@ -1,0 +1,3 @@
+<Page loaded="Loaded">
+    {%raw%}<WebView id="webview" src="{{ url }}" />{%endraw%}
+</Page>

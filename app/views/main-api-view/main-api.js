@@ -104,6 +104,10 @@ drawMain = function()
                     {
                         topmost.navigate("views/options-view/options");
                     }
+                    else if (object_field[cont].value == "webview")
+                    {
+                        topmost.navigate("views/webview/webview");
+                    }
                     else
                     {
                         var navigationOptions =
@@ -114,7 +118,7 @@ drawMain = function()
                                 typeView: object_field[cont].value,
                                 targetTable: mainApi[cont].targetTable
                             }
-                    }
+                        }
                         topmost.navigate(navigationOptions);
                     }
                  });
