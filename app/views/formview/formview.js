@@ -17,9 +17,10 @@ exports.formView = function(args) {
 
     var newStackLayout = new stackModule.StackLayout();
     var scrollView = new scrollModule.ScrollView();
-    var fieldsArray = [];
 
-    var saveInputText = [];
+    var fieldsArray = [];       // save objects
+    var submitInfo = [];        // save info to submit
+    var saveInputText = [];     // save number of objects with input
     var q = 0;
     
     for(cont=0; cont < data.length; cont++)
@@ -41,10 +42,10 @@ exports.formView = function(args) {
                 fieldsArray[i].items = data[i].items;
                 fieldsArray[i].id = data[i].id;
                 fieldsArray[i].selectedIndex = 0;
-
-                //console.info("coco: " + i);
-                //saveInputText[p] = i;
-                //q += 1;
+                newStackLayout.addChild(fieldsArray[cont]);
+                saveInputText[p] = i;
+                q += 1;
+                console.info("drop: " + i);
                 break;
             case "radiogroup":
                 /*fieldsArray[cont] = new radioBtnModule.RadioGroup();
@@ -94,9 +95,15 @@ exports.formView = function(args) {
 
         for (i = 0; i < saveInputText.length; i++) {
             var x = saveInputText[i];
-            console.info(fieldsArray[x].text);
-            con.add('/aasd', fieldsArray[x].text);
-        }   
+
+            if (data[x].type == 'dropdown') {
+                submitInfo[i] = fieldsArray[x].items[fieldsArray[x].selectedIndex];
+            }
+            else {
+                submitInfo[i] = fieldsArray[x].text;
+            }
+        }
+        con.add('/aasd', submitInfo);
     });
 
     newStackLayout.addChild(submitBtn);
