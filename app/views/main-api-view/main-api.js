@@ -31,7 +31,7 @@ activity.onBackPressed = function()
         startMain.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(startMain);
     }
-    else if(localStorage.getItem("currentPage") == "options" || localStorage.getItem("currentPage") == "construct" || localStorage.getItem("currentPage") == "info")
+    else if(localStorage.getItem("currentPage") == "options" || localStorage.getItem("currentPage") == "construct" || localStorage.getItem("currentPage") == "info" ||localStorage.getItem("currentPage") == "webview")
     {
         topmost.navigate("views/main-api-view/main-api");
     }

@@ -10,10 +10,9 @@ exports.options = function(args)
     page.actionBar.title = "Options";
     page.actionBar.backgroundColor = options.color_actionBar;
     page.actionBar.color = options.color_text;
-    localstorage.setItem("currentPage" , "options");
+    localstorage.setItem("currentPage", "options");
 
-    page.bindingContext = { ButtonBackgroundColor: options.color_button, ButtonTextColor: options.color_text};
-
+    page.bindingContext = { ButtonBackgroundColor: options.color_button, ButtonTextColor: options.color_text };
 }
 
 exports.changeServer = function()

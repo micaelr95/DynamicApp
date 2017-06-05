@@ -4,6 +4,8 @@ exports.Loaded = function(args)
 {
     page = args.object;
     page.actionBar.title = "WebView";
+    
+    localStorage.setItem("currentPage" , "webview");
 
     var webview = page.getViewById("webview");
     webview.android.getSettings().setBuiltInZoomControls(false);
