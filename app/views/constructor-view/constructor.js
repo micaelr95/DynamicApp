@@ -22,6 +22,54 @@ var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var page;
 
+exports.constructorLoad = function(args)
+{
+    page = args.object;
+
+    localStorage.setItem("currentPage" , "construct");
+
+    var Options = localStorage.getItem("Options");
+
+    page.bindingContext = { ActionColor: Options.color_actionBar};
+    page.actionBar.actionItems._items[0].visibility = "collapse";
+    page.actionBar.color = Options.color_text;
+
+    var gotData = page.navigationContext;
+    var Info = gotData.typeView;
+
+    localStorage.setItem("targetTable" , gotData.targetTable);
+
+    var viewGrid = new gridModule.GridLayout();
+    var arrayRows = new Array();
+    var arrayColumns = new Array();
+
+    createRows(1,arrayRows,viewGrid,1,"star");
+    createRows(1,arrayRows,viewGrid,45,"pixel");
+    createColumns(3,arrayColumns,viewGrid,1,"star");
+
+    createBottomNavButton(viewGrid,"0xef015","views/main-api-view/main-api",true,1,0);
+    createBottomNavButton(viewGrid,"0xef129","views/Info/Info",true,1,1);
+    createBottomNavButton(viewGrid,"0xef013","views/options-view/options",false,1,2);
+
+   if(Info.toLowerCase() == "list")
+   {
+        requestForm("list",viewGrid);
+        page.actionBar.actionItems._items[0].visibility = "visible";
+   }
+   else if(Info.toLowerCase() == "form")
+   {
+        requestForm("form",viewGrid);
+   }
+   else if(Info.toLowerCase() == "webview")
+   {
+        requestForm("webview",viewGrid);
+   }
+   else
+   {
+        alert("NOPE!");
+   }
+}
+
 function createRows(numbRows , arrayRows , gridLayout, RowHeight, RowMode)
 {
     for(i = 0; i < numbRows; i++)
@@ -89,7 +137,7 @@ function createBottomNavButton(viewGrid,iconString,navTo,booleanClear,row,col)
 
 function removeSelectedItem(tappedItemIndex)
 {
-   var data = localStorage.getItem(localStorage.getItem("targetTable"));
+   var data = localStorage.getItem("targetTable");
 
     var stuff = [];
     var infoArray = [];
@@ -191,7 +239,7 @@ function drawList(data,viewGrid)
             // error is here
             //listItems[titleArray[j]] = data.campsInfo[data.showCamps.campLocation[j]][i];
         }
-        // listArray.push(listItems);
+        listArray.push(listItems);
     }
 
     xList.items = listArray;
@@ -383,7 +431,7 @@ drawForm = function(data,viewGrid){
             }
         }
 
-        con.add('/aasd', submitInfo);
+        
         alert("Sended to database");
         var navigationOptions =
         {

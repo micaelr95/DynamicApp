@@ -99,27 +99,21 @@ drawMain = function()
                 object_field[i].value = mainApi[i].typeview;
                 object_field[i].backgroundColor = options.color_button;
                 object_field[i].on(buttonModule.Button.tapEvent, function() {
-                    // verifica se é options
-                    if(object_field[cont].value == "options")
+                    // verify path view
+                   switch (object_field[cont].value) 
                     {
-                        topmost.navigate("views/options-view/options");
-                    }
-                    else if (object_field[cont].value == "webview")
-                    {
-                        topmost.navigate("views/webview/webview");
-                    }
-                    else
-                    {
-                        var navigationOptions =
-                        {
-                            moduleName: "views/constructor-view/constructor",
-                            context:
-                            {
-                                typeView: object_field[cont].value,
-                                targetTable: mainApi[cont].targetTable
-                            }
-                        }
-                        topmost.navigate(navigationOptions);
+                        case "options":
+                            topmost.navigate("views/options-view/options");
+                            break;
+                        case "list":
+                            topmost.navigate("views/listview/listview");
+                            break;
+                        case "form":
+                            topmost.navigate("views/formview/formview");
+                            break;
+                        case "webview":
+                            topmost.navigate("views/webview/webview");
+                            break
                     }
                  });
 
