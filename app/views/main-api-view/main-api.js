@@ -70,10 +70,10 @@ exports.mainMenu = function(args)
 drawMain = function()
 {
      // layout
-    var glayout = new gridLayout.GridLayout();
-    //var stackLayout = new StackLayout();
-    var x = 0;
-    var y = 0;
+    //var glayout = new gridLayout.GridLayout();
+    var stackLayout = new StackLayout();
+    //var x = 0;
+    //var y = 0;
 
     // array to get data of objects
     var object_field = new Array();
@@ -118,30 +118,30 @@ drawMain = function()
                  });
 
                 // add button to layout
-                gridLayout.GridLayout.setColumn(object_field[i], x);
-                gridLayout.GridLayout.setRow(object_field[i], y);
-                var column = new gridLayout.ItemSpec(1, "auto");
-                var row = new gridLayout.ItemSpec(1, "auto");
+                //gridLayout.GridLayout.setColumn(object_field[i], x);
+                //gridLayout.GridLayout.setRow(object_field[i], y);
+                //var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
+                //var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
 
-               // stackLayout.addChild(object_field[i]);
+                stackLayout.addChild(object_field[i]);
 
-                glayout.addColumn(column);
+                /*glayout.addColumn(column);
                 glayout.addRow(row);
-                glayout.addChild(object_field[i]);
+                glayout.addChild(object_field[i]);*/
                 
                 // columns and rows of datagrid
-                if(x >= 1) {
+                /*if(x >= 1) {
                     x = 0;
                     y += 1;
                 } 
                 else {
                     x += 1;
-                }
+                }*/
                 break;
 
             case "radiobutton":
                 break;
         }
-        page.content = glayout;       
+        page.content = stackLayout;       
     }
 }

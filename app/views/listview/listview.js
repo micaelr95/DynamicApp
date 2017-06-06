@@ -11,40 +11,44 @@ exports.listView = function(args) {
     localStorage.setItem("currentPage", "listview");
 
     var lista = localStorage.getItem("list");
-    var data = localStorage.getItem("aasd");
-    var arr = Object.values(data);
-    console.info(JSON.stringify(arr));
 
-    console.info(lista.length);
-
-    var label = [];
-
-    // var gridLayout = new gridModule.GridLayout();
     var gridLayout = page.getViewById("testar");
-
-    var merdaQualquer = page.getViewById("bueda");
-    for(index = 0; index < lista.length; index++) {
-        label[index] = new labelModule.Label();
-        label[index].text = "merda";
-        // merdaQualquer.push(label[index]);
-    }
-
-
+    var labelTitle = [];
     for(i = 0; i < lista.length; i++) {
-        label[i] = new labelModule.Label();
-        label[i].text = lista[i];
-        console.info(label[i].text);
+        labelTitle[i] = new labelModule.Label();
+        labelTitle[i].text = lista[i];
 
-        gridModule.GridLayout.setColumn(label[i], i);
-        gridModule.GridLayout.setRow(label[i], 0);
+        gridModule.GridLayout.setColumn(labelTitle[i], i);
+        gridModule.GridLayout.setRow(labelTitle[i], 0);
 
         var column = new gridModule.ItemSpec(1, "auto");
         var row = new gridModule.ItemSpec(1, "auto");
 
         gridLayout.addColumn(column);
         gridLayout.addRow(row);    
-        gridLayout.addChild(label[i]);
-    }  
+        gridLayout.addChild(labelTitle[i]);
+    }
+
+    var data = localStorage.getItem("aasd");
+    var arr = Object.values(data);
+
     
+    var merdaQualquer = page.getViewById("bueda");
+    var labellist = [];
+    for(i = 0; i < arr.length; i++) {
+        labellist[i] = new labelModule.Label();
+        labellist[i].text = "cenas";
+
+        gridModule.GridLayout.setColumn(labellist[i], i);
+        gridModule.GridLayout.setRow(labellist[i], 0);
+
+        var column = new gridModule.ItemSpec(1, "auto");
+        var row = new gridModule.ItemSpec(1, "auto");
+
+        gridLayout.addColumn(column);
+        gridLayout.addRow(row);    
+        gridLayout.addChild(labellist[i]);
+    }
+
    // page.content = gridLayout;
 }
