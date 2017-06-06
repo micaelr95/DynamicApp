@@ -1,6 +1,14 @@
 <Page loaded="listView">
     <ActionBar title="Listview"></ActionBar>
-      <GridLayout rows="*">
-        <ListView items="{{ myItems }}" />
+    
+    <GridLayout id="testar">
+        <ListView items="{{ items }}">
+            <!--Describing how the element will look like-->
+              <ListView.itemTemplate>
+                <GridLayout id="bueda" columns="*">
+
+                </GridLayout>
+            </ListView.itemTemplate>
+        </ListView>
     </GridLayout>
 </Page>
