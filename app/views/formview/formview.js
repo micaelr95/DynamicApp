@@ -15,6 +15,8 @@ var data = localStorage.getItem("constructForm");
 exports.formView = function(args) {
     var page = args.object;
 
+    localStorage.setItem("currentPage" , "formview");
+
     var newStackLayout = new stackModule.StackLayout();
     var scrollView = new scrollModule.ScrollView();
 
