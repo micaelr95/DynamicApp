@@ -7,15 +7,15 @@ var appModule = require("application");
 exports.listView = function(args) {
     var page = args.object;
 
-    var data = localStorage.getItem("aasd");
-    console.info(JSON.stringify(data));
-    console.info(data["-Klt66wfJYSCkf21DRfe"]);
-    var a='';
-    data["-Klt66wfJYSCkf21DRfe"].forEach(function(element) {
-        a+=element+ " ";
-    }       
-    , this);
-    
-        console.info(a);
+    localStorage.setItem("currentPage", "listview");
 
+    var data = localStorage.getItem("aasd");
+    var arr = Object.values(data);
+    for (var index = 0; index < arr.length; index++) {
+        arr.forEach(function(element) {
+            console.log(arr[index]);
+        }       
+        , this);
+    }
+    page.bindingContext = { myItems: arr };
 }
