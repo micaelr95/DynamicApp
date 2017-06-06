@@ -1,8 +1,11 @@
 <Page loaded="listView">
     <ActionBar title="Listview"></ActionBar>
-    <GridLayout id="testar">
-        <GridLayout id="bueda" columns="*, *, *, *, *">
-                
+
+
+
+        <GridLayout id="testar" columns="auto" margin="10">
+            <GridLayout id="bueda">
+                    
+            </GridLayout>
         </GridLayout>
-    </GridLayout>
 </Page>
