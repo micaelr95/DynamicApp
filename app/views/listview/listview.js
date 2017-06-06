@@ -25,29 +25,31 @@ exports.listView = function(args) {
         var row = new gridModule.ItemSpec(1, "auto");
 
         gridLayout.addColumn(column);
-        gridLayout.addRow(row);    
+        gridLayout.addRow(row);
         gridLayout.addChild(labelTitle[i]);
     }
 
     var data = localStorage.getItem("aasd");
     var arr = Object.values(data);
-
     
     var merdaQualquer = page.getViewById("bueda");
     var labellist = [];
     for(i = 0; i < arr.length; i++) {
-        labellist[i] = new labelModule.Label();
-        labellist[i].text = "cenas";
+        for(x = 0; x < arr.length; x++)
+        {
+            labellist[i] = new labelModule.Label();
+            labellist[i].text = "cenas";
 
-        gridModule.GridLayout.setColumn(labellist[i], i);
-        gridModule.GridLayout.setRow(labellist[i], 0);
+            gridModule.GridLayout.setColumn(labellist[i], i);
+            gridModule.GridLayout.setRow(labellist[i], x);
 
-        var column = new gridModule.ItemSpec(1, "auto");
-        var row = new gridModule.ItemSpec(1, "auto");
+            var column = new gridModule.ItemSpec(1, "auto");
+            var row = new gridModule.ItemSpec(1, "auto");
 
-        gridLayout.addColumn(column);
-        gridLayout.addRow(row);    
-        gridLayout.addChild(labellist[i]);
+            gridLayout.addColumn(column);
+            gridLayout.addRow(row);
+            gridLayout.addChild(labellist[i]);
+        }
     }
 
    // page.content = gridLayout;
