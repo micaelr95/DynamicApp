@@ -1,9 +1,10 @@
-var localStorage = require("nativescript-localstorage");
-
 exports.Loaded = function(args)
 {
     page = args.object;
+    var options = localStorage.getItem("Options");
     page.actionBar.title = "WebView";
+    page.actionBar.backgroundColor = options.color_actionBar;
+    page.actionBar.color = options.color_text;
     
     localStorage.setItem("currentPage" , "webview");
 

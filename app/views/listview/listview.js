@@ -1,12 +1,16 @@
 var observable = require("data/observable");
 var pageModule = require("ui/page");
-var localStorage = require("nativescript-localstorage");
 var appModule = require("application");
 var gridModule= require("ui/layouts/grid-layout");
 var labelModule = require("ui/label");
 
 exports.listView = function(args) {
     var page = args.object;
+
+    var options = localStorage.getItem("Options");
+    page.actionBar.title = "ListView";
+    page.actionBar.backgroundColor = options.color_actionBar;
+    page.actionBar.color = options.color_text;
 
     localStorage.setItem("currentPage", "listview");
 
@@ -59,6 +63,4 @@ exports.listView = function(args) {
         }
             gridLayout.addRow(row);
     }
-
-   // page.content = gridLayout;
 }

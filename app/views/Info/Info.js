@@ -1,5 +1,4 @@
 var frameModule = require("ui/frame");
-var localStorage = require("nativescript-localstorage");
 var page;
 
 exports.Loaded = function(args)

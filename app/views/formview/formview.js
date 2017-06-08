@@ -1,4 +1,3 @@
-var localStorage = require("nativescript-localstorage");
 var stackModule = require("ui/layouts/stack-layout");
 var buttonModule = require("ui/button");
 var labelModule = require("ui/label");
@@ -14,6 +13,11 @@ var data = localStorage.getItem("constructForm");
 
 exports.formView = function(args) {
     var page = args.object;
+
+    var options = localStorage.getItem("Options");
+    page.actionBar.title = "FormView";
+    page.actionBar.backgroundColor = options.color_actionBar;
+    page.actionBar.color = options.color_text;
 
     localStorage.setItem("currentPage" , "formview");
 

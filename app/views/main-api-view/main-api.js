@@ -1,10 +1,8 @@
-// modules
 var frameModule = require("ui/frame");
 var topmost = frameModule.topmost();
 var buttonModule = require("ui/button");
 var StackLayout = require("ui/layouts/stack-layout").StackLayout;
 var gridLayout = require("ui/layouts/grid-layout");
-var localStorage = require("nativescript-localstorage");
 var formattedStringModule = require("text/formatted-string");
 var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
