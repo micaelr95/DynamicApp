@@ -1,3 +1,14 @@
-<Page loaded="mainMenu">
-   <ActionBar title="Api View"></ActionBar>
+<Page loaded="Loaded">
+    <ActionBar title="Api View"></ActionBar>
+    <GridLayout rows="* auto" columns="">
+        <ScrollView>
+            <StackLayout id="Container">
+            </StackLayout>
+        </ScrollView>
+        <GridLayout row="1" rows="auto" columns="* * *">
+            <Button row="0" col="0" class="bottomBar" text="&#xf015;" />
+            <Button row="0" col="1" class="bottomBar" text="&#xf129;" />
+            <Button row="0" col="2" class="bottomBar" text="&#xf013;" />
+        </GridLayout>
+    </GridLayout>
 </Page>

@@ -1,17 +1,10 @@
-var frameModule = require("ui/frame");
-var topmost = frameModule.topmost();
+var application = require("application");
+var topmost = require("ui/frame").topmost();
 var buttonModule = require("ui/button");
-var StackLayout = require("ui/layouts/stack-layout").StackLayout;
-var gridLayout = require("ui/layouts/grid-layout");
 var formattedStringModule = require("text/formatted-string");
 var spansModule = require("text/span");
 var toastModule = require("nativescript-toast");
-var application = require("application");
-var Connection = require("../../shared/DB_connection");
-var con = new Connection();
-var page;
 
-// vars storage
 var options = localStorage.getItem("Options");
 var mainApi = localStorage.getItem("form");
 
@@ -51,34 +44,23 @@ activity.onBackPressed = function()
     }
 }
 
-exports.mainMenu = function(args)
+exports.Loaded = function(args)
 {
-    page = args.object;
+    var page = args.object;
     localStorage.setItem("currentPage" , "mainAPI");
-    
-    // set actionbar propertys
+ 
     page.actionBar.title = "Main Api";
     page.actionBar.backgroundColor = options.color_actionBar;
     page.actionBar.color = options.color_text;
 
-    // draw MainApi
-    drawMain();
-}
-
-drawMain = function()
-{
-     // layout
-    //var glayout = new gridLayout.GridLayout();
-    var stackLayout = new StackLayout();
-    //var x = 0;
-    //var y = 0;
-
-    // array to get data of objects
+    var container = page.getViewById("Container");
     var object_field = new Array();
 
-    for(i = 0; i < mainApi.length; i++) {
+    for(i = 0; i < mainApi.length; i++)
+    {
         const cont = i;
-        switch (mainApi[i].Type) {
+        switch (mainApi[i].Type)
+        {
             case "button":
                 var formattedString = new formattedStringModule.FormattedString();
                 var iconSpan = new spansModule.Span();
@@ -96,50 +78,26 @@ drawMain = function()
                 object_field[i].className = "btnIcon";
                 object_field[i].value = mainApi[i].typeview;
                 object_field[i].backgroundColor = options.color_button;
-                object_field[i].on(buttonModule.Button.tapEvent, function() {
-                    // verify path view
-                   switch (object_field[cont].value) 
+                object_field[i].on(buttonModule.Button.tapEvent, function()
+                {
+                    switch (object_field[cont].value) 
                     {
                         case "options":
                             topmost.navigate("views/options-view/options");
-                            break;
+                        break;
                         case "list":
                             topmost.navigate("views/listview/listview");
-                            break;
+                        break;
                         case "form":
                             topmost.navigate("views/formview/formview");
-                            break;
+                        break;
                         case "webview":
                             topmost.navigate("views/webview/webview");
-                            break
+                        break;
                     }
-                 });
-
-                // add button to layout
-                //gridLayout.GridLayout.setColumn(object_field[i], x);
-                //gridLayout.GridLayout.setRow(object_field[i], y);
-                //var column = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
-                //var row = new gridLayout.ItemSpec(1, gridLayout.GridUnitType.auto);
-
-                stackLayout.addChild(object_field[i]);
-
-                /*glayout.addColumn(column);
-                glayout.addRow(row);
-                glayout.addChild(object_field[i]);*/
-                
-                // columns and rows of datagrid
-                /*if(x >= 1) {
-                    x = 0;
-                    y += 1;
-                } 
-                else {
-                    x += 1;
-                }*/
-                break;
-
-            case "radiobutton":
-                break;
+                });
+            break;
         }
-        page.content = stackLayout;       
+        container.addChild(object_field[i]);
     }
 }

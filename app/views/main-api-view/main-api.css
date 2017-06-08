@@ -2,3 +2,9 @@
     font-family: FontAwesome, fontawesome-webfont;
     color: white;
 }
+
+.bottomBar {
+    font-family: FontAwesome, fontawesome-webfont;
+    font-size: 22.5px;
+    border-width: 0.1px;
+}
