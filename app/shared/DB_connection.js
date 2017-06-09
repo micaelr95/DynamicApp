@@ -12,7 +12,7 @@ function Connection()
     // Starts database connection
     viewModel.init = function()
     {
-        firebase.init(
+        return firebase.init(
             {
                 url: localStorage.getItem("server_url"),
                 persist: true
@@ -31,13 +31,14 @@ function Connection()
     // Login to database
     viewModel.login = function()
     {
-        firebase.login(
+        return firebase.login(
         {
             type: firebase.LoginType.ANONYMOUS
         }
         ).then(function (result)
         {
-            config.uid = response.uid;
+            config.uid = result.uid;
+            console.log("firebase logged in");
         },
         function (errorMessage)
         {
@@ -45,18 +46,32 @@ function Connection()
         })
     };
 
-    viewModel.load = async function() {
+    viewModel.load = function() {
+        console.log("firebase load start");
         var onChildEvent = function(result) {
             localStorage.setItem(result.key, result.value);
-        };
-        return await firebase.addChildEventListener(onChildEvent, "/").then(
-            function() {
-                console.log("firebase.addChildEventListener added");
-            },
-            function(error) {
-                console.log("firebase.addChildEventListener error: " + error);
+            console.log(result);
+            if (localStorage.getItem("Options") && localStorage.getItem("form"))
+            {
+                localStorage.setItem("canStart", true);
+                var topmost = require("ui/frame").topmost();
+                        var navigationOptions =
+                        {
+                            moduleName: "views/main-api-view/main-api",
+                            clearHistory: true
+                        }
+                        topmost.navigate(navigationOptions);
             }
-        )
+        };
+        return firebase.addChildEventListener(onChildEvent, "/").then(
+        function()
+        {
+            console.log("firebase.addChildEventListener added");
+        },
+        function(error)
+        {
+            console.log("firebase.addChildEventListener error: " + error);
+        });
     }
 
     // Add data to database

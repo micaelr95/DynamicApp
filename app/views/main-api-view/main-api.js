@@ -11,6 +11,8 @@ var mainApi = localStorage.getItem("form");
 exports.Loaded = function(args)
 {
     var page = args.object;
+
+    console.log("Main api");
  
     page.actionBar.title = "Main Api";
     page.actionBar.backgroundColor = options.color_actionBar;

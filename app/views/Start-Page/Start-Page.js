@@ -9,7 +9,7 @@ exports.Loaded = function(args)
 {
     page = args.object;
 
-    if(localStorage.getItem("Options"))
+    if(localStorage.getItem("canStart") == true)
     {
         var topmost = frameModule.topmost();
         var navigationOptions =
@@ -63,20 +63,14 @@ exports.confirmURL = function()
         localStorage.setItem("server_url",my_url);
         
         // Initiate database connection
-        con.init();
+        con.init().then(function(){
+            console.log("inited");
+            con.login().then(function(){
+                console.log("logged");
+                con.load()
+            });
+        });
         // Starts ANONYMOUS connection to database
-        con.login();
         
-        con.load();
-        if (localStorage.getItem("Options"))
-        {
-            var topmost = frameModule.topmost();
-            var navigationOptions =
-            {
-                moduleName: "views/main-api-view/main-api",
-                clearHistory: true
-            }
-            topmost.navigate(navigationOptions);
-        }
     }
 }
