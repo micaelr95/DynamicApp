@@ -55,12 +55,12 @@ function Connection()
             {
                 localStorage.setItem("canStart", true);
                 var topmost = require("ui/frame").topmost();
-                        var navigationOptions =
-                        {
-                            moduleName: "views/main-api-view/main-api",
-                            clearHistory: true
-                        }
-                        topmost.navigate(navigationOptions);
+                var navigationOptions =
+                {
+                    moduleName: "views/main-api-view/main-api",
+                    clearHistory: true
+                }
+                topmost.navigate(navigationOptions);
             }
         };
         return firebase.addChildEventListener(onChildEvent, "/").then(
