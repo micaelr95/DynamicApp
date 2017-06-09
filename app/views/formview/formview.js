@@ -2,7 +2,6 @@ var stackModule = require("ui/layouts/stack-layout");
 var buttonModule = require("ui/button");
 var labelModule = require("ui/label");
 var scrollModule = require("ui/scroll-view");
-var frameModule = require("ui/frame");
 var textFieldModule = require("ui/text-field");
 var textViewModule = require("ui/text-view");
 var dropModule = require("nativescript-drop-down");
@@ -18,9 +17,7 @@ exports.formView = function(args) {
     page.actionBar.title = "FormView";
     page.actionBar.backgroundColor = options.color_actionBar;
     page.actionBar.color = options.color_text;
-
-    localStorage.setItem("currentPage" , "formview");
-
+    
     var newStackLayout = new stackModule.StackLayout();
     var scrollView = new scrollModule.ScrollView();
 

@@ -12,8 +12,6 @@ exports.listView = function(args) {
     page.actionBar.backgroundColor = options.color_actionBar;
     page.actionBar.color = options.color_text;
 
-    localStorage.setItem("currentPage", "listview");
-
     var lista = localStorage.getItem("list");
 
     var gridLayout = page.getViewById("testar");

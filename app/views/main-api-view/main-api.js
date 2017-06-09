@@ -8,46 +8,9 @@ var toastModule = require("nativescript-toast");
 var options = localStorage.getItem("Options");
 var mainApi = localStorage.getItem("form");
 
-var activity = application.android.startActivity ||
-        application.android.foregroundActivity ||
-        frameModule.topmost().android.currentActivity ||
-        frameModule.topmost().android.activity;
-
-activity.onBackPressed = function()
-{
-    if (localStorage.getItem("currentPage") == "mainAPI")
-    {
-        var startMain = new android.content.Intent(android.content.Intent.ACTION_MAIN);
-        startMain.addCategory(android.content.Intent.CATEGORY_HOME);
-        startMain.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(startMain);
-    }
-    else if(localStorage.getItem("currentPage") == "options" || localStorage.getItem("currentPage") == "formview" || localStorage.getItem("currentPage") == "info" ||localStorage.getItem("currentPage") == "webview" || localStorage.getItem("currentPage") == "listview")
-    {
-        topmost.navigate("views/main-api-view/main-api");
-    }
-    else if(localStorage.getItem("addlist") == "true" )
-    {
-        localStorage.setItem("addlist" , "false");
-        var navigationOptions =
-        {
-            moduleName: "views/constructor-view/constructor",
-            context:
-            {
-                typeView: "list",
-                targetTable: localStorage.getItem("targetTable")
-            }
-        }
-            topmost.navigate(navigationOptions);
-    } else {
-        frameModule.topmost().goBack();
-    }
-}
-
 exports.Loaded = function(args)
 {
     var page = args.object;
-    localStorage.setItem("currentPage" , "mainAPI");
  
     page.actionBar.title = "Main Api";
     page.actionBar.backgroundColor = options.color_actionBar;

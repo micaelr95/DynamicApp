@@ -1,6 +1,3 @@
-var frameModule = require("ui/frame");
-var page;
-
 exports.Loaded = function(args)
 {
     page = args.object;
@@ -9,7 +6,6 @@ exports.Loaded = function(args)
     page.actionBar.title = "Info";
     page.actionBar.backgroundColor = options.color_actionBar;
     page.actionBar.color = options.color_text;
-    localStorage.setItem("currentPage" , "info");
 
     var info = localStorage.getItem("Info");
 

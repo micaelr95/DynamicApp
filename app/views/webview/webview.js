@@ -5,8 +5,6 @@ exports.Loaded = function(args)
     page.actionBar.title = "WebView";
     page.actionBar.backgroundColor = options.color_actionBar;
     page.actionBar.color = options.color_text;
-    
-    localStorage.setItem("currentPage" , "webview");
 
     var webview = page.getViewById("webview");
     webview.android.getSettings().setBuiltInZoomControls(false);
