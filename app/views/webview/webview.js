@@ -1,3 +1,5 @@
+var topmost = require("ui/frame").topmost();
+
 exports.Loaded = function(args)
 {
     page = args.object;
@@ -11,4 +13,24 @@ exports.Loaded = function(args)
 
     var link = localStorage.getItem("webview");
     page.bindingContext = { url: link.defaultUrl };
+}
+
+exports.homeButton = function()
+{
+    var navigationOptions =
+    {
+        moduleName: "views/main-api-view/main-api",
+        clearHistory: true
+    }
+    topmost.navigate(navigationOptions);
+}
+
+exports.infoButton = function()
+{
+    topmost.navigate("views/Info/Info");
+}
+
+exports.optionsButton = function()
+{
+    topmost.navigate("views/options-view/options");
 }

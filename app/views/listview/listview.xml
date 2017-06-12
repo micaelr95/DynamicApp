@@ -1,11 +1,16 @@
 <Page loaded="listView">
     <ActionBar title="Listview"></ActionBar>
-
-
-
-        <GridLayout id="testar" columns="auto" margin="10">
-            <GridLayout id="bueda">
-                    
+    <GridLayout rows="* auto" columns="">
+        <ScrollView>
+            <GridLayout id="testar" columns="auto" margin="10">
+                <GridLayout id="bueda">
+                </GridLayout>
             </GridLayout>
+        </ScrollView>
+        <GridLayout row="1" rows="auto" columns="* * *">
+            <Button row="0" col="0" class="bottomBar" text="&#xf015;" onTap="homeButton" />
+            <Button row="0" col="1" class="bottomBar" text="&#xf129;" onTap="infoButton" />
+            <Button row="0" col="2" class="bottomBar" text="&#xf013;" onTap="optionsButton" />
         </GridLayout>
+    </GridLayout>
 </Page>

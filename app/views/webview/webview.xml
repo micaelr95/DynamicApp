@@ -1,3 +1,10 @@
 <Page loaded="Loaded">
-    {%raw%}<WebView id="webview" src="{{ url }}" />{%endraw%}
+    <GridLayout rows="* auto" columns="">
+        {%raw%}<WebView id="webview" src="{{ url }}" />{%endraw%}
+        <GridLayout row="1" rows="auto" columns="* * *">
+            <Button row="0" col="0" class="bottomBar" text="&#xf015;" onTap="homeButton" />
+            <Button row="0" col="1" class="bottomBar" text="&#xf129;" onTap="infoButton" />
+            <Button row="0" col="2" class="bottomBar" text="&#xf013;" onTap="optionsButton" />
+        </GridLayout>
+    </GridLayout>
 </Page>

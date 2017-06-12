@@ -1,4 +1,5 @@
 var frameModule = require("ui/frame");
+var topmost = require("ui/frame").topmost();
 
 exports.options = function(args)
 {   
@@ -21,4 +22,24 @@ exports.changeServer = function()
         clearHistory: true
     }
     topmost.navigate(navigationOptions);
+}
+
+exports.homeButton = function()
+{
+    var navigationOptions =
+    {
+        moduleName: "views/main-api-view/main-api",
+        clearHistory: true
+    }
+    topmost.navigate(navigationOptions);
+}
+
+exports.infoButton = function()
+{
+    topmost.navigate("views/Info/Info");
+}
+
+exports.optionsButton = function()
+{
+    topmost.navigate("views/options-view/options");
 }

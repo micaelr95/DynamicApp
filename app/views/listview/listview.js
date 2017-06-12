@@ -3,6 +3,7 @@ var pageModule = require("ui/page");
 var appModule = require("application");
 var gridModule= require("ui/layouts/grid-layout");
 var labelModule = require("ui/label");
+var topmost = require("ui/frame").topmost();
 
 exports.listView = function(args) {
     var page = args.object;
@@ -61,4 +62,24 @@ exports.listView = function(args) {
         }
             gridLayout.addRow(row);
     }
+}
+
+exports.homeButton = function()
+{
+    var navigationOptions =
+    {
+        moduleName: "views/main-api-view/main-api",
+        clearHistory: true
+    }
+    topmost.navigate(navigationOptions);
+}
+
+exports.infoButton = function()
+{
+    topmost.navigate("views/Info/Info");
+}
+
+exports.optionsButton = function()
+{
+    topmost.navigate("views/options-view/options");
 }

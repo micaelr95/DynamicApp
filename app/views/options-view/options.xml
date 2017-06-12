@@ -1,5 +1,12 @@
 <Page loaded="options">
-    <StackLayout orientation="vertical">
-        <Button text="Change server" backgroundColor="{{ ButtonBackgroundColor }}" color="{{ ButtonTextColor }}" onTap="changeServer" />
-    </StackLayout>
+    <GridLayout rows="* auto" columns="">
+        <StackLayout orientation="vertical">
+            <Button text="Change server" backgroundColor="{{ ButtonBackgroundColor }}" color="{{ ButtonTextColor }}" onTap="changeServer" />
+        </StackLayout>
+        <GridLayout row="1" rows="auto" columns="* * *">
+            <Button row="0" col="0" class="bottomBar" text="&#xf015;" onTap="homeButton" />
+            <Button row="0" col="1" class="bottomBar" text="&#xf129;" onTap="infoButton" />
+            <Button row="0" col="2" class="bottomBar" text="&#xf013;" onTap="optionsButton" />
+        </GridLayout>
+    </GridLayout>
 </Page>

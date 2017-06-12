@@ -5,6 +5,7 @@ var scrollModule = require("ui/scroll-view");
 var textFieldModule = require("ui/text-field");
 var textViewModule = require("ui/text-view");
 var dropModule = require("nativescript-drop-down");
+var topmost = require("ui/frame").topmost();
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 
@@ -112,4 +113,24 @@ exports.formView = function(args) {
     newStackLayout.addChild(submitBtn);
     scrollView.content = newStackLayout;
     page.content = scrollView;
+}
+
+exports.homeButton = function()
+{
+    var navigationOptions =
+    {
+        moduleName: "views/main-api-view/main-api",
+        clearHistory: true
+    }
+    topmost.navigate(navigationOptions);
+}
+
+exports.infoButton = function()
+{
+    topmost.navigate("views/Info/Info");
+}
+
+exports.optionsButton = function()
+{
+    topmost.navigate("views/options-view/options");
 }
