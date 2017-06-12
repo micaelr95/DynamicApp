@@ -11,6 +11,14 @@ exports.Loaded = function(args)
 
     if(localStorage.getItem("Info") && localStorage.getItem("Options") && localStorage.getItem("aasd") && localStorage.getItem("constructForm") && localStorage.getItem("form") && localStorage.getItem("list") && localStorage.getItem("webview"))
     {
+        con.init().then(function(){
+            console.log("inited");
+            con.login().then(function(){
+                console.log("logged");
+                con.load()
+            });
+        });
+
         var topmost = frameModule.topmost();
         var navigationOptions =
         {
