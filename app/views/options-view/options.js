@@ -1,5 +1,6 @@
 var frameModule = require("ui/frame");
 var topmost = require("ui/frame").topmost();
+var config = require("../../shared/config");
 
 exports.options = function(args)
 {   
@@ -21,6 +22,7 @@ exports.changeServer = function()
         moduleName: "views/Start-Page/Start-Page",
         clearHistory: true
     }
+    config.mainapiOpen = false;
     topmost.navigate(navigationOptions);
 }
 

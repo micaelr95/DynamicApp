@@ -50,7 +50,6 @@ function Connection()
         console.log("firebase load start");
         var onChildEvent = function(result) {
             localStorage.setItem(result.key, result.value);
-            console.log(result);
             if (localStorage.getItem("Options") && localStorage.getItem("form"))
             {
                 localStorage.setItem("canStart", true);
@@ -62,6 +61,7 @@ function Connection()
                 }
                 topmost.navigate(navigationOptions);
             }
+            config.mainapiOpen = false;
         };
         return firebase.addChildEventListener(onChildEvent, "/").then(
         function()

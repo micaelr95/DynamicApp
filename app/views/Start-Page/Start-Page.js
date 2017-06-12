@@ -9,7 +9,7 @@ exports.Loaded = function(args)
 {
     page = args.object;
 
-    if(localStorage.getItem("canStart") == true)
+    if(localStorage.getItem("Info") && localStorage.getItem("Options") && localStorage.getItem("aasd") && localStorage.getItem("constructForm") && localStorage.getItem("form") && localStorage.getItem("list") && localStorage.getItem("webview"))
     {
         var topmost = frameModule.topmost();
         var navigationOptions =
