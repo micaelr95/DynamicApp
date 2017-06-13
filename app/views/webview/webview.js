@@ -8,7 +8,7 @@ exports.Loaded = function (args) {
     webview.android.getSettings().setBuiltInZoomControls(false);
 
     var link = localStorage.getItem("webview");
-    page.bindingContext = {title: "Web View", backgroundColor: options.color_actionBar, textColor: options.color_text, url: link.defaultUrl};
+    page.bindingContext = { title: "Web View", backgroundColor: options.color_actionBar, textColor: options.color_text, url: link.defaultUrl };
 }
 
 exports.homeButton = function () {

@@ -1,24 +1,20 @@
 var observable = require("data/observable");
 var pageModule = require("ui/page");
 var appModule = require("application");
-var gridModule= require("ui/layouts/grid-layout");
+var gridModule = require("ui/layouts/grid-layout");
 var labelModule = require("ui/label");
 var topmost = require("ui/frame").topmost();
 
-exports.listView = function(args) {
+exports.Loaded = function (args) {
     var page = args.object;
 
     var options = localStorage.getItem("Options");
-    page.actionBar.title = "ListView";
-    page.actionBar.backgroundColor = options.color_actionBar;
-    page.actionBar.color = options.color_text;
-
     var lista = localStorage.getItem("list");
 
     var gridLayout = page.getViewById("testar");
     var labelTitle = [];
 
-    for(i = 0; i < lista.length; i++) {
+    for (i = 0; i < lista.length; i++) {
         labelTitle[i] = new labelModule.Label();
         labelTitle[i].text = lista[i];
         labelTitle[i].marginRight = "5";
@@ -38,18 +34,12 @@ exports.listView = function(args) {
     var data = localStorage.getItem("aasd");
     var arr = Object.values(data);
 
-    console.info(arr.length);
-    console.info(arr[0].length);
-    console.info(JSON.stringify(arr));
-    
     var labellist = [];
-    for(i = 0; i < arr.length; i++) {
-        for(x = 0; x < arr[i].length; x++)
-        {
+    for (i = 0; i < arr.length; i++) {
+        for (x = 0; x < arr[i].length; x++) {
             labellist[i] = new labelModule.Label();
             labellist[i].text = arr[i][x];
             labellist[i].marginRight = "5";
-            console.info(arr[i][x]);
 
             gridModule.GridLayout.setColumn(labellist[i], x);
             gridModule.GridLayout.setRow(labellist[i], i + 1);
@@ -60,27 +50,24 @@ exports.listView = function(args) {
             gridLayout.addColumn(column);
             gridLayout.addChild(labellist[i]);
         }
-            gridLayout.addRow(row);
+        gridLayout.addRow(row);
     }
-    page.bindingContext = {title: "List View", backgroundColor: options.color_actionBar, textColor: options.color_text};
+    page.bindingContext = { title: "List View", backgroundColor: options.color_actionBar, textColor: options.color_text };
 }
 
-exports.homeButton = function()
-{
+exports.homeButton = function () {
     var navigationOptions =
-    {
-        moduleName: "views/main-api-view/main-api",
-        clearHistory: true
-    }
+        {
+            moduleName: "views/main-api-view/main-api",
+            clearHistory: true
+        }
     topmost.navigate(navigationOptions);
 }
 
-exports.infoButton = function()
-{
+exports.infoButton = function () {
     topmost.navigate("views/Info/Info");
 }
 
-exports.optionsButton = function()
-{
+exports.optionsButton = function () {
     topmost.navigate("views/options-view/options");
 }

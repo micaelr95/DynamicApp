@@ -9,8 +9,7 @@ var config = require("../../shared/config");
 var options = localStorage.getItem("Options");
 var mainApi = localStorage.getItem("form");
 
-exports.Loaded = function(args)
-{
+exports.Loaded = function (args) {
     var page = args.object;
 
     if (!config.mainapiOpen) {
@@ -59,7 +58,7 @@ exports.Loaded = function(args)
             }
         }
     }
-    page.bindingContext = {title: "Main Api", backgroundColor: options.color_actionBar, textColor: options.color_text};
+    page.bindingContext = { title: "Main Api", backgroundColor: options.color_actionBar, textColor: options.color_text };
 }
 
 exports.homeButton = function () {

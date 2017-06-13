@@ -12,25 +12,20 @@ var con = new Connection();
 var options = localStorage.getItem("Options");
 var data = localStorage.getItem("constructForm");
 
-exports.formView = function(args) {
+exports.Loaded = function (args) {
     var page = args.object;
-    page.actionBar.title = "FormView";
-    page.actionBar.backgroundColor = options.color_actionBar;
-    page.actionBar.color = options.color_text;
-    
+
     var container = page.getViewById("Container");
-    if (container._childrenCount == 0)
-    {
+    if (container._childrenCount == 0) {
         var fieldsArray = [];       // save objects
         var submitInfo = [];        // save info to submit
         var saveInputText = [];     // save number of objects with input
         var q = 0;
-        
-        for(cont=0; cont < data.length; cont++)
-        {
+
+        for (cont = 0; cont < data.length; cont++) {
             const i = cont;
             const p = q;
-            switch(data[i].type){
+            switch (data[i].type) {
                 case "dropdown":
                     var arrayDados = new Array();
                     fieldsArray[i] = new dropModule.DropDown();
@@ -40,7 +35,6 @@ exports.formView = function(args) {
                     container.addChild(fieldsArray[cont]);
                     saveInputText[p] = i;
                     q += 1;
-                    console.info("drop: " + i);
                     break;
                 case "label":
                     fieldsArray[i] = new labelModule.Label();
@@ -55,7 +49,6 @@ exports.formView = function(args) {
                     container.addChild(fieldsArray[cont]);
                     saveInputText[p] = i;
                     q += 1;
-                    console.info("textfield: " + i);
                     break;
                 case "textview":
                     fieldsArray[i] = new textViewModule.TextView();
@@ -64,15 +57,14 @@ exports.formView = function(args) {
                     container.addChild(fieldsArray[i]);
                     saveInputText[p] = i;
                     q += 1;
-                    console.info("textview: " + i);
                     break;
             }
         }
-    
+
         // button submit
         var submitBtn = new buttonModule.Button();
-        submitBtn.text = "submit";  
-        submitBtn.on(buttonModule.Button.tapEvent, function (){
+        submitBtn.text = "submit";
+        submitBtn.on(buttonModule.Button.tapEvent, function () {
 
             for (i = 0; i < saveInputText.length; i++) {
                 var x = saveInputText[i];
@@ -88,25 +80,22 @@ exports.formView = function(args) {
         });
         container.addChild(submitBtn);
     }
-    page.bindingContext = {title: "Form View", backgroundColor: options.color_actionBar, textColor: options.color_text};
+    page.bindingContext = { title: "Form View", backgroundColor: options.color_actionBar, textColor: options.color_text };
 }
 
-exports.homeButton = function()
-{
+exports.homeButton = function () {
     var navigationOptions =
-    {
-        moduleName: "views/main-api-view/main-api",
-        clearHistory: true
-    }
+        {
+            moduleName: "views/main-api-view/main-api",
+            clearHistory: true
+        }
     topmost.navigate(navigationOptions);
 }
 
-exports.infoButton = function()
-{
+exports.infoButton = function () {
     topmost.navigate("views/Info/Info");
 }
 
-exports.optionsButton = function()
-{
+exports.optionsButton = function () {
     topmost.navigate("views/options-view/options");
 }

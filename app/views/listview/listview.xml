@@ -1,4 +1,4 @@
-<Page loaded="listView">
+<Page loaded="Loaded">
     <ActionBar title="{{ title }}" backgroundColor="{{ backgroundColor }}" color="{{ textColor }}"></ActionBar>
     <GridLayout rows="* auto" columns="">
         <ScrollView>

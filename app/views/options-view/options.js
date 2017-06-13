@@ -2,7 +2,7 @@ var frameModule = require("ui/frame");
 var topmost = require("ui/frame").topmost();
 var config = require("../../shared/config");
 
-exports.options = function (args) {
+exports.Loaded = function (args) {
     page = args.object;
     var options = localStorage.getItem("Options");
 
