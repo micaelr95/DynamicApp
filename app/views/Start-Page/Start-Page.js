@@ -1,6 +1,7 @@
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
 var localStorage = require("nativescript-localstorage");
 var frameModule = require("ui/frame");
+var config = require("../../shared/config");
 var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 var page;
@@ -8,7 +9,7 @@ var page;
 exports.Loaded = function (args) {
     page = args.object;
 
-    if (localStorage.getItem("Info") && localStorage.getItem("Options") && localStorage.getItem("aasd") && localStorage.getItem("constructForm") && localStorage.getItem("form") && localStorage.getItem("list") && localStorage.getItem("webview")) {
+    if (config.isConfigured) {
         con.init().then(function () {
             con.login().then(function () {
                 con.load()
@@ -63,7 +64,9 @@ exports.confirmURL = function () {
         // Initiate database connection
         con.init().then(function () {
             con.login().then(function () {
-                con.load()
+                con.load().then(function() {
+                    config.isConfigured = true;
+                })
             });
         });
     }

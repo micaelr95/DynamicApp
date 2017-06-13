@@ -18,6 +18,7 @@ exports.changeServer = function () {
             clearHistory: true
         }
     config.mainapiOpen = false;
+    config.isConfigured = false;
     topmost.navigate(navigationOptions);
 }
 
