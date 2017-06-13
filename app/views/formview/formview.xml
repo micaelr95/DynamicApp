@@ -1,5 +1,5 @@
 <Page loaded="formView">
-    <ActionBar title="Formview"></ActionBar>
+    <ActionBar title="{{ title }}" backgroundColor="{{ backgroundColor }}" color="{{ textColor }}"></ActionBar>
     <GridLayout rows="* auto" columns="">
         <ScrollView>
             <StackLayout id="Container">

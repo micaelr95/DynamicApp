@@ -12,9 +12,6 @@ var mainApi = localStorage.getItem("form");
 exports.Loaded = function(args)
 {
     var page = args.object;
-    page.actionBar.title = "Main Api";
-    page.actionBar.backgroundColor = options.color_actionBar;
-    page.actionBar.color = options.color_text;
 
     if (!config.mainapiOpen) {
         var container = page.getViewById("Container");
@@ -61,8 +58,8 @@ exports.Loaded = function(args)
                 container.addChild(object_field[i]);
             }
         }
-
     }
+    page.bindingContext = {title: "Main Api", backgroundColor: options.color_actionBar, textColor: options.color_text};
 }
 
 exports.homeButton = function () {

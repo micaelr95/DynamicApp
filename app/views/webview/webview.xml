@@ -1,4 +1,5 @@
 <Page loaded="Loaded">
+    <ActionBar title="{{ title }}" backgroundColor="{{ backgroundColor }}" color="{{ textColor }}"></ActionBar>
     <GridLayout rows="* auto" columns="">
         {%raw%}<WebView id="webview" src="{{ url }}" />{%endraw%}
         <GridLayout row="1" rows="auto" columns="* * *">

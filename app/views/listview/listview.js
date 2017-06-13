@@ -62,6 +62,7 @@ exports.listView = function(args) {
         }
             gridLayout.addRow(row);
     }
+    page.bindingContext = {title: "List View", backgroundColor: options.color_actionBar, textColor: options.color_text};
 }
 
 exports.homeButton = function()

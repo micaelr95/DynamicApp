@@ -1,5 +1,5 @@
 <Page loaded="listView">
-    <ActionBar title="Listview"></ActionBar>
+    <ActionBar title="{{ title }}" backgroundColor="{{ backgroundColor }}" color="{{ textColor }}"></ActionBar>
     <GridLayout rows="* auto" columns="">
         <ScrollView>
             <GridLayout id="testar" columns="auto" margin="10">

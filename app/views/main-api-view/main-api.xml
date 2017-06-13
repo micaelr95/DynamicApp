@@ -1,5 +1,5 @@
 <Page loaded="Loaded">
-    <ActionBar title="Api View"></ActionBar>
+    <ActionBar title="{{ title }}" backgroundColor="{{ backgroundColor }}" color="{{ textColor }}"></ActionBar>
     <GridLayout rows="* auto" columns="">
         <ScrollView>
             <StackLayout id="Container">

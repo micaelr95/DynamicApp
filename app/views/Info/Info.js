@@ -11,7 +11,7 @@ exports.Loaded = function(args)
 
     var info = localStorage.getItem("Info");
 
-    page.bindingContext = { Text: info.text, ButtonTextColor: options.color_text};
+    page.bindingContext = {title: "Info", backgroundColor: options.color_actionBar, textColor: options.color_text, Text: info.text, ButtonTextColor: options.color_text};
 }
 
 exports.homeButton = function()

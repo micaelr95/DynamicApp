@@ -1,4 +1,5 @@
 <Page loaded="options">
+    <ActionBar title="{{ title }}" backgroundColor="{{ backgroundColor }}" color="{{ textColor }}"></ActionBar>
     <GridLayout rows="* auto" columns="">
         <StackLayout orientation="vertical">
             <Button text="Change server" backgroundColor="{{ ButtonBackgroundColor }}" color="{{ ButtonTextColor }}" onTap="changeServer" />

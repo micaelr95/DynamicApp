@@ -88,6 +88,7 @@ exports.formView = function(args) {
         });
         container.addChild(submitBtn);
     }
+    page.bindingContext = {title: "Form View", backgroundColor: options.color_actionBar, textColor: options.color_text};
 }
 
 exports.homeButton = function()
