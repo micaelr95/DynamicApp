@@ -12,50 +12,48 @@ var mainApi = localStorage.getItem("form");
 exports.Loaded = function (args) {
     var page = args.object;
 
-    if (!config.mainapiOpen) {
-        var container = page.getViewById("Container");
+    var container = page.getViewById("Container");
+    if (mainApi.length > 0 && container._childrenCount == 0) {
         var object_field = [];
-        if (mainApi.length > 0 && container._childrenCount == 0) {
-            for (i = 0; i < mainApi.length; i++) {
-                const cont = i;
-                switch (mainApi[i].Type) {
-                    case "button":
-                        var formattedString = new formattedStringModule.FormattedString();
-                        var iconSpan = new spansModule.Span();
-                        iconSpan.text = String.fromCharCode(mainApi[i].icon);
-                        iconSpan.fontSize = 25;
-                        formattedString.spans.push(iconSpan);
+        for (i = 0; i < mainApi.length; i++) {
+            const cont = i;
+            switch (mainApi[i].Type) {
+                case "button":
+                    var formattedString = new formattedStringModule.FormattedString();
+                    var iconSpan = new spansModule.Span();
+                    iconSpan.text = String.fromCharCode(mainApi[i].icon);
+                    iconSpan.fontSize = 25;
+                    formattedString.spans.push(iconSpan);
 
-                        var textSpan = new spansModule.Span();
-                        textSpan.text = "\n\n" + mainApi[i].text;
-                        formattedString.spans.push(textSpan);
+                    var textSpan = new spansModule.Span();
+                    textSpan.text = "\n\n" + mainApi[i].text;
+                    formattedString.spans.push(textSpan);
 
-                        object_field[i] = new buttonModule.Button();
-                        object_field[i].id = mainApi[i].id;
-                        object_field[i].formattedText = formattedString;
-                        object_field[i].className = "btnIcon";
-                        object_field[i].value = mainApi[i].typeview;
-                        object_field[i].backgroundColor = options.color_button;
-                        object_field[i].on(buttonModule.Button.tapEvent, function () {
-                            switch (object_field[cont].value) {
-                                case "options":
-                                    topmost.navigate("views/options-view/options");
-                                    break;
-                                case "list":
-                                    topmost.navigate("views/listview/listview");
-                                    break;
-                                case "form":
-                                    topmost.navigate("views/formview/formview");
-                                    break;
-                                case "webview":
-                                    topmost.navigate("views/webview/webview");
-                                    break;
-                            }
-                        });
-                        break;
-                }
-                container.addChild(object_field[i]);
+                    object_field[i] = new buttonModule.Button();
+                    object_field[i].id = mainApi[i].id;
+                    object_field[i].formattedText = formattedString;
+                    object_field[i].className = "btnIcon";
+                    object_field[i].value = mainApi[i].typeview;
+                    object_field[i].backgroundColor = options.color_button;
+                    object_field[i].on(buttonModule.Button.tapEvent, function () {
+                        switch (object_field[cont].value) {
+                            case "options":
+                                topmost.navigate("views/options-view/options");
+                                break;
+                            case "list":
+                                topmost.navigate("views/listview/listview");
+                                break;
+                            case "form":
+                                topmost.navigate("views/formview/formview");
+                                break;
+                            case "webview":
+                                topmost.navigate("views/webview/webview");
+                                break;
+                        }
+                    });
+                    break;
             }
+            container.addChild(object_field[i]);
         }
     }
     page.bindingContext = { title: "Main Api", backgroundColor: options.color_actionBar, textColor: options.color_text };

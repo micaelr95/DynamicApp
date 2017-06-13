@@ -9,7 +9,7 @@ var page;
 exports.Loaded = function (args) {
     page = args.object;
 
-    if (config.isConfigured) {
+    if (localStorage.getItem("server_url")) {
         con.init().then(function () {
             con.login().then(function () {
                 con.load()
