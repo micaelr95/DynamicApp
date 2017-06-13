@@ -10,10 +10,12 @@ var Connection = require("../../shared/DB_connection");
 var con = new Connection();
 
 var options = localStorage.getItem("Options");
-var data = localStorage.getItem("constructForm");
 
 exports.Loaded = function (args) {
     var page = args.object;
+
+    var gotData = page.navigationContext;
+    var data = localStorage.getItem(gotData.table);
 
     var container = page.getViewById("Container");
     if (container._childrenCount == 0) {
@@ -65,7 +67,6 @@ exports.Loaded = function (args) {
         var submitBtn = new buttonModule.Button();
         submitBtn.text = "submit";
         submitBtn.on(buttonModule.Button.tapEvent, function () {
-
             for (i = 0; i < saveInputText.length; i++) {
                 var x = saveInputText[i];
 
@@ -76,7 +77,7 @@ exports.Loaded = function (args) {
                     submitInfo[i] = fieldsArray[x].text;
                 }
             }
-            con.add('/aasd', submitInfo);
+            con.add(gotData.submitTable, submitInfo);
         });
         container.addChild(submitBtn);
     }

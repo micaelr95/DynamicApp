@@ -50,7 +50,7 @@ function Connection()
         console.log("firebase load start");
         var onChildEvent = function(result) {
             localStorage.setItem(result.key, result.value);
-            if (localStorage.getItem("Options") && localStorage.getItem("form"))
+            if (localStorage.getItem("Options") && localStorage.getItem("MainApi"))
             {
                 localStorage.setItem("canStart", true);
                 var topmost = require("ui/frame").topmost();

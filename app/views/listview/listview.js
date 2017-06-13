@@ -8,6 +8,9 @@ var topmost = require("ui/frame").topmost();
 exports.Loaded = function (args) {
     var page = args.object;
 
+    var gotData = page.navigationContext;
+    var data = localStorage.getItem(gotData.table);
+
     var options = localStorage.getItem("Options");
     var lista = localStorage.getItem("list");
 
@@ -31,7 +34,6 @@ exports.Loaded = function (args) {
         gridLayout.addChild(labelTitle[i]);
     }
 
-    var data = localStorage.getItem("aasd");
     var arr = Object.values(data);
 
     var labellist = [];

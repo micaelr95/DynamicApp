@@ -7,7 +7,7 @@ var toastModule = require("nativescript-toast");
 var config = require("../../shared/config");
 
 var options = localStorage.getItem("Options");
-var mainApi = localStorage.getItem("form");
+var mainApi = localStorage.getItem("MainApi");
 
 exports.Loaded = function (args) {
     var page = args.object;
@@ -37,17 +37,33 @@ exports.Loaded = function (args) {
                     object_field[i].backgroundColor = options.color_button;
                     object_field[i].on(buttonModule.Button.tapEvent, function () {
                         switch (object_field[cont].value) {
-                            case "options":
-                                topmost.navigate("views/options-view/options");
-                                break;
                             case "list":
-                                topmost.navigate("views/listview/listview");
+                                var navigationOptions = {
+                                    moduleName: "views/listview/listview",
+                                    context: {
+                                        table: mainApi[cont].targetTable
+                                    }
+                                }
+                                topmost.navigate(navigationOptions);
                                 break;
                             case "form":
-                                topmost.navigate("views/formview/formview");
+                                var navigationOptions = {
+                                    moduleName: "views/formview/formview",
+                                    context: {
+                                        table: mainApi[cont].targetTable,
+                                        submitTable: mainApi[cont].submitTable
+                                    }
+                                }
+                                topmost.navigate(navigationOptions);
                                 break;
                             case "webview":
-                                topmost.navigate("views/webview/webview");
+                                var navigationOptions = {
+                                    moduleName: "views/webview/webview",
+                                    context: {
+                                        table: mainApi[cont].targetTable
+                                    }
+                                }
+                                topmost.navigate(navigationOptions);
                                 break;
                         }
                     });
