@@ -73,7 +73,75 @@ exports.Loaded = function (args) {
                     }
                 }
                 break;
-            
+            case "GridLayout":
+                var gridLayout = require("ui/layouts/grid-layout");
+                var layoutType = new gridLayout.GridLayout();
+                var x = 0;
+                var y = 0;
+                for (index = 0; index < mainApi.length; index++) {
+                    const cont = index;
+                    switch (mainApi[index].Type) {
+                        case "button":
+                            var formattedString = new FormattedString();
+                            var iconSpan = new Span();
+                            iconSpan.text = String.fromCharCode(mainApi[index].icon);
+                            iconSpan.fontSize = 25;
+                            formattedString.spans.push(iconSpan);
+
+                            var textSpan = new Span();
+                            textSpan.text = "\n\n" + mainApi[index].text;
+                            formattedString.spans.push(textSpan);
+
+                            var button = new Button();
+                            button.id = mainApi[index].id;
+                            button.formattedText = formattedString;
+                            button.className = "btnIcon";
+                            button.value = mainApi[index].typeview;
+                            button.backgroundColor = options.color_button;
+                            button.on(Button.tapEvent, function () {
+                                switch (mainApi[cont].typeview) {
+                                    case "list":
+                                        var navigationOptions = {
+                                            moduleName: "views/listview/listview",
+                                            context: {
+                                                table: mainApi[cont].targetTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
+                                    case "form":
+                                        var navigationOptions = {
+                                            moduleName: "views/formview/formview",
+                                            context: {
+                                                table: mainApi[cont].targetTable,
+                                                submitTable: mainApi[cont].submitTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
+                                    case "webview":
+                                        var navigationOptions = {
+                                            moduleName: "views/webview/webview",
+                                            context: {
+                                                table: mainApi[cont].targetTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
+                                }
+                            });
+                            // add button to layout
+                            gridLayout.GridLayout.setColumn(button, 0);
+                            gridLayout.GridLayout.setRow(button, 2);
+                            var column = new gridLayout.ItemSpec(1, "auto");
+                            var row = new gridLayout.ItemSpec(1, "auto");
+                            layoutType.addColumn(column);
+                            layoutType.addRow(row);
+                            layoutType.addChild(button);
+                            break;
+                    }
+                }
+                break;
         }
         container.addChild(layoutType);
     }
