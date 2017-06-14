@@ -130,8 +130,8 @@ exports.Loaded = function (args) {
                                         break;
                                 }
                             });
-                            gridLayout.GridLayout.setColumn(button, mainApi[index].posx);
-                            gridLayout.GridLayout.setRow(button, mainApi[index].posy);
+                            gridLayout.GridLayout.setColumn(button, mainApi[index].posColumn);
+                            gridLayout.GridLayout.setRow(button, mainApi[index].posRow);
                             gridLayout.GridLayout.setColumnSpan(button, mainApi[index].span);
                             var column = new gridLayout.ItemSpec(1, "auto");
                             var row = new gridLayout.ItemSpec(1, "auto");
