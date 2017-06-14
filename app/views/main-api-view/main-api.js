@@ -130,9 +130,9 @@ exports.Loaded = function (args) {
                                         break;
                                 }
                             });
-                            // add button to layout
-                            gridLayout.GridLayout.setColumn(button, 0);
-                            gridLayout.GridLayout.setRow(button, 2);
+                            gridLayout.GridLayout.setColumn(button, mainApi[index].posx);
+                            gridLayout.GridLayout.setRow(button, mainApi[index].posy);
+                            gridLayout.GridLayout.setColumnSpan(button, mainApi[index].span);
                             var column = new gridLayout.ItemSpec(1, "auto");
                             var row = new gridLayout.ItemSpec(1, "auto");
                             layoutType.addColumn(column);
