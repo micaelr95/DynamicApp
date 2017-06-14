@@ -52,7 +52,6 @@ function Connection()
             localStorage.setItem(result.key, result.value);
             if (localStorage.getItem("Options") && localStorage.getItem("MainApi"))
             {
-                localStorage.setItem("canStart", true);
                 var topmost = require("ui/frame").topmost();
                 var navigationOptions =
                 {
@@ -61,7 +60,6 @@ function Connection()
                 }
                 topmost.navigate(navigationOptions);
             }
-            config.mainapiOpen = false;
         };
         return firebase.addChildEventListener(onChildEvent, "/").then(
         function()

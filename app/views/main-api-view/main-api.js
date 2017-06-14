@@ -1,76 +1,81 @@
-var application = require("application");
 var topmost = require("ui/frame").topmost();
-var buttonModule = require("ui/button");
-var formattedStringModule = require("text/formatted-string");
-var spansModule = require("text/span");
-var toastModule = require("nativescript-toast");
-var config = require("../../shared/config");
+var Button = require("ui/button").Button;
+var FormattedString = require("text/formatted-string").FormattedString;
+var Span = require("text/span").Span;
 
 var options = localStorage.getItem("Options");
 var mainApi = localStorage.getItem("MainApi");
+var MainApiLayout = localStorage.getItem("MainApiLayout");
 
 exports.Loaded = function (args) {
     var page = args.object;
 
     var container = page.getViewById("Container");
     if (mainApi.length > 0 && container._childrenCount == 0) {
-        var object_field = [];
-        for (i = 0; i < mainApi.length; i++) {
-            const cont = i;
-            switch (mainApi[i].Type) {
-                case "button":
-                    var formattedString = new formattedStringModule.FormattedString();
-                    var iconSpan = new spansModule.Span();
-                    iconSpan.text = String.fromCharCode(mainApi[i].icon);
-                    iconSpan.fontSize = 25;
-                    formattedString.spans.push(iconSpan);
+        switch (MainApiLayout.type) {
+            case "StackLayout":
+                var StackLayout = require("ui/layouts/stack-layout").StackLayout;
+                var layoutType = new StackLayout();
+                for (index = 0; index < mainApi.length; index++) {
+                    const cont = index;
+                    switch (mainApi[index].Type) {
+                        case "button":
+                            var formattedString = new FormattedString();
+                            var iconSpan = new Span();
+                            iconSpan.text = String.fromCharCode(mainApi[index].icon);
+                            iconSpan.fontSize = 25;
+                            formattedString.spans.push(iconSpan);
 
-                    var textSpan = new spansModule.Span();
-                    textSpan.text = "\n\n" + mainApi[i].text;
-                    formattedString.spans.push(textSpan);
+                            var textSpan = new Span();
+                            textSpan.text = "\n\n" + mainApi[index].text;
+                            formattedString.spans.push(textSpan);
 
-                    object_field[i] = new buttonModule.Button();
-                    object_field[i].id = mainApi[i].id;
-                    object_field[i].formattedText = formattedString;
-                    object_field[i].className = "btnIcon";
-                    object_field[i].value = mainApi[i].typeview;
-                    object_field[i].backgroundColor = options.color_button;
-                    object_field[i].on(buttonModule.Button.tapEvent, function () {
-                        switch (object_field[cont].value) {
-                            case "list":
-                                var navigationOptions = {
-                                    moduleName: "views/listview/listview",
-                                    context: {
-                                        table: mainApi[cont].targetTable
-                                    }
+                            var button = new Button();
+                            button.id = mainApi[index].id;
+                            button.formattedText = formattedString;
+                            button.className = "btnIcon";
+                            button.value = mainApi[index].typeview;
+                            button.backgroundColor = options.color_button;
+                            button.on(Button.tapEvent, function () {
+                                switch (mainApi[cont].typeview) {
+                                    case "list":
+                                        var navigationOptions = {
+                                            moduleName: "views/listview/listview",
+                                            context: {
+                                                table: mainApi[cont].targetTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
+                                    case "form":
+                                        var navigationOptions = {
+                                            moduleName: "views/formview/formview",
+                                            context: {
+                                                table: mainApi[cont].targetTable,
+                                                submitTable: mainApi[cont].submitTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
+                                    case "webview":
+                                        var navigationOptions = {
+                                            moduleName: "views/webview/webview",
+                                            context: {
+                                                table: mainApi[cont].targetTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
                                 }
-                                topmost.navigate(navigationOptions);
-                                break;
-                            case "form":
-                                var navigationOptions = {
-                                    moduleName: "views/formview/formview",
-                                    context: {
-                                        table: mainApi[cont].targetTable,
-                                        submitTable: mainApi[cont].submitTable
-                                    }
-                                }
-                                topmost.navigate(navigationOptions);
-                                break;
-                            case "webview":
-                                var navigationOptions = {
-                                    moduleName: "views/webview/webview",
-                                    context: {
-                                        table: mainApi[cont].targetTable
-                                    }
-                                }
-                                topmost.navigate(navigationOptions);
-                                break;
-                        }
-                    });
-                    break;
-            }
-            container.addChild(object_field[i]);
+                            });
+                            layoutType.addChild(button);
+                            break;
+                    }
+                }
+                break;
+            
         }
+        container.addChild(layoutType);
     }
     page.bindingContext = { title: "Main Api", backgroundColor: options.color_actionBar, textColor: options.color_text };
 }
