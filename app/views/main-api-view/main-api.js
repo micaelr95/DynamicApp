@@ -14,6 +14,7 @@ exports.Loaded = function (args) {
     if (mainApi.length > 0 && container._childrenCount == 0) {
         switch (MainApiLayout.type) {
             case "StackLayout":
+                // Stack don't need any adicional properties
                 var StackLayout = require("ui/layouts/stack-layout").StackLayout;
                 var layoutType = new StackLayout();
                 for (index = 0; index < mainApi.length; index++) {
@@ -74,6 +75,7 @@ exports.Loaded = function (args) {
                 }
                 break;
             case "GridLayout":
+                // GridLayout need column position, row position, column span and row span (value)
                 var gridLayout = require("ui/layouts/grid-layout");
                 var layoutType = new gridLayout.GridLayout();
                 for (index = 0; index < mainApi.length; index++) {
@@ -142,6 +144,7 @@ exports.Loaded = function (args) {
                 }
                 break;
             case "AbsoluteLayout":
+                // AbsoluteLayout need Top and Left properties (value)
                 var absoluteLayout = require("ui/layouts/absolute-layout");
                 var layoutType = new absoluteLayout.AbsoluteLayout();
                 for (index = 0; index < mainApi.length; index++) {
@@ -204,6 +207,7 @@ exports.Loaded = function (args) {
                 }
                 break;
             case "DockLayout":
+                // DockLayout need Dock property (left, top, right and bottom)
                 var dockLayout = require("ui/layouts/dock-layout");
                 var layoutType = new dockLayout.DockLayout();
                 for (index = 0; index < mainApi.length; index++) {
@@ -265,6 +269,7 @@ exports.Loaded = function (args) {
                 }
                 break;
             case "WrapLayout":
+                // WrapLayout need Orientation property (vertical/horiontal)
                 var wrapLayout = require("ui/layouts/wrap-layout");
                 var layoutType = new wrapLayout.WrapLayout();
                 for (index = 0; index < mainApi.length; index++) {
