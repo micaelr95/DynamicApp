@@ -203,6 +203,67 @@ exports.Loaded = function (args) {
                     }
                 }
                 break;
+            case "DockLayout":
+                var dockLayout =  require("ui/layouts/dock-layout");
+                var layoutType = new dockLayout.DockLayout();
+                for (index = 0; index < mainApi.length; index++) {
+                    const cont = index;
+                    switch (mainApi[index].Type) {
+                        case "button":
+                            var formattedString = new FormattedString();
+                            var iconSpan = new Span();
+                            iconSpan.text = String.fromCharCode(mainApi[index].icon);
+                            iconSpan.fontSize = 25;
+                            formattedString.spans.push(iconSpan);
+
+                            var textSpan = new Span();
+                            textSpan.text = "\n\n" + mainApi[index].text;
+                            formattedString.spans.push(textSpan);
+
+                            var button = new Button();
+                            button.id = mainApi[index].id;
+                            button.formattedText = formattedString;
+                            button.className = "btnIcon";
+                            button.value = mainApi[index].typeview;
+                            button.backgroundColor = options.color_button;
+                            button.on(Button.tapEvent, function () {
+                                switch (mainApi[cont].typeview) {
+                                    case "list":
+                                        var navigationOptions = {
+                                            moduleName: "views/listview/listview",
+                                            context: {
+                                                table: mainApi[cont].targetTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
+                                    case "form":
+                                        var navigationOptions = {
+                                            moduleName: "views/formview/formview",
+                                            context: {
+                                                table: mainApi[cont].targetTable,
+                                                submitTable: mainApi[cont].submitTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
+                                    case "webview":
+                                        var navigationOptions = {
+                                            moduleName: "views/webview/webview",
+                                            context: {
+                                                table: mainApi[cont].targetTable
+                                            }
+                                        }
+                                        topmost.navigate(navigationOptions);
+                                        break;
+                                }
+                            });
+                            dockLayout.DockLayout.setDock(button, mainApi[index].Dock);
+                            layoutType.addChild(button);
+                            break;
+                    }
+                }
+                break;
         }
         container._addView(layoutType);
     }
