@@ -1,9 +1,8 @@
 <Page loaded="Loaded">
     <ActionBar title="{{ title }}" backgroundColor="{{ backgroundColor }}" color="{{ textColor }}"></ActionBar>
     <GridLayout rows="* auto" columns="">
-        <ScrollView>
-            <StackLayout id="Container">
-            </StackLayout>
+        <ScrollView id="Container" row="0">
+
         </ScrollView>
         <GridLayout row="1" rows="auto" columns="* * *">
             <Button row="0" col="0" class="bottomBar" text="&#xf015;" onTap="homeButton" />

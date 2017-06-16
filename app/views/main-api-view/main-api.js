@@ -76,8 +76,6 @@ exports.Loaded = function (args) {
             case "GridLayout":
                 var gridLayout = require("ui/layouts/grid-layout");
                 var layoutType = new gridLayout.GridLayout();
-                var x = 0;
-                var y = 0;
                 for (index = 0; index < mainApi.length; index++) {
                     const cont = index;
                     switch (mainApi[index].Type) {
@@ -132,7 +130,8 @@ exports.Loaded = function (args) {
                             });
                             gridLayout.GridLayout.setColumn(button, mainApi[index].posColumn);
                             gridLayout.GridLayout.setRow(button, mainApi[index].posRow);
-                            gridLayout.GridLayout.setColumnSpan(button, mainApi[index].span);
+                            gridLayout.GridLayout.setColumnSpan(button, mainApi[index].colSpan);
+                            gridLayout.GridLayout.setRowSpan(button, mainApi[index].rowSpan);
                             var column = new gridLayout.ItemSpec(1, "auto");
                             var row = new gridLayout.ItemSpec(1, "auto");
                             layoutType.addColumn(column);
@@ -143,7 +142,7 @@ exports.Loaded = function (args) {
                 }
                 break;
         }
-        container.addChild(layoutType);
+        container._addView(layoutType);
     }
     page.bindingContext = { title: "Main Api", backgroundColor: options.color_actionBar, textColor: options.color_text };
 }
