@@ -6,8 +6,6 @@ var textFieldModule = require("ui/text-field");
 var textViewModule = require("ui/text-view");
 var dropModule = require("nativescript-drop-down");
 var topmost = require("ui/frame").topmost();
-var Connection = require("../../shared/DB_connection");
-var con = new Connection();
 
 var options = localStorage.getItem("Options");
 
@@ -77,7 +75,6 @@ exports.Loaded = function (args) {
                     submitInfo[i] = fieldsArray[x].text;
                 }
             }
-            con.add(gotData.submitTable, submitInfo);
         });
         container.addChild(submitBtn);
     }
