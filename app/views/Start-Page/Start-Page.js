@@ -1,21 +1,13 @@
 var BarcodeScanner = require("nativescript-barcodescanner").BarcodeScanner;
 var localStorage = require("nativescript-localstorage");
 var frameModule = require("ui/frame");
-var config = require("../../shared/config");
-var Connection = require("../../shared/DB_connection");
-var con = new Connection();
+var http = require("http");
 var page;
 
 exports.Loaded = function (args) {
     page = args.object;
 
     if (localStorage.getItem("server_url")) {
-        con.init().then(function () {
-            con.login().then(function () {
-                con.load()
-            });
-        });
-
         var topmost = frameModule.topmost();
         var navigationOptions =
             {
@@ -61,13 +53,23 @@ exports.confirmURL = function () {
     else {
         localStorage.setItem("server_url", my_url);
 
-        // Initiate database connection
-        con.init().then(function () {
-            con.login().then(function () {
-                con.load().then(function() {
-                    config.isConfigured = true;
-                })
-            });
+        http.getJSON(my_url).then(function (result) {
+            //// Argument (r) is JSON!
+            for(var k in result) {
+                console.log(k, JSON.stringify(result[k]));
+                localStorage.setItem(k, result[k]);
+            }
+        }, function (e) {
+            //// Argument (e) is Error!
+            console.log(e);
+        }).then(function() {
+            var topmost = require("ui/frame").topmost();
+            var navigationOptions =
+            {
+                moduleName: "views/main-api-view/main-api",
+                clearHistory: true
+            }
+            topmost.navigate(navigationOptions);
         });
     }
 }
