@@ -79,8 +79,6 @@ exports.Loaded = function (args) {
                     submit[key].push("test" + ":" + fieldsArray[x].text);
                 }
             }
-            
-            console.log(JSON.stringify(submit));
 
             http.request({
                 url: localStorage.getItem("server_url"),
@@ -89,7 +87,7 @@ exports.Loaded = function (args) {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                content: JSON.stringify({ MyVariableOne: "ValueOne", MyVariableTwo: "ValueTwo" })
+                content: JSON.stringify(submit)
             }).then(function (response) {
                 result = response.content.toJSON();
                 console.log(result);
