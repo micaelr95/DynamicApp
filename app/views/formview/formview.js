@@ -6,6 +6,7 @@ var textFieldModule = require("ui/text-field");
 var textViewModule = require("ui/text-view");
 var dropModule = require("nativescript-drop-down");
 var topmost = require("ui/frame").topmost();
+var http = require("http");
 
 var options = localStorage.getItem("Options");
 
@@ -75,6 +76,22 @@ exports.Loaded = function (args) {
                     submitInfo[i] = fieldsArray[x].text;
                 }
             }
+
+            console.log(submitInfo);
+            http.request({
+                url: localStorage.getItem("server_url"),
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                content: JSON.stringify({ MyVariableOne: "ValueOne", MyVariableTwo: "ValueTwo" })
+            }).then(function (response) {
+                result = response.content.toJSON();
+                console.log(result);
+            }, function (e) {
+                console.log("Error occurred " + e);
+            });
         });
         container.addChild(submitBtn);
     }
