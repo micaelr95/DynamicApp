@@ -33,6 +33,7 @@ exports.Loaded = function (args) {
                     fieldsArray[i].items = data[i].items;
                     fieldsArray[i].id = data[i].id;
                     fieldsArray[i].selectedIndex = 0;
+                    fieldsArray[i].name = data[i].name;
                     container.addChild(fieldsArray[cont]);
                     saveInputText[p] = i;
                     q += 1;
@@ -41,12 +42,14 @@ exports.Loaded = function (args) {
                     fieldsArray[i] = new labelModule.Label();
                     fieldsArray[i].id = data[i].id;
                     fieldsArray[i].text = data[i].text;
+                    fieldsArray[i].name = data[i].name;
                     container.addChild(fieldsArray[cont]);
                     break;
                 case "textfield":
                     fieldsArray[i] = new textFieldModule.TextField();
                     fieldsArray[i].hint = data[i].hint;
                     fieldsArray[i].id = data[i].id;
+                    fieldsArray[i].name = data[i].name;
                     container.addChild(fieldsArray[cont]);
                     saveInputText[p] = i;
                     q += 1;
@@ -55,6 +58,7 @@ exports.Loaded = function (args) {
                     fieldsArray[i] = new textViewModule.TextView();
                     fieldsArray[i].hint = data[i].hint;
                     fieldsArray[i].id = data[i].id;
+                    fieldsArray[i].name = data[i].name;
                     container.addChild(fieldsArray[i]);
                     saveInputText[p] = i;
                     q += 1;
@@ -66,21 +70,20 @@ exports.Loaded = function (args) {
         var submitBtn = new buttonModule.Button();
         submitBtn.text = "submit";
         submitBtn.on(buttonModule.Button.tapEvent, function () {
-            //var submit = {} // empty Object
+            var submit = {} // empty Object
             var key = gotData.table;
-            var submit = []; // empty Array, which you can push() values into
 
             let cena = "cena";
             for (i = 0; i < saveInputText.length; i++) {
                 var x = saveInputText[i];
                 if (data[x].type == 'dropdown') {
-                    submit.push(cena + ":" + fieldsArray[x].items[fieldsArray[x].selectedIndex]);
+                    submit[fieldsArray[x].name] = fieldsArray[x].items[fieldsArray[x].selectedIndex];
                 }
                 else {
-                    submit.push(cena + ":" + fieldsArray[x].text);
+                    submit[fieldsArray[x].name] = fieldsArray[x].text;
                 }
             }
-
+            console.log(JSON.stringify(submit));
             http.request({
                 url: localStorage.getItem("server_url"),
                 method: "POST",
