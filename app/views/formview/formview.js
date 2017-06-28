@@ -66,17 +66,18 @@ exports.Loaded = function (args) {
         var submitBtn = new buttonModule.Button();
         submitBtn.text = "submit";
         submitBtn.on(buttonModule.Button.tapEvent, function () {
-            var submit = {} // empty Object
+            //var submit = {} // empty Object
             var key = gotData.table;
-            submit[key] = []; // empty Array, which you can push() values into
+            var submit = []; // empty Array, which you can push() values into
 
+            let cena = "cena";
             for (i = 0; i < saveInputText.length; i++) {
                 var x = saveInputText[i];
                 if (data[x].type == 'dropdown') {
-                    submit[key].push("test" + ":" + fieldsArray[x].items[fieldsArray[x].selectedIndex]);
+                    submit.push(cena + ":" + fieldsArray[x].items[fieldsArray[x].selectedIndex]);
                 }
                 else {
-                    submit[key].push("test" + ":" + fieldsArray[x].text);
+                    submit.push(cena + ":" + fieldsArray[x].text);
                 }
             }
 
