@@ -6,8 +6,7 @@ var textFieldModule = require("ui/text-field");
 var textViewModule = require("ui/text-view");
 var dropModule = require("nativescript-drop-down");
 var topmost = require("ui/frame").topmost();
-var Connection = require("../../shared/DB_connection");
-var con = new Connection();
+var http = require("http");
 
 var options = localStorage.getItem("Options");
 
@@ -34,6 +33,7 @@ exports.Loaded = function (args) {
                     fieldsArray[i].items = data[i].items;
                     fieldsArray[i].id = data[i].id;
                     fieldsArray[i].selectedIndex = 0;
+                    fieldsArray[i].name = data[i].name;
                     container.addChild(fieldsArray[cont]);
                     saveInputText[p] = i;
                     q += 1;
@@ -42,12 +42,14 @@ exports.Loaded = function (args) {
                     fieldsArray[i] = new labelModule.Label();
                     fieldsArray[i].id = data[i].id;
                     fieldsArray[i].text = data[i].text;
+                    fieldsArray[i].name = data[i].name;
                     container.addChild(fieldsArray[cont]);
                     break;
                 case "textfield":
                     fieldsArray[i] = new textFieldModule.TextField();
                     fieldsArray[i].hint = data[i].hint;
                     fieldsArray[i].id = data[i].id;
+                    fieldsArray[i].name = data[i].name;
                     container.addChild(fieldsArray[cont]);
                     saveInputText[p] = i;
                     q += 1;
@@ -56,6 +58,7 @@ exports.Loaded = function (args) {
                     fieldsArray[i] = new textViewModule.TextView();
                     fieldsArray[i].hint = data[i].hint;
                     fieldsArray[i].id = data[i].id;
+                    fieldsArray[i].name = data[i].name;
                     container.addChild(fieldsArray[i]);
                     saveInputText[p] = i;
                     q += 1;
@@ -67,17 +70,34 @@ exports.Loaded = function (args) {
         var submitBtn = new buttonModule.Button();
         submitBtn.text = "submit";
         submitBtn.on(buttonModule.Button.tapEvent, function () {
+            var submit = {} // empty Object
+            var key = gotData.table;
+
+            let cena = "cena";
             for (i = 0; i < saveInputText.length; i++) {
                 var x = saveInputText[i];
-
                 if (data[x].type == 'dropdown') {
-                    submitInfo[i] = fieldsArray[x].items[fieldsArray[x].selectedIndex];
+                    submit[fieldsArray[x].name] = fieldsArray[x].items[fieldsArray[x].selectedIndex];
                 }
                 else {
-                    submitInfo[i] = fieldsArray[x].text;
+                    submit[fieldsArray[x].name] = fieldsArray[x].text;
                 }
             }
-            con.add(gotData.submitTable, submitInfo);
+            console.log(JSON.stringify(submit));
+            http.request({
+                url: localStorage.getItem("server_url"),
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                content: JSON.stringify(submit)
+            }).then(function (response) {
+                result = response.content.toJSON();
+                console.log(result);
+            }, function (e) {
+                console.log("Error occurred " + e);
+            });
         });
         container.addChild(submitBtn);
     }

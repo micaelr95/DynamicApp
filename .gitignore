@@ -12,4 +12,4 @@ node_modules/
 platforms/
 tmp/
 typings/
-!platforms/android/google-services.json
+
