@@ -1,3 +1,5 @@
+To use this application you most use the [NodeServer](https://github.com/micaelr95/NodeServer). Just download the project and run the main.js.
+
 # Application Start
 ## If user never used the app
 Choose the webservice by reading a QRCode or writing a URL, save database data in localstorage and navigate to main menu creating the menu from database.
