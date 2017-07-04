@@ -1,12 +1,12 @@
 <Page loaded="Loaded">
     <ActionBar title="{{ title }}" backgroundColor="{{ backgroundColor }}" color="{{ textColor }}"></ActionBar>
     <GridLayout rows="* auto" columns="">
-        <ScrollView>
-            <GridLayout id="testar" columns="auto" margin="10">
+        <GridLayout row="0" id="testar" columns="auto" margin="10">
+            <ScrollView row="1">
                 <GridLayout id="bueda">
                 </GridLayout>
-            </GridLayout>
-        </ScrollView>
+            </ScrollView>
+        </GridLayout>
         <GridLayout row="1" rows="auto" columns="* * *">
             <Button row="0" col="0" class="bottomBar" text="&#xf015;" onTap="homeButton" />
             <Button row="0" col="1" class="bottomBar" text="&#xf129;" onTap="infoButton" />

@@ -34,25 +34,28 @@ exports.Loaded = function (args) {
         gridLayout.addChild(labelTitle[i]);
     }
 
+    var list = page.getViewById("bueda");
+
     var arr = Object.values(data);
 
-    var labellist = [];
     for (i = 0; i < arr.length; i++) {
-        for (x = 0; x < arr[i].length; x++) {
-            labellist[i] = new labelModule.Label();
-            labellist[i].text = arr[i][x];
-            labellist[i].marginRight = "5";
+        var cenas = Object.keys(arr[i]);
+        console.log(cenas);
+        for (x = 0; x < Object.keys(arr[i]).length; x++) {
+            label = new labelModule.Label();
+            label.text = Object.values(arr[i])[x];
+            label.marginRight = "5";
 
-            gridModule.GridLayout.setColumn(labellist[i], x);
-            gridModule.GridLayout.setRow(labellist[i], i + 1);
+            gridModule.GridLayout.setColumn(label, x);
+            gridModule.GridLayout.setRow(label, i + 1);
 
             var column = new gridModule.ItemSpec(1, "auto");
             var row = new gridModule.ItemSpec(1, "auto");
 
-            gridLayout.addColumn(column);
-            gridLayout.addChild(labellist[i]);
+            list.addColumn(column);
+            list.addRow(row);
+            list.addChild(label);
         }
-        gridLayout.addRow(row);
     }
     page.bindingContext = { title: "List View", backgroundColor: options.color_actionBar, textColor: options.color_text };
 }
