@@ -4,60 +4,72 @@ var appModule = require("application");
 var gridModule = require("ui/layouts/grid-layout");
 var labelModule = require("ui/label");
 var topmost = require("ui/frame").topmost();
+var http = require("http");
 
 exports.Loaded = function (args) {
     var page = args.object;
 
     var gotData = page.navigationContext;
-    var data = localStorage.getItem(gotData.table);
 
-    var options = localStorage.getItem("Options");
-    var lista = localStorage.getItem("list");
+    http.getJSON(localStorage.getItem("server_url")).then(function (result) {
+        //// Argument (r) is JSON!
+        for (var k in result) {
+            console.log(k, JSON.stringify(result[k]));
+            localStorage.setItem(k, result[k]);
+        }
+    }, function (e) {
+        //// Argument (e) is Error!
+        console.log(e);
+    }).then(function () {
+        var data = localStorage.getItem(gotData.table);
+        var options = localStorage.getItem("Options");
+        var lista = localStorage.getItem("list");
 
-    var gridLayout = page.getViewById("testar");
-    var labelTitle = [];
+        var gridLayout = page.getViewById("testar");
+        var labelTitle = [];
 
-    for (i = 0; i < lista.length; i++) {
-        labelTitle[i] = new labelModule.Label();
-        labelTitle[i].text = lista[i];
-        labelTitle[i].marginRight = "5";
-        labelTitle[i].color = "Red";
+        for (i = 0; i < lista.length; i++) {
+            labelTitle[i] = new labelModule.Label();
+            labelTitle[i].text = lista[i];
+            labelTitle[i].marginRight = "5";
+            labelTitle[i].color = "Red";
 
-        gridModule.GridLayout.setColumn(labelTitle[i], i);
-        gridModule.GridLayout.setRow(labelTitle[i], 0);
-
-        var column = new gridModule.ItemSpec(1, "auto");
-        var row = new gridModule.ItemSpec(1, "auto");
-
-        gridLayout.addColumn(column);
-        gridLayout.addRow(row);
-        gridLayout.addChild(labelTitle[i]);
-    }
-
-    var list = page.getViewById("bueda");
-
-    var arr = Object.values(data);
-
-    for (i = 0; i < arr.length; i++) {
-        var cenas = Object.keys(arr[i]);
-        console.log(cenas);
-        for (x = 0; x < Object.keys(arr[i]).length; x++) {
-            label = new labelModule.Label();
-            label.text = Object.values(arr[i])[x];
-            label.marginRight = "5";
-
-            gridModule.GridLayout.setColumn(label, x);
-            gridModule.GridLayout.setRow(label, i + 1);
+            gridModule.GridLayout.setColumn(labelTitle[i], i);
+            gridModule.GridLayout.setRow(labelTitle[i], 0);
 
             var column = new gridModule.ItemSpec(1, "auto");
             var row = new gridModule.ItemSpec(1, "auto");
 
-            list.addColumn(column);
-            list.addRow(row);
-            list.addChild(label);
+            gridLayout.addColumn(column);
+            gridLayout.addRow(row);
+            gridLayout.addChild(labelTitle[i]);
         }
-    }
-    page.bindingContext = { title: "List View", backgroundColor: options.color_actionBar, textColor: options.color_text };
+
+        var list = page.getViewById("bueda");
+
+        var arr = Object.values(data);
+
+        for (i = 0; i < arr.length; i++) {
+            var cenas = Object.keys(arr[i]);
+            console.log(cenas);
+            for (x = 0; x < Object.keys(arr[i]).length; x++) {
+                label = new labelModule.Label();
+                label.text = Object.values(arr[i])[x];
+                label.marginRight = "5";
+
+                gridModule.GridLayout.setColumn(label, x);
+                gridModule.GridLayout.setRow(label, i + 1);
+
+                var column = new gridModule.ItemSpec(1, "auto");
+                var row = new gridModule.ItemSpec(1, "auto");
+
+                list.addColumn(column);
+                list.addRow(row);
+                list.addChild(label);
+            }
+        }
+        page.bindingContext = { title: "List View", backgroundColor: options.color_actionBar, textColor: options.color_text };
+    });
 }
 
 exports.homeButton = function () {
