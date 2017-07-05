@@ -98,6 +98,12 @@ exports.Loaded = function (args) {
             }, function (e) {
                 console.log("Error occurred " + e);
             });
+            var navigationOptions =
+                {
+                    moduleName: "views/main-api-view/main-api",
+                    clearHistory: true
+                }
+            topmost.navigate(navigationOptions);
         });
         container.addChild(submitBtn);
     }
